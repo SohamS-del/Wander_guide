@@ -1,0 +1,2 @@
+This is how you can run react-native
+npx expo start -c
