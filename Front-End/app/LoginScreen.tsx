@@ -24,13 +24,12 @@ const Login = ({navigation}: {navigation: any}) => {
       body: JSON.stringify({
         //changes due!@!!
         email: UserEmail,
-        password: UserPassword,
-        rememberme:true
+        password: UserPassword
       })
     });
     result = await result.json();
     if(result){
-      alert("Data has been added")
+      alert("Login Succesful")
     }
   }
 

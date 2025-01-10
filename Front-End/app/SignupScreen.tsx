@@ -3,16 +3,33 @@ import { StyleSheet, StatusBar,TextInput, Text, View, TouchableOpacity,ImageBack
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+import { SignUpUrl } from './components/url';
 
 const Signup = ({navigation}: {navigation: any}) => {
 
   const goTologinPage = () =>{
     navigation.navigate("Login")
   };
-  const SignUpButton = () => {
-    alert(`Your account has been created`);
-    navigation.navigate("HomeScreen")
-  };
+  const SignUpButton = async() =>{
+  
+      let result = await fetch(SignUpUrl, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          //changes due!@!!
+          Email: UserEmail,
+          Password: UserPassword,
+          ConfirmPassword:UserConfirm
+        })
+      });
+      result = await result.json();
+      if(result){
+        alert("User Created")
+        navigation.navigate("LoadingScreen")
+      }
+    };
 
   //loginbutton
     const [UserEmail, SetEmail] = React.useState('');
