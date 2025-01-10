@@ -6,11 +6,15 @@ export default function LoadingScreen({navigation}: {navigation: any}){
   const newbutton1 = () =>{
     navigation.navigate("Login")
   }
+  const newbutton2 = () =>{
+    navigation.navigate("HomeScreen")
+  }
 
   return (
       
     <SafeAreaView style={styles.container}>
       <Text onPress={newbutton1} style = {styles.pressme}>→</Text>
+      <Text onPress={newbutton2} style = {styles.pressme2}>HomeScreen</Text>
       
       <Image 
         style = {[styles.img_position,styles.logo_img]} 
@@ -39,6 +43,11 @@ const styles = StyleSheet.create({
   },
   pressme:{
     fontSize:60,
+    textAlign:'center',
+    bottom:-140
+  },
+  pressme2:{
+    fontSize:40,
     textAlign:'center',
     bottom:-140
   },

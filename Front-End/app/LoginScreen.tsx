@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { Loginurl } from './components/url';
+import ForgotPasswordScreen from './ForgotPasswordScreen';
 
 
 
@@ -15,6 +16,7 @@ const Login = ({navigation}: {navigation: any}) => {
   }
   //apicallbutton
   const goToHomePage = async() =>{
+    
 
     let result = await fetch(Loginurl, {
       method: "POST",
@@ -30,6 +32,7 @@ const Login = ({navigation}: {navigation: any}) => {
     result = await result.json();
     if(result){
       alert("Login Succesful")
+      navigation.navigate("LoadingScreen")
     }
   }
 
@@ -43,6 +46,11 @@ const Login = ({navigation}: {navigation: any}) => {
 
    //rememberme
    const rememberme = true;
+
+   //go to forgot pass page
+   const forgotpass = () => {
+    navigation.navigate("ForgotPasswordScreen")
+   }
   
   
 
@@ -89,6 +97,12 @@ const Login = ({navigation}: {navigation: any}) => {
                 secureTextEntry
               />
     </View>
+    <TouchableOpacity onPress = {forgotpass}>
+      
+      
+      <Text style = {styles.ForgotPassText}>Forgot Password ?</Text>
+    </TouchableOpacity>
+
        
         
     </SafeAreaView>
@@ -220,5 +234,11 @@ backimage:{
   height:100,
   top:-150
 
+},
+ForgotPassText:{
+  fontSize:14,
+  top:-90,
+  right:-88,
+  color:"#522D7E"
 }
 });
