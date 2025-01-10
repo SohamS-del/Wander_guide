@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar,TextInput, Text, View, TouchableOpacity,TouchableHighlight,ImageBackground} from 'react-native';
+import { StyleSheet,Alert,Platform,KeyboardAvoidingView ,StatusBar,TextInput, Text, View, TouchableOpacity,TouchableHighlight,ImageBackground} from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -10,15 +10,29 @@ import ForgotPasswordScreen from './ForgotPasswordScreen';
 //main code
 const Login = ({navigation}: {navigation: any}) => {
   
+  //loginbutton
+  const [UserEmail, SetEmail] = React.useState('');
   
+  //passwordbutton
+  const [UserPassword, SetPassword] = React.useState('');
+  
+  //Navigate to SignUp
   const goToSignUpPage = () =>{
     navigation.navigate("Signup");
   }
+
+  //go to forgot pass page
+  const forgotpass = () => {
+    navigation.navigate("ForgotPasswordScreen")
+   }
+
+
   //apicallbutton
   const goToHomePage = async() =>{
-    
-
-    let result = await fetch(Loginurl, {
+    if(!validateInput()) return;
+  
+try{
+    let response = await fetch(Loginurl, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -29,32 +43,46 @@ const Login = ({navigation}: {navigation: any}) => {
         password: UserPassword
       })
     });
-    result = await result.json();
-    if(result){
-      alert("Login Succesful")
-      navigation.navigate("LoadingScreen")
+    
+    if (!response.ok) {
+      const error = await response.json();
+      Alert.alert('Error', error.message || 'Login failed');
+      return;
     }
+
+
+    const result = await response.json();
+    Alert.alert('Success','Login Successful');
+    navigation.navigate('HomeScreen');
+  }catch(error){
+    console.error('Login Error:',error);
+    Alert.alert('Error','Something went wrong.Please try again.');
   }
+  };
+  const validateInput = () => {
+    if (!UserEmail.trim()) {
+      Alert.alert('Validation Error', 'Email is required');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(UserEmail)) {
+      Alert.alert('Validation Error', 'Invalid email format');
+      return false;
+    }
+    if (!UserPassword.trim()) {
+      Alert.alert('Validation Error', 'Password is required');
+      return false;
+    }
+    if (UserPassword.length < 6) {
+      Alert.alert(
+        'Validation Error',
+        'Password must be at least 6 characters long'
+      );
+      return false;
+    }
+    return true;
+    };
 
 
-  
-  //loginbutton
-  const [UserEmail, SetEmail] = React.useState('');
-  
-  //passwordbutton
-  const [UserPassword, SetPassword] = React.useState('');
-
-   //rememberme
-   const rememberme = true;
-
-   //go to forgot pass page
-   const forgotpass = () => {
-    navigation.navigate("ForgotPasswordScreen")
-   }
-
-  
-
- 
   return (
     <SafeAreaView 
       style={[styles.safeArea,styles.container]} >
@@ -120,7 +148,7 @@ const styles = StyleSheet.create({
   titleLogin: {
     fontWeight: 'bold',
     fontSize: 32,
-    marginBottom: 40,
+    marginBottom: 70,
     textAlign: 'center',
     color: '#522D7E',
   },
@@ -149,8 +177,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowColor: 'grey',
     width: '90%',
-    marginTop: 20,
-    top:210
+    top:180
   },
   loginButtonTextStyle: {
     color: 'white',
@@ -174,8 +201,8 @@ const styles = StyleSheet.create({
   backimage: {
     width: 100,
     height: 100,
-    position: 'absolute',
-    top: 50,
+
+    top: -80,
   },
   btnContainer: {
     flex: 1,

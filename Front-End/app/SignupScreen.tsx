@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
   backimage: {
     width: 100,
     height: 100,
-    top:-120
+    top:-10,
+    marginBottom:60
   },
 });

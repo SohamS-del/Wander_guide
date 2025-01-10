@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         marginLeft:55,
         marginRight:55,
         top:50,
-        width:150
+        width:200
       },
       OtpButtonTextStyle: {
         color: 'white',
