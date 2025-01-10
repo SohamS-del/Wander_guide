@@ -63,7 +63,7 @@ const Signup = ({ navigation }: { navigation: any }) => {
         <TextInput
           style={styles.EmailtextInput}
           numberOfLines={1}
-          placeholder="Enter Your Email"
+          placeholder="   Enter Your Email"
           placeholderTextColor="#761B89"
           maxLength={256}
           onChangeText={SetEmail}
@@ -73,7 +73,7 @@ const Signup = ({ navigation }: { navigation: any }) => {
       <View style={styles.Passcontainer}>
         <TextInput
           numberOfLines={1}
-          placeholder="Enter Your Password"
+          placeholder="  Enter Your Password"
           placeholderTextColor="#761B89"
           maxLength={256}
           onChangeText={SetPassword}
@@ -85,7 +85,7 @@ const Signup = ({ navigation }: { navigation: any }) => {
       <View style={styles.Confirmcontainer}>
         <TextInput
           numberOfLines={1}
-          placeholder="Confirm Your Password"
+          placeholder="  Confirm Your Password"
           placeholderTextColor="#761B89"
           maxLength={256}
           onChangeText={SetConfirm}
@@ -118,9 +118,10 @@ const styles = StyleSheet.create({
   titleLogin: {
     fontWeight: 'bold',
     fontSize: 32,
-    marginBottom: 20,
+    marginBottom: 10,
     textAlign: 'center',
     color: '#522D7E',
+    top:-30
   },
   loginButtonStyle: {
     backgroundColor: '#522D7E',
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.5,
     shadowOffset: { width: 0, height: 4 },
     shadowColor: 'grey',
-    marginTop: 20,
+    marginTop: 40,
     width: 330,
   },
   loginButtonTextStyle: {
@@ -145,6 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
+    top:30,
     color: '#761B89',
   },
   signUpLink: {
@@ -191,6 +193,6 @@ const styles = StyleSheet.create({
   backimage: {
     width: 100,
     height: 100,
-    marginBottom: 20,
+    top:-120
   },
 });
