@@ -51,7 +51,7 @@ const Login = ({navigation}: {navigation: any}) => {
    const forgotpass = () => {
     navigation.navigate("ForgotPasswordScreen")
    }
-  
+
   
 
  
@@ -77,7 +77,7 @@ const Login = ({navigation}: {navigation: any}) => {
       <TextInput 
                 style={styles.EmailtextInput}
                 numberOfLines={4}
-                placeholder  = '  Enter Your Email'
+                placeholder  = '   Enter Your Email'
                 placeholderTextColor="#761B89"
                 maxLength={256}
                 onChangeText={text =>SetEmail(text)}
@@ -88,7 +88,7 @@ const Login = ({navigation}: {navigation: any}) => {
     <View style = {styles.Passcontainer}>
       <TextInput
                 numberOfLines={4}
-                placeholder='  Enter Your Password'
+                placeholder='   Enter Your Password'
                 placeholderTextColor="#761B89"
                 maxLength={256}
                 onChangeText={text =>SetPassword(text)}
@@ -98,45 +98,43 @@ const Login = ({navigation}: {navigation: any}) => {
               />
     </View>
     <TouchableOpacity onPress = {forgotpass}>
-      
-      
       <Text style = {styles.ForgotPassText}>Forgot Password ?</Text>
     </TouchableOpacity>
-
-       
-        
     </SafeAreaView>
-    
-  );
-  
-  
-};
+    );
+}
 
 export default Login;
 
 const styles = StyleSheet.create({
-  google:{
-    width:50,
-    height:50
-  },
   safeArea: {
     flex: 1,
     backgroundColor: 'white',
   },
   container: {
     flex: 1,
-    justifyContent: 'center', // Centers content vertically
-    alignItems: 'center', // Centers content horizontally
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 16,
   },
   titleLogin: {
     fontWeight: 'bold',
     fontSize: 32,
-    top:-100,
     marginBottom: 40,
     textAlign: 'center',
-    color: '#522D7E'
-    
+    color: '#522D7E',
+  },
+  inputContainer: {
+    width: '90%',
+    borderWidth: 1,
+    borderColor: '#522D7E',
+    borderRadius: 7,
+    marginBottom: 20,
+  },
+  textInput: {
+    height: 45,
+    paddingHorizontal: 10,
+    color: '#761B89',
   },
   loginButtonStyle: {
     backgroundColor: '#522D7E',
@@ -150,10 +148,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3.5,
     shadowOffset: { width: 0, height: 4 },
     shadowColor: 'grey',
-    marginLeft:55,
-    marginRight:55,
-    top:200,
-    width:330
+    width: '90%',
+    marginTop: 20,
+    top:210
   },
   loginButtonTextStyle: {
     color: 'white',
@@ -163,8 +160,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     marginTop: 20,
-    top:210,
-    color:'#761B89'
+    color: '#761B89',
+    bottom:-200
   },
   signUpLink: {
     position: 'absolute',
@@ -172,19 +169,13 @@ const styles = StyleSheet.create({
     right: 20,
     fontSize: 18,
     opacity: 0.6,
-    color:'#522D7E'
+    color: '#522D7E',
   },
-  btnClickContain: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
-    backgroundColor: '#009D6E',
-    borderRadius: 5,
-    padding: 5,
-    marginTop: 5,
-    marginBottom: 5,
+  backimage: {
+    width: 100,
+    height: 100,
+    position: 'absolute',
+    top: 50,
   },
   btnContainer: {
     flex: 1,
@@ -228,12 +219,6 @@ Passcontainer:{
   borderColor:'#522D7E',
   borderWidth:1,
   borderRadius:7,
-},
-backimage:{
-  width:100,
-  height:100,
-  top:-150
-
 },
 ForgotPassText:{
   fontSize:14,
