@@ -33,16 +33,6 @@
   },
   {
     "ContainingType": "AuthController",
-    "Method": "Profile",
-    "RelativePath": "api/Auth/profile",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "AuthController",
     "Method": "ResetPassword",
     "RelativePath": "api/Auth/reset-password",
     "HttpMethod": "POST",
