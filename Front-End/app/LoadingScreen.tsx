@@ -36,7 +36,7 @@ export default function LoadingScreen({navigation}: {navigation: any}){
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:"white",
+    backgroundColor:'white',
     flex: 1,
     justifyContent:'center',
     alignItems:'center'

@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "ForgotPasswordRequest",
+        "Type": "Backend_WanderGuide.Models.ForgotPasswordRequest",
         "IsRequired": true
       }
     ],
@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "LoginRequest",
+        "Type": "Backend_WanderGuide.Models.LoginRequest",
         "IsRequired": true
       }
     ],
@@ -51,7 +51,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "ResetPasswordRequest",
+        "Type": "Backend_WanderGuide.Models.ResetPasswordRequest",
         "IsRequired": true
       }
     ],
@@ -67,7 +67,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "SignupRequest",
+        "Type": "Backend_WanderGuide.Models.SignupRequest",
         "IsRequired": true
       }
     ],

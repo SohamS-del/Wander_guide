@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend_WanderGuide.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20250110071057_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250123142654_initalcreate")]
+    partial class initalcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

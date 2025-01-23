@@ -181,7 +181,7 @@
             "type": "string",
             "nullable": true
           },
-          "token": {
+          "otp": {
             "type": "string",
             "nullable": true
           },
