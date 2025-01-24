@@ -9,5 +9,6 @@ public interface IAuthService
     Task<IActionResult> Login(LoginRequest request);
     Task<IActionResult> ForgotPassword(ForgotPasswordRequest request);
     Task<IActionResult> ResetPassword(ResetPasswordRequest request);
-    
+    Task<IActionResult> ValidateOtpRequest(ValidateOtpRequest request);
+
 }

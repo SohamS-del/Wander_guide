@@ -99,6 +99,37 @@
         }
       }
     },
+    "/api/Auth/Validate-Otp-Request": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/reset-password": {
       "post": {
         "tags": [
@@ -169,11 +200,11 @@
             "type": "string",
             "nullable": true
           },
-          "otp": {
+          "newPassword": {
             "type": "string",
             "nullable": true
           },
-          "newPassword": {
+          "confirmPassword": {
             "type": "string",
             "nullable": true
           }
@@ -200,6 +231,20 @@
           "confirmPassword": {
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidateOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "otp": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

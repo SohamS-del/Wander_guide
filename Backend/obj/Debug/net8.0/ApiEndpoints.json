@@ -41,7 +41,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Backend_WanderGuide.Models.ResetPasswordRequest",
+        "Type": "ResetPasswordRequest",
         "IsRequired": true
       }
     ],
@@ -58,6 +58,22 @@
       {
         "Name": "request",
         "Type": "Backend_WanderGuide.Models.SignupRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthController",
+    "Method": "ValidateOtpRequest",
+    "RelativePath": "api/Auth/Validate-Otp-Request",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Backend_WanderGuide.Models.ValidateOtpRequest",
         "IsRequired": true
       }
     ],

@@ -74,16 +74,37 @@ public class AuthService : IAuthService
         return new OkObjectResult(new { message = "OTP sent to email" });
     }
 
-    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    public async Task<IActionResult> ValidateOtpRequest(ValidateOtpRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
             return new BadRequestObjectResult(new { message = "User not found" });
 
+        // Check if the OTP exists and validate it against the stored value
         if (!OtpUtility._otpStore.TryGetValue(request.Email, out var otpInfo) ||
             otpInfo.Otp != request.Otp ||
             otpInfo.ExpiresAt < DateTime.UtcNow)
             return new BadRequestObjectResult(new { message = "Invalid or expired OTP" });
+
+        // Save the email for the password reset step
+        // Here, we can return a token or session ID to use in the next step
+        return new OkObjectResult(new { message = "OTP validated successfully", email = request.Email });
+    }
+    public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+    {
+        // Check if the new password and confirm password match
+        if (request.NewPassword != request.ConfirmPassword)
+        {
+            return new BadRequestObjectResult(new { message = "Passwords do not match" });
+        }
+
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+            return new BadRequestObjectResult(new { message = "User not found" });
+
+        if (!OtpUtility._otpStore.TryGetValue(request.Email, out var otpInfo) ||
+            otpInfo.ExpiresAt < DateTime.UtcNow)
+            return new BadRequestObjectResult(new { message = "OTP expired or not validated" });
 
         // Reset password using the stored token
         var result = await _userManager.ResetPasswordAsync(user, otpInfo.Token, request.NewPassword);
@@ -96,5 +117,5 @@ public class AuthService : IAuthService
         return new OkObjectResult(new { message = "Password reset successful" });
     }
 
-    
+
 }

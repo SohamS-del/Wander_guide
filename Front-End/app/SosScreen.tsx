@@ -10,28 +10,28 @@ const SosScreen = ({navigation}:{navigation: any}) => {
   const MAX_SPAM_COUNT = 6; // Number of presses to trigger alert
   const SPAM_INTERVAL = 10000; // 10 seconds in milliseconds
 
-  const handleSosPress = () => {
-    try {
-      const currentTime = Date.now(); // Get current timestamp in milliseconds
+  // const handleSosPress = () => {
+  //   try {
+  //     const currentTime = Date.now(); // Get current timestamp in milliseconds
 
-      // Add the current timestamp and filter out timestamps older than SPAM_INTERVAL
-      setPressTimes ( (prevPressTimes) => {
-        const updatedPressTimes = [...prevPressTimes, currentTime].filter(
-          (time) => currentTime - time <= SPAM_INTERVAL
-        );
+  //     // Add the current timestamp and filter out timestamps older than SPAM_INTERVAL
+  //     setPressTimes ( (prevPressTimes) => {
+  //       const updatedPressTimes = [...prevPressTimes, currentTime].filter(
+  //         (time) => currentTime - time <= SPAM_INTERVAL
+  //       );
 
-        // Check if the button was pressed enough times
-        if (updatedPressTimes.length >= MAX_SPAM_COUNT) {
-          Alert.alert('SOS Alert', 'SOS message has been sent!');
-          return []; // Reset the pressTimes array after triggering the alert
-        }
+  //       // Check if the button was pressed enough times
+  //       if (updatedPressTimes.length >= MAX_SPAM_COUNT) {
+  //         Alert.alert('SOS Alert', 'SOS message has been sent!');
+  //         return []; // Reset the pressTimes array after triggering the alert
+  //       }
 
-        return updatedPressTimes; // Keep the updated timestamps in state
-      });
-    } catch (error) {
-      console.error('Error handling SOS button press:', error);
-    }
-  };
+  //       return updatedPressTimes; // Keep the updated timestamps in state
+  //     });
+  //   } catch (error) {
+  //     console.error('Error handling SOS button press:', error);
+  //   }
+  // };
 
 
   const goToHomeScreen = () =>{
@@ -44,7 +44,7 @@ const SosScreen = ({navigation}:{navigation: any}) => {
                   ← 
                   </Text>
       <TouchableOpacity
-        onPress={handleSosPress}
+        // onPress={handleSosPress}
         activeOpacity={0.8}
       >
         <Animatable.View

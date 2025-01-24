@@ -29,8 +29,10 @@ const Login = ({navigation}: {navigation: any}) => {
 
   //apicallbutton
   const goToHomePage = async() =>{
-    if(!validateInput()) return;
-  
+    if(!validateInput()){
+      console.log("Validation Failed")
+       return;
+    }
 try{
     let response = await fetch(Loginurl, {
       method: "POST",
@@ -46,35 +48,34 @@ try{
     
     if (!response.ok) {
       const error = await response.json();
-      Alert.alert('Error', error.message || 'Login failed');
+      alert( error.message || 'Login failed. Please Try Again');
       return;
     }
 
 
     const result = await response.json();
-    Alert.alert('Success','Login Successful');
+    alert('Login Successful');
     navigation.navigate('HomeScreen');
   }catch(error){
     console.error('Login Error:',error);
-    Alert.alert('Error','Something went wrong.Please try again.');
+    alert('Something went wrong.Please try again.');
   }
   };
   const validateInput = () => {
     if (!UserEmail.trim()) {
-      Alert.alert('Validation Error', 'Email is required');
+      alert( 'Email is required');
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(UserEmail)) {
-      Alert.alert('Validation Error', 'Invalid email format');
+      alert( 'Invalid email format');
       return false;
     }
     if (!UserPassword.trim()) {
-      Alert.alert('Validation Error', 'Password is required');
+      alert( 'Password is required');
       return false;
     }
     if (UserPassword.length < 6) {
-      Alert.alert(
-        'Validation Error',
+      alert(
         'Password must be at least 6 characters long'
       );
       return false;

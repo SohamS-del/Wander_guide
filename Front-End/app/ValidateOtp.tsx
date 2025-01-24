@@ -1,67 +1,67 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, View ,SafeAreaView,ImageBackground,TouchableOpacity,TextInput,Alert } from 'react-native'
-import React,{useState} from 'react'
 
-const ForgotPasswordScreen = ({navigation}: {navigation: any}) => {
+const ValidateOtp = ({ route, navigation }:{route:any,navigation:any}) => {
+    const { email } = route.params; // Retrieve email from navigation params
+    const [otp, setOtp] = useState('');
 
     const goTologinpage = () =>{
         navigation.navigate("Login");
       }
-      const [email, setEmail] = useState('');
 
-    const sendOtp =async () => {
-      try {
-          const response = await fetch('https://localhost:7209/api/Auth/forgot-password', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email })
-          });
-          const data = await response.json();
-          if (response.ok) {
-              alert('OTP has been sent to your email');
-              navigation.navigate('ValidateOtp', { email }); // Pass email to next screen
-          } else {
-              alert(data.message);
-          }
-      } catch (error) {
-          console.error(error);
-      }
-  };
-      
+    const handleValidateOtp = async () => {
+        try {
+            const response = await fetch('https://localhost:7209/api/Auth/Validate-Otp-Request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, otp })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                alert('OTP validated successfully');
+                navigation.navigate('ResetPassword', { email }); // Pass email to reset password screen
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-  return (
-    <SafeAreaView 
-          style={[styles.safeArea,styles.container]} >
-            <ImageBackground source={require('./assets/mit.png')} resizeMode="cover" style={styles.backimage}></ImageBackground>
-            <Text onPress = {goTologinpage}  style={styles.backarrow}>
-            ← 
-            </Text>
-            <Text style={styles.resettitle}>RESET PASSWORD</Text>
-             <TouchableOpacity 
-                      style={styles.OtpButtonStyle} 
-                      onPress={sendOtp} 
-                      activeOpacity={0.8}>
-                      
-                      <Text style={styles.OtpButtonTextStyle}>Send Otp</Text>
-                    </TouchableOpacity>
-            
-            <View style = {styles.Emailcontainer}>
-          <TextInput 
-                    style={styles.EmailtextInput}
-                    numberOfLines={4}
-                    placeholder  = '  Enter Your Email'
-                    placeholderTextColor="#761B89"
-                    maxLength={256}
-                    value={email}
-                    onChangeText={setEmail}
-                    
-                  />
-        </View>
-        </SafeAreaView>
+    return (
         
-      )
-}
+        <SafeAreaView 
+                  style={[styles.safeArea,styles.container]} >
+                    <ImageBackground source={require('./assets/mit.png')} resizeMode="cover" style={styles.backimage}></ImageBackground>
+                    <Text onPress = {goTologinpage}  style={styles.backarrow}>
+                    ← 
+                    </Text>
+                    <Text style={styles.resettitle}>RESET PASSWORD</Text>
+                     <TouchableOpacity 
+                              style={styles.OtpButtonStyle} 
+                              onPress={handleValidateOtp} 
+                              activeOpacity={0.8}>
+                              
+                              <Text style={styles.OtpButtonTextStyle}>Verify Otp</Text>
+                            </TouchableOpacity>
+                    
+                    <View style = {styles.Emailcontainer}>
+                  <TextInput 
+                            style={styles.EmailtextInput}
+                            numberOfLines={4}
+                            placeholder  = '  One Time Password'
+                            placeholderTextColor="#761B89"
+                            maxLength={256}
+                            value={otp}
+                            onChangeText={setOtp}
+                            
+                          />
+                </View>
+                </SafeAreaView>
+    );
+};
 
-export default ForgotPasswordScreen
+export default ValidateOtp;
 
 const styles = StyleSheet.create({
     google:{

@@ -31,6 +31,11 @@ public class AuthController : ControllerBase
     {
         return _authService.ForgotPassword(request);
     }
+    [HttpPost("Validate-Otp-Request")]
+    public Task<IActionResult> ValidateOtpRequest([FromBody] ValidateOtpRequest request)
+    {
+        return _authService.ValidateOtpRequest(request);
+    }
 
     [HttpPost("reset-password")]
     public Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
