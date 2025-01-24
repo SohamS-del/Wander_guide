@@ -9,6 +9,7 @@ import SosScreen from '../SosScreen';
 import { TransitionPresets, TransitionSpecs } from '@react-navigation/bottom-tabs';
 import ValidateOtp from '../ValidateOtp';
 import ResetPassword from '../ResetPassword';
+import NearbyPlaces from '../NearbyPlacesScreen';
 
 const MyStack = () => {
     const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ const MyStack = () => {
         <Stack.Screen name="SosScreen" component={SosScreen} />
         <Stack.Screen name="ValidateOtp" component={ValidateOtp} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="NearbyPlaces" component={NearbyPlaces}/>
       </Stack.Navigator>
     
   );
