@@ -78,5 +78,21 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.LocationController",
+    "Method": "PostLocation",
+    "RelativePath": "api/Location",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "location",
+        "Type": "Backend_WanderGuide.Models.LocationData",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

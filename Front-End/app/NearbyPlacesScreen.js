@@ -1,178 +1,86 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import axios from 'axios';
 
-const NearbyPlaces = () => {
+const NearbyPlacesScreen = () => {
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [places, setPlaces] = useState([]);
-
-  const FOURSQUARE_API_KEY = 'fsq3pRYZAOfwaPMBGhjMF+tOzFhhJ3dPzC90WNoAYVKhe2Q=';
-
-  const requestLocationPermission = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied.');
-      return;
-    }
-
-    let currentLocation = await Location.getCurrentPositionAsync({});
-    setLocation(currentLocation);
-    fetchNearbyPlaces(currentLocation.coords.latitude, currentLocation.coords.longitude);
-  };
-
-  const fetchNearbyPlaces = async (latitude, longitude) => {
-    try {
-      const response = await axios.get(
-        `https://api.foursquare.com/v3/places/nearby`,
-        {
-          params: {
-            ll: `${latitude},${longitude}`,
-            radius: 5000,
-            limit: 10,
-          },
-          headers: {
-            Authorization: FOURSQUARE_API_KEY,
-          },
-          timeout: 10000,
-        }
-      );
-      setPlaces(response.data.results);
-    } catch (error) {
-      console.error('Error fetching places:', error);
-      setErrorMsg('Error fetching places');
-    }
-  };
+  const Name = "Soham";
+  const Phone = 8530804663;
+  const UserId = 1201;
+  const Id = 1001;
 
   useEffect(() => {
-    // Initial location fetch
-    requestLocationPermission();
-
-    // Set interval to update location every 30 seconds
-    const intervalId = setInterval(async () => {
-      try {
-        let currentLocation = await Location.getCurrentPositionAsync({});
-        setLocation(currentLocation);
-        fetchNearbyPlaces(currentLocation.coords.latitude, currentLocation.coords.longitude);
-      } catch (error) {
-        console.error('Error updating location:', error);
+    const fetchLocation = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.error('Location permission denied');
+        return;
       }
-    }, 30000); // 30 seconds
 
-    // Clear interval on component unmount
-    return () => clearInterval(intervalId);
+      const location = await Location.getCurrentPositionAsync({});
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+
+      // Send location to backend every minute
+      const interval = setInterval(() => {
+        sendLocationToBackend(location.coords.latitude, location.coords.longitude);
+      }, 60000); // Send every 60 seconds
+
+      return () => clearInterval(interval); // Cleanup on unmount
+    };
+
+    fetchLocation();
   }, []);
 
-  // Function to render header content (location and button)
-  const renderHeader = () => (
-    <View style={styles.headerContainer}>
-      {errorMsg ? (
-        <Text style={styles.errorMsg}>{errorMsg}</Text>
-      ) : location ? (
-        <>
-          <Text style={styles.locationText}>
-            Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}
-          </Text>
-          <TouchableOpacity style={styles.refreshButton} onPress={requestLocationPermission}>
-            <Text style={styles.refreshButtonText}>Refresh Location</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <Text style={styles.loadingText}>Fetching location...</Text>
-      )}
-    </View>
-  );
+  const sendLocationToBackend = async (latitude, longitude) => {
+    try {
+      const response = await fetch('locationUrl', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Id:0,
+          UserId:123,
+          Name:'soham',
+          Phone:865202222,
+          Email:"kachingjutsu@gmail.com",
+          Latitude: latitude,
+          Longitude : longitude,
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      const data = await response.json();
+      console.log('Location sent to backend:', data);
+    } catch (error) {
+      console.error('Error sending location to backend:', error);
+    }
+  };
 
-  // Function to render each place item
-  const renderItem = ({ item }) => (
-    <View style={styles.placeItem}>
-      <Text style={styles.placeName}>{item.name}</Text>
-      <Text style={styles.placeAddress}>{item.location.address || 'No address available'}</Text>
-    </View>
-  );
+  if (!location) return null;
 
   return (
-    <FlatList
-      ListHeaderComponent={renderHeader} // Attach header
-      data={places}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={renderItem}
-      contentContainerStyle={styles.scrollContainer}
-      ListEmptyComponent={<Text style={styles.emptyText}>No nearby places found.</Text>}
-    />
+    <MapView
+      provider="google"
+      style={styles.map}
+      region={{
+        latitude: location.latitude,
+        longitude: location.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }}>
+      <Marker coordinate={location} title="Your Location" />
+    </MapView>
   );
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    padding: 20,
-    backgroundColor: '#6200ea',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  locationText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 15,
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#fff',
-    marginTop: 20,
-  },
-  errorMsg: {
-    color: '#ff0000',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  refreshButton: {
-    marginTop: 15,
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  refreshButtonText: {
-    color: '#6200ea',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  scrollContainer: {
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-  },
-  placeItem: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 10,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  placeName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  placeAddress: {
-    fontSize: 14,
-    color: '#555',
-  },
-  emptyText: {
-    fontSize: 18,
-    color: '#555',
-    textAlign: 'center',
-    marginTop: 20,
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
-export default NearbyPlaces;
+export default NearbyPlacesScreen;

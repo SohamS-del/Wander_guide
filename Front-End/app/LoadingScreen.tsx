@@ -7,7 +7,7 @@ export default function LoadingScreen({navigation}: {navigation: any}){
     navigation.navigate("Login")
   }
   const newbutton2 = () =>{
-    navigation.navigate("NearbyPlaces")
+    navigation.navigate("HomeScreen")
   }
 
   return (

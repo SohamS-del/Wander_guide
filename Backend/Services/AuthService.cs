@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 public class AuthService : IAuthService
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    
 
-    public AuthService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        
     }
 
     public async Task<IActionResult> Signup(SignupRequest request)
@@ -22,8 +24,10 @@ public class AuthService : IAuthService
         if (!AuthUtilities.IsValidEmail(request.Email))
             return new BadRequestObjectResult(new { message = "Invalid email format" });
 
-        if (!AuthUtilities.CheckEmailExists(request.Email))
-            return new BadRequestObjectResult(new { message = "Email does not exist in DNS" });
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return new BadRequestObjectResult(new { message = "Name is required" });
+
+  
 
         if (request.Password != request.ConfirmPassword)
             return new BadRequestObjectResult(new { message = "Password and Confirm Password do not match" });
@@ -32,7 +36,14 @@ public class AuthService : IAuthService
         if (existingUser != null)
             return new BadRequestObjectResult(new { message = "Email is already registered" });
 
-        var user = new IdentityUser { UserName = request.Email, Email = request.Email };
+        var user = new ApplicationUser
+        {
+            UserName = request.Email,
+            Email = request.Email,
+            Name = request.Name,
+            Phone = request.Phone
+        };
+
         var result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)

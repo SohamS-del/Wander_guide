@@ -16,7 +16,7 @@ const ResetPassword = ({ route, navigation }:{route:any,navigation:any}) => {
         }
 
         try {
-            const response = await fetch('https://localhost:7209/api/Auth/reset-password', {
+            const response = await fetch('ResetPassUrl', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ Email: email, // Match the key names expected by the backend

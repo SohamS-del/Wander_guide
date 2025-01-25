@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View,Button } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,6 +15,9 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
     const goToSOSPage = () =>{
         navigation.navigate("SosScreen")
       };
+      const handleViewLocation = () => {
+        navigation.navigate('NearbyPlacesScreen'); // Navigate to the NearbyPlaces screen when the button is pressed
+      };
   return (
     <SafeAreaView style = {styles.container}>
       <Text style = {styles.homescreentxt}>HomeScreen</Text>
@@ -27,6 +30,7 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
       <Text onPress = {goToSOSPage} style={styles.goback}>
                         SOS
                       </Text>
+                      <Button title="View Location on Map" onPress={handleViewLocation} />
     </SafeAreaView>
     
   )
