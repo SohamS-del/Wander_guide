@@ -1,13 +1,33 @@
-import { StyleSheet, StatusBar, TextInput, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  StatusBar,
+  TextInput,
+  Text,
+  View,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import { SignUpUrl } from './components/url'; // Ensure this URL is correct and exported
+import { Snackbar } from 'react-native-paper'; // Import Snackbar component
 
 const Signup = ({ navigation }: { navigation: any }) => {
   const [UserEmail, SetEmail] = React.useState('');
   const [UserPassword, SetPassword] = React.useState('');
   const [UserConfirm, SetConfirm] = React.useState('');
+
+  const [snackbarVisible, setSnackbarVisible] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [snackbarColor, setSnackbarColor] = React.useState('red');
+
+  // Function to show Snackbar
+  const showSnackbar = (message: string, color: string = 'red') => {
+    setSnackbarMessage(message);
+    setSnackbarColor(color);
+    setSnackbarVisible(true);
+  };
 
   // Navigation to login page
   const goTologinPage = () => {
@@ -17,11 +37,11 @@ const Signup = ({ navigation }: { navigation: any }) => {
   // Sign-up button handler
   const SignUpButton = async () => {
     if (!UserEmail || !UserPassword || !UserConfirm) {
-      alert('Please fill all the fields!');
+      showSnackbar('Please fill all the fields!', 'red');
       return;
     }
     if (UserPassword !== UserConfirm) {
-      alert('Passwords do not match!');
+      showSnackbar('Passwords do not match!', 'red');
       return;
     }
 
@@ -41,20 +61,23 @@ const Signup = ({ navigation }: { navigation: any }) => {
       const result = await response.json();
 
       if (response.ok) {
-        alert('User Created Successfully!');
+        showSnackbar('User Created Successfully!', 'green');
         navigation.navigate('LoadingScreen'); // Redirect on success
       } else {
-        alert(result.message || 'Signup Failed!');
+        showSnackbar(result.message || 'Signup Failed!', 'red');
       }
     } catch (error) {
       console.error('Error during signup:', error);
-      alert('An error occurred. Please try again later.');
+      showSnackbar('An error occurred. Please try again later.', 'red');
     }
   };
 
   return (
     <SafeAreaView style={[styles.safeArea, styles.container]}>
-      <ImageBackground source={require('./assets/mit.png')} resizeMode="cover" style={styles.backimage}></ImageBackground>
+      <ImageBackground
+        source={require('./assets/mit.png')}
+        resizeMode="cover"
+        style={styles.backimage}></ImageBackground>
       <Text onPress={goTologinPage} style={styles.signUpLink}>
         Log in
       </Text>
@@ -94,10 +117,23 @@ const Signup = ({ navigation }: { navigation: any }) => {
           secureTextEntry
         />
       </View>
-      <TouchableOpacity style={styles.loginButtonStyle} onPress={SignUpButton} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.loginButtonStyle}
+        onPress={SignUpButton}
+        activeOpacity={0.8}>
         <Text style={styles.loginButtonTextStyle}>Create Account</Text>
       </TouchableOpacity>
-      <Text style={styles.socialAccText}>By clicking above you are agreeing to our Terms and Conditions.</Text>
+      <Text style={styles.socialAccText}>
+        By clicking above you are agreeing to our Terms and Conditions.
+      </Text>
+      {/* Snackbar Component */}
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        style={{ backgroundColor: snackbarColor }}>
+        {snackbarMessage}
+      </Snackbar>
     </SafeAreaView>
   );
 };
@@ -121,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
     color: '#522D7E',
-    top:-30
+    top: -30,
   },
   loginButtonStyle: {
     backgroundColor: '#522D7E',
@@ -146,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginTop: 10,
-    top:30,
+    top: 30,
     color: '#761B89',
   },
   signUpLink: {
@@ -193,7 +229,7 @@ const styles = StyleSheet.create({
   backimage: {
     width: 100,
     height: 100,
-    top:-10,
-    marginBottom:60
+    top: -10,
+    marginBottom: 60,
   },
 });
