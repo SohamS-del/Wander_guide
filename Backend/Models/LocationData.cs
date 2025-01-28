@@ -6,21 +6,7 @@ namespace Backend_WanderGuide.Models
     public class LocationData
     {
         public int Id { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
-
-        [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
-
-        [Required]
-        [Phone]
-        public string Phone { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         [Range(-90, 90)]

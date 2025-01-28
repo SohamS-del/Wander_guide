@@ -17,6 +17,8 @@ const Signup = ({ navigation }: { navigation: any }) => {
   const [UserEmail, SetEmail] = React.useState('');
   const [UserPassword, SetPassword] = React.useState('');
   const [UserConfirm, SetConfirm] = React.useState('');
+  const [UserName, SetName] = React.useState('');
+  const [UserPhone, SetPhone] = React.useState('');
 
   const [snackbarVisible, setSnackbarVisible] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
@@ -55,6 +57,8 @@ const Signup = ({ navigation }: { navigation: any }) => {
           Email: UserEmail,
           Password: UserPassword,
           ConfirmPassword: UserConfirm,
+          Name:UserName,
+          Phone:UserPhone
         }),
       });
 

@@ -161,6 +161,37 @@
         }
       }
     },
+    "/api/EmergencyContacts/save": {
+      "post": {
+        "tags": [
+          "EmergencyContacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Location": {
       "post": {
         "tags": [
@@ -185,6 +216,32 @@
   },
   "components": {
     "schemas": {
+      "EmergencyContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "emergencyPhone1": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone2": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone3": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
       "ForgotPasswordRequest": {
         "type": "object",
         "properties": {
@@ -197,12 +254,8 @@
       },
       "LocationData": {
         "required": [
-          "email",
           "latitude",
-          "longitude",
-          "name",
-          "phone",
-          "userId"
+          "longitude"
         ],
         "type": "object",
         "properties": {
@@ -211,23 +264,8 @@
             "format": "int32"
           },
           "userId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "maxLength": 100,
-            "minLength": 0,
-            "type": "string"
-          },
-          "phone": {
-            "minLength": 1,
             "type": "string",
-            "format": "tel"
-          },
-          "email": {
-            "minLength": 1,
-            "type": "string",
-            "format": "email"
+            "format": "uuid"
           },
           "latitude": {
             "maximum": 90,

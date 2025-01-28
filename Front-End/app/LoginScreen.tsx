@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, Text, View, TouchableOpacity, ImageBackground } 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Snackbar } from 'react-native-paper';
 import { Loginurl } from './components/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }: { navigation: any }) => {
   const [UserEmail, SetEmail] = React.useState('');
@@ -36,16 +37,35 @@ const Login = ({ navigation }: { navigation: any }) => {
           password: UserPassword,
         }),
       });
-
+  
       if (!response.ok) {
         const error = await response.json();
         showSnackbar(error.message || 'Login failed. Please Try Again');
         return;
       }
-
+  
       const result = await response.json();
+      console.log('API Response:', result);
+
+if (!result || !result.userDetails) {
+  showSnackbar('Invalid server response. Please try again.');
+  return;
+}
+
+// Save userDetails in AsyncStorage
+const { userDetails } = result;
+
+      try {
+        await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
+        console.log('User details saved successfully.');
+      } catch (error) {
+        console.error('Error saving user details:', error);
+        showSnackbar('Failed to save user details. Please try again.');
+      }
+      
+  
       showSnackbar('Login Successful');
-      navigation.navigate('HomeScreen');
+      navigation.navigate('HomeScreen'); // Navigate to the next screen
     } catch (error) {
       console.error('Login Error:', error);
       showSnackbar('Something went wrong. Please try again.');
@@ -115,10 +135,18 @@ const Login = ({ navigation }: { navigation: any }) => {
         <Text style={styles.ForgotPassText}>Forgot Password ?</Text>
       </TouchableOpacity>
 
-      {/* Snackbar component for showing messages */}
-      <Snackbar visible={snackbarVisible} onDismiss={() => setSnackbarVisible(false)} duration={Snackbar.DURATION_SHORT}>
-        {snackbarMessage}
-      </Snackbar>
+      <Snackbar
+  visible={snackbarVisible}
+  onDismiss={() => setSnackbarVisible(false)}
+  duration={3000}
+  action={{
+    label: 'Close',
+    onPress: () => setSnackbarVisible(false),
+  }}
+>
+  {snackbarMessage}
+</Snackbar>
+
     </SafeAreaView>
   );
 };

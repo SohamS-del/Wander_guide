@@ -4,6 +4,7 @@ namespace Backend_WanderGuide.Models
 {
     public class SignupRequest
     {
+        
         [Required]
         [EmailAddress]
         public string Email { get; set; }

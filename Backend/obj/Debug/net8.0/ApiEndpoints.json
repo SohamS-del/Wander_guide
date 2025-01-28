@@ -80,6 +80,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Backend_WanderGuide.Controllers.EmergencyContactsController",
+    "Method": "SaveEmergencyContacts",
+    "RelativePath": "api/EmergencyContacts/save",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "EmergencyContacts",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Backend_WanderGuide.Controllers.LocationController",
     "Method": "PostLocation",
     "RelativePath": "api/Location",

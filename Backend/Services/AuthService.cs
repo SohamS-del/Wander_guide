@@ -59,8 +59,23 @@ public class AuthService : IAuthService
             return new UnauthorizedObjectResult(new { message = "Invalid email or password" });
 
         var token = AuthUtilities.GenerateJwtToken(user);
-        return new OkObjectResult(new { message = "Login Successful" });
+
+        // Assuming user has Name and PhoneNumber properties
+        var userDetails = new
+        {
+            userId = user.Id,
+            name = user.Name, // or user.FullName if available
+            email = user.Email,
+            phoneNumber = user.Phone
+        };
+
+        return new OkObjectResult(new
+        {
+            message = "Login Successful",
+            userDetails = userDetails
+        });
     }
+
 
     public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
     {

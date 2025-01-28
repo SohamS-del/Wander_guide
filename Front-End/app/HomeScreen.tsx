@@ -15,9 +15,15 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
     const goToSOSPage = () =>{
         navigation.navigate("SosScreen")
       };
-      const handleViewLocation = () => {
-        navigation.navigate('NearbyPlacesScreen'); // Navigate to the NearbyPlaces screen when the button is pressed
+    const goToProfileScreenPage = () =>{
+        navigation.navigate("ProfileScreen")
       };
+    const goToEmergencyContacts = () =>{
+        navigation.navigate("EmergencyContacts")
+      };
+      // const handleViewLocation = () => {
+      //   navigation.navigate('NearbyPlacesScreen'); // Navigate to the NearbyPlaces screen when the button is pressed
+      // };
   return (
     <SafeAreaView style = {styles.container}>
       <Text style = {styles.homescreentxt}>HomeScreen</Text>
@@ -27,10 +33,21 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
       <Text onPress = {goTologinPage} style={styles.goback}>
                         Go Back
                       </Text>
+      <Text onPress = {goToProfileScreenPage} style={styles.goback}>
+                        User Details
+                      </Text>
+      <Text onPress = {goToEmergencyContacts} style={styles.goback}>
+                       EmergencyContacts
+                      </Text>
       <Text onPress = {goToSOSPage} style={styles.goback}>
                         SOS
                       </Text>
-                      <Button title="View Location on Map" onPress={handleViewLocation} />
+      <Text onPress = {goToSOSPage} style={styles.goback}>
+                        EverydayRoutes
+                      </Text>
+        
+      
+                      {/* <Button title="View Location on Map" onPress={handleViewLocation} /> */}
     </SafeAreaView>
     
   )

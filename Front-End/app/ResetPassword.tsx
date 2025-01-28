@@ -33,7 +33,7 @@ const ResetPassword = ({ route, navigation }:any) => {
             const data = await response.json();
             if (response.ok) {
                 showSnackbar('Password reset successfully', 'green');
-                navigation.navigate('HomeScreen');
+                navigation.navigate('Login');
             } else {
                 showSnackbar(data.message || 'Password reset failed', 'red');
             }

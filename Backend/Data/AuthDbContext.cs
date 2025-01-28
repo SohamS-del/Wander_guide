@@ -6,5 +6,6 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser>
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) { }
     public DbSet<LocationData> LocationData { get; set; }
+    public DbSet<EmergencyContacts> EmergencyContacts { get; set; }
 
 }

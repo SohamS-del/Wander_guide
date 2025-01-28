@@ -9,7 +9,12 @@ import SosScreen from '../SosScreen';
 import { TransitionPresets, TransitionSpecs } from '@react-navigation/bottom-tabs';
 import ValidateOtp from '../ValidateOtp';
 import ResetPassword from '../ResetPassword';
-import NearbyPlaces from '../NearbyPlacesScreen';
+import ProfileScreen from '../Profile';
+import EmergencyContacts from '../EmergencyContacts';
+import SavedContacts from '../SavedContacts';
+import EverydayRoutes from '../EverydayRoutes';
+import FullListPage from '../FullListPage';
+// import CurrentLocationSend from '../CurrentLocationSend';
 
 const MyStack = () => {
     const Stack = createNativeStackNavigator();
@@ -24,7 +29,12 @@ const MyStack = () => {
         <Stack.Screen name="SosScreen" component={SosScreen} />
         <Stack.Screen name="ValidateOtp" component={ValidateOtp} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
-        <Stack.Screen name="NearbyPlaces" component={NearbyPlaces}/>
+        {/* <Stack.Screen name="CurrentLocationSend" component={CurrentLocationSend}/> */}
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
+        <Stack.Screen name="EmergencyContacts" component={EmergencyContacts}/>
+        <Stack.Screen name="SavedContacts" component={SavedContacts}/>
+        <Stack.Screen name="EverydayRoutes" component={EverydayRoutes}/>
+        <Stack.Screen name="FullListPage" component={FullListPage}/>
       </Stack.Navigator>
     
   );
