@@ -14,7 +14,8 @@ import EmergencyContacts from '../EmergencyContacts';
 import SavedContacts from '../SavedContacts';
 import EverydayRoutes from '../EverydayRoutes';
 import FullListPage from '../FullListPage';
-// import CurrentLocationSend from '../CurrentLocationSend';
+import CurrentLocationSend from '../CurrentLocationSend';
+import NearbyPlaces from '../NearbyPlaces';
 
 const MyStack = () => {
     const Stack = createNativeStackNavigator();
@@ -29,13 +30,15 @@ const MyStack = () => {
         <Stack.Screen name="SosScreen" component={SosScreen} />
         <Stack.Screen name="ValidateOtp" component={ValidateOtp} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
-        {/* <Stack.Screen name="CurrentLocationSend" component={CurrentLocationSend}/> */}
+        <Stack.Screen name="CurrentLocationSend" component={CurrentLocationSend}/>
         <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
         <Stack.Screen name="EmergencyContacts" component={EmergencyContacts}/>
         <Stack.Screen name="SavedContacts" component={SavedContacts}/>
         <Stack.Screen name="EverydayRoutes" component={EverydayRoutes}/>
         <Stack.Screen name="FullListPage" component={FullListPage}/>
+        <Stack.Screen name="NearbyPlaces" component={NearbyPlaces}/>
       </Stack.Navigator>
+      
     
   );
 };

@@ -1,5 +1,6 @@
 ﻿using Backend_WanderGuide.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend_WanderGuide.Controllers
 {
@@ -14,9 +15,9 @@ namespace Backend_WanderGuide.Controllers
             _context = context;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Consumes("application/json")]
-        public async Task<IActionResult> PostLocation([FromBody] LocationData location)
+        public async Task<IActionResult> PutLocation([FromBody] LocationData location)
         {
             if (location == null || !ModelState.IsValid)
             {
@@ -25,15 +26,33 @@ namespace Backend_WanderGuide.Controllers
 
             try
             {
-                // Store the location in the database
-                _context.LocationData.Add(location);
+                // Check if a record with the given UserId already exists
+                var existingLocation = await _context.LocationData
+                    .FirstOrDefaultAsync(l => l.UserId == location.UserId);
+
+                if (existingLocation != null)
+                {
+                    // Update the existing record
+                    existingLocation.Latitude = location.Latitude;
+                    existingLocation.Longitude = location.Longitude;
+                    existingLocation.Timestamp = location.Timestamp;
+
+                    _context.LocationData.Update(existingLocation);
+                }
+                else
+                {
+                    // Create a new record
+                    _context.LocationData.Add(location);
+                }
+
+                // Save changes to the database
                 await _context.SaveChangesAsync();
-                return Ok(location);
+                return Ok(new { message = "Location data successfully processed.", location });
             }
             catch (Exception ex)
             {
                 // Log exception (optional)
-                return StatusCode(500, new { message = "An error occurred while saving the location", error = ex.Message });
+                return StatusCode(500, new { message = "An error occurred while processing the location data.", error = ex.Message });
             }
         }
     }

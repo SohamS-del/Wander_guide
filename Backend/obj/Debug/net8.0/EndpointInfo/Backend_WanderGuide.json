@@ -193,7 +193,7 @@
       }
     },
     "/api/Location": {
-      "post": {
+      "put": {
         "tags": [
           "Location"
         ],

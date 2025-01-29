@@ -18,7 +18,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "app/components/api.js" // Ensure specific files are included
-, "app/CurrentLocationSend.js", "app/Profile.jsx", "app/NearbyPlaces.jsx"  ],
+, "app/CurrentLocationSend.js", "app/Profile.jsx", "app/NearbyPlaces.js", "app/UserContext.tsx", "app/LoginScreen.jsx"  ],
   "exclude": [
     "node_modules", // Exclude unnecessary directories
     "babel.config.js",

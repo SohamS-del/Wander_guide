@@ -97,9 +97,9 @@
   },
   {
     "ContainingType": "Backend_WanderGuide.Controllers.LocationController",
-    "Method": "PostLocation",
+    "Method": "PutLocation",
     "RelativePath": "api/Location",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
