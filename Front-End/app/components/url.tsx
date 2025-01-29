@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-//import React from 'react'
+import React from 'react'
 
 export const Loginurl = 'https://54f1-2401-4900-1c17-1003-99f9-503c-b224-512.ngrok-free.app/api/Auth/login';
 export const SignUpUrl = 'https://54f1-2401-4900-1c17-1003-99f9-503c-b224-512.ngrok-free.app/Auth/signup';

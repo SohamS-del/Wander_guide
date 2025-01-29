@@ -2,26 +2,16 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "jsx": "react", // Enable JSX support
-    "moduleResolution": "node", // Ensures proper resolution of modules
     "paths": {
       "@/*": [
         "./*"
       ]
-    },
-    "allowSyntheticDefaultImports": true, // Allow default imports
-    "esModuleInterop": true // Ensure compatibility with CommonJS modules
+    }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "app/components/api.js" // Ensure specific files are included
-, "app/CurrentLocationSend.js", "app/Profile.jsx", "app/NearbyPlaces.js", "app/UserContext.tsx", "app/LoginScreen.jsx"  ],
-  "exclude": [
-    "node_modules", // Exclude unnecessary directories
-    "babel.config.js",
-    "metro.config.js"
+    "expo-env.d.ts"
   ]
 }

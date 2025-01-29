@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "TransferProject",
-    "slug": "TransferProject",
+    "name": "my-app",
+    "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "app/assets/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -12,17 +12,15 @@
       "supportsTablet": true
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "app/assets/icon.png",
+        "backgroundColor": "#ffffff"
+      },
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBKt1C4naUd88TQqYnp2dcRcesZkLMDSMQ"
         }
-      },
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.kachingjutsu.TransferProject"
-    },
+    }},
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -42,14 +40,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "4ce151ff-d9ed-432e-a81a-953e32efd14a"
-      }
     }
   }
 }
