@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View,Button } from 'react-native'
+import { StyleSheet, Text, View,Button, TouchableOpacity, StatusBar } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import StartJourney from './StartJourney';
 
 
 
@@ -34,37 +35,47 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
       const goToLoginPage = () => {
         navigation.navigate("Login"); // Navigate to the NearbyPlaces screen when the button is pressed
       };
+      const StartJourney = () => {
+        navigation.navigate("StartJourney"); // Navigate to the NearbyPlaces screen when the button is pressed
+      };
       
   return (
     <SafeAreaView style = {styles.container}>
-      <Text style = {styles.homescreentxt}>HomeScreen</Text>
-      <Text onPress = {goToloadingPage} style={styles.lode}>
-                        LoadingScreen
-                      </Text>
-      <Text onPress = {Gobackbutton} style={styles.goback}>
-                        Signup
-                      </Text>
+<StatusBar backgroundColor="#5D5D5D" barStyle="light-content" />
+      <Text style={styles.manageAccount}>Manage your account</Text>
+
       <Text onPress = {gotoEverydayRoutes} style={styles.goback}>
-                        EverydayRoutes
+                         Pool car
+                      </Text>
+
+                      <Text onPress = {StartJourney} style={styles.goback}>
+                         Start journey
                       </Text>
       <Text onPress = {gotoNearbyPlaces} style={styles.goback}>
-                        NearbyPlaces
+      Home
                       </Text>
       <Text onPress = {goToProfileScreenPage} style={styles.goback}>
-                        User Details
+                        My Account
                       </Text>
       <Text onPress = {goToEmergencyContacts} style={styles.goback}>
-                       EmergencyContacts
+                       My Emergency Contacts
                       </Text>
       <Text onPress = {goToSOSPage} style={styles.goback}>
                         SOS
                       </Text>
-      <Text onPress = {goToLoginPage} style={styles.goback}>
-                        Login
-                      </Text>
+
         
+    <TouchableOpacity onPress={handleViewLocation}>
+    <Text style={styles.goback}>
+                        My Location
+                      </Text>
+    </TouchableOpacity>
+
+    <Text onPress = {goToSOSPage} style={styles.goback}>
+                        LOGOUT
+                      </Text>
       
-                      <Button  title="View Location on Map" onPress={handleViewLocation } />
+                      {/* <Button  title="View Location on Map" onPress={handleViewLocation } /> */}
     </SafeAreaView>
     
   )
@@ -74,8 +85,16 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'white',
+
     flex: 1,
+    width:"90%",
+    marginLeft:"5%"
+  },
+  manageAccount:{
+    fontSize:30,
+    fontWeight:"700",
+    marginTop:30,
+    marginBlock:30
   },
   button:{
     backgroundColor:'red'
@@ -88,10 +107,14 @@ const styles = StyleSheet.create({
         
     },
     goback:{
-        fontSize:20,
-        textAlign:"center",
-        bottom:-400,
-        margin:10
+        fontSize:18,
+        textAlign:"left",
+        backgroundColor:"white",
+        marginTop:20,
+        padding:18,
+        borderRadius:10,
+        borderLeftWidth:5,
+        borderLeftColor:"#5D5D5D"
       
     },
     loading:{

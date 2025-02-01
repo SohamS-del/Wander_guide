@@ -31,6 +31,10 @@ const NearbyPlaces = () => {
     }
   };
 
+  const menuPress = () =>{
+    navigation.navigate("HomeScreen")
+  }
+
   const fetchNearbyPlaces = async (latitude, longitude) => {
     try {
       const response = await axios.get(GoogleMapsAPIJson, {
@@ -79,6 +83,15 @@ const NearbyPlaces = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.welcome}>
+        <TouchableOpacity style={styles.menu} onPress={menuPress}>
+          <Image source={require('./assets/menu.png')} style={styles.menuIcon}  />
+        </TouchableOpacity>
+      
+        <Text style={styles.welcomeText}>Welcome back,</Text>
+        <Text style={styles.welcomeName}>Himanshu</Text>
+      </View>
+      
       <View style={styles.header}>
         <View style={styles.boxContainer}>
           <View style={styles.box}>
@@ -86,37 +99,37 @@ const NearbyPlaces = () => {
               <Text style={styles.boxTitle}>So where are you heading?</Text>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('CarpoolingPage')}
+                onPress={() => navigation.navigate('StartJourney')}
               >
                 <Text style={styles.buttonText}>Let’s start a journey</Text>
               </TouchableOpacity>
             </View>
-            <Image source={require('./assets/logo.png')} style={styles.boxImage} />
+            <Image source={require('./assets/loc.png')} style={styles.boxImage} />
           </View>
           <View style={styles.box}>
             <View style={styles.boxContent}>
               <Text style={styles.boxTitle}>Pool a car on your way</Text>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("EverydayRoutes")}>
                 <Text style={styles.buttonText}>Check Cars</Text>
               </TouchableOpacity>
             </View>
-            <Image source={require('./assets/mit.png')} style={styles.boxImage} />
+            <Image source={require('./assets/pool.png')} style={styles.boxImage} />
           </View>
         </View>
       </View>
 
       <View style={styles.listHeader}>
-        <Text style={styles.listHeading}>Places Near You</Text>
+        <Text style={styles.listHeading}>Places within 10kms</Text>
         <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
           <Text style={styles.viewAll}>View all</Text>
         </TouchableOpacity>
       </View>
-      <TextInput
+      {/* <TextInput
         style={styles.searchBar}
         placeholder="Search places"
         value={searchQuery}
         onChangeText={setSearchQuery}
-      />
+      /> */}
       <FlatList
         data={placesToShow}
         keyExtractor={(item, index) => index.toString()}
@@ -129,6 +142,7 @@ const NearbyPlaces = () => {
           <Text style={styles.showMoreText}>Show More</Text>
         </TouchableOpacity>
       )}
+      
     </View>
   );
 };
@@ -137,14 +151,40 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#ffffff' },
   header: {
     padding: 20,
-    backgroundColor: '#ADD8E6',
+    // backgroundColor: '#ADD8E6',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+  },
+  menu:{
+    position:"absolute",
+    marginTop:12,
+    alignSelf:"flex-end",
+    zIndex: 10,
+    
+  },
+  menuIcon:{
+    height:31,
+    width:35,
+    marginRight:"7%",
+  },
+  welcome:{
+    paddingLeft:20,
+    marginTop:20
+  },
+  welcomeText:{
+    fontSize:22,
+    color:"#595959"
+  },
+  welcomeName:{
+    fontSize:26,
+    fontWeight:"bold",
+    color:"#595959",
+    marginTop:"-5"
   },
   boxContainer: { marginBottom: 20 },
   box: {
     flexDirection: 'row',
-    backgroundColor: '#1C1C1E',
+    backgroundColor: '#5D5D5D',
     padding: 20,
     borderRadius: 15,
     marginBottom: 10,
@@ -158,49 +198,54 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   boxTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '800',
     color: '#ffffff',
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#50E3C2',
+    backgroundColor: 'white',
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
     borderRadius: 5,
+    width:"70%"
   },
-  buttonText: { color: '#000000', fontSize: 14, fontWeight: '600', textAlign: 'center' },
+  buttonText: { color: '#5D5D5D', fontSize: 16, fontWeight: '600', textAlign: 'center' },
   listHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 20,
     marginVertical: 10,
   },
   listHeading: { fontSize: 20, fontWeight: 'bold', color: '#4A4A4A' },
-  viewAll: { color: '#007BFF', fontSize: 16, fontWeight: '600' },
+  viewAll: { color: '#007BFF', fontSize: 16, fontWeight: '600',textDecorationLine:"underline" },
   searchBar: {
     backgroundColor: '#F7F7F7',
     padding: 15,
     borderRadius: 25,
-    marginHorizontal: 15,
+    marginHorizontal: 20,
     marginBottom: 20,
     borderWidth: 1,
     borderColor: '#E6E6E6',
   },
-  scrollContainer: { paddingHorizontal: 15, paddingBottom: 20 },
+  scrollContainer: { paddingHorizontal: 20, paddingBottom: 20 ,borderRadius: 15,height:"auto",backgroundColor:"#EEEEEE",width:"90%",marginLeft:"5%"},
   placeItem: {
-    backgroundColor: '#F7F9FC',
-    padding: 20,
-    marginBottom: 15,
-    borderRadius: 15,
-    elevation: 5,
+    backgroundColor: '#EEEEEE',
+    paddingTop: 20,
+    paddingBottom:12.5,
+    marginBottom: 12.5,
+    // borderRadius: 7,
+    // elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
+    borderBottomColor:"black",
+    borderBottomWidth:1,
+    borderBottomColor:"#CCCCCC"
   },
-  placeName: { fontSize: 18, fontWeight: 'bold', marginBottom: 5, color: '#333333' },
+  placeName: { fontSize: 18, fontWeight: 'bold', marginBottom: 12, color: '#5D5D5D',textDecorationLine:"underline" },
   placeAddress: { fontSize: 14, color: '#666666' },
   emptyText: { fontSize: 18, color: '#999999', textAlign: 'center', marginTop: 20 },
   showMore: { alignItems: 'center', marginVertical: 10 },

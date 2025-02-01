@@ -16,12 +16,13 @@ import EverydayRoutes from '../EverydayRoutes';
 import FullListPage from '../FullListPage';
 import CurrentLocationSend from '../CurrentLocationSend';
 import NearbyPlaces from '../NearbyPlaces';
+import StartJourney from '../StartJourney';
 
 const MyStack = () => {
     const Stack = createNativeStackNavigator();
   return (
     
-      <Stack.Navigator initialRouteName='LoadingScreen' screenOptions={{headerShown:false,gestureEnabled:true,gestureDirection:"horizontal"}}>
+      <Stack.Navigator initialRouteName='NearbyPlaces' screenOptions={{headerShown:false,gestureEnabled:true,gestureDirection:"horizontal"}}>
         <Stack.Screen name="LoadingScreen" component={LoadingScreen}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Signup" component={Signup} />
@@ -37,6 +38,7 @@ const MyStack = () => {
         <Stack.Screen name="EverydayRoutes" component={EverydayRoutes}/>
         <Stack.Screen name="FullListPage" component={FullListPage}/>
         <Stack.Screen name="NearbyPlaces" component={NearbyPlaces}/>
+        <Stack.Screen name="StartJourney" component={StartJourney}/>
       </Stack.Navigator>
       
     
