@@ -41,7 +41,7 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
       
   return (
     <SafeAreaView style = {styles.container}>
-<StatusBar backgroundColor="#5D5D5D" barStyle="light-content" />
+<StatusBar backgroundColor="#522D7E" barStyle="light-content" />
       <Text style={styles.manageAccount}>Manage your account</Text>
 
       <Text onPress = {gotoEverydayRoutes} style={styles.goback}>

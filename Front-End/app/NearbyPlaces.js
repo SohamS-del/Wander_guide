@@ -178,24 +178,26 @@ const styles = StyleSheet.create({
   welcomeName:{
     fontSize:26,
     fontWeight:"bold",
-    color:"#595959",
+    color:"#522D7E",
     marginTop:"-5"
   },
   boxContainer: { marginBottom: 20 },
   box: {
     flexDirection: 'row',
-    backgroundColor: '#5D5D5D',
+    backgroundColor: '#522D7E',
     padding: 20,
-    borderRadius: 15,
+    borderRadius: 18,
     marginBottom: 10,
     alignItems: 'center',
   },
-  boxContent: { flex: 1 },
+  boxContent: { flex: 1,
+   },
   boxImage: {
     width: 80,
     height: 80,
     borderRadius: 10,
     marginLeft: 10,
+    
   },
   boxTitle: {
     fontSize: 20,
@@ -210,16 +212,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width:"70%"
   },
-  buttonText: { color: '#5D5D5D', fontSize: 16, fontWeight: '600', textAlign: 'center' },
+  buttonText: { color: '#522D7E', fontSize: 16, fontWeight: '600', textAlign: 'center' },
   listHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 20,
     marginVertical: 10,
+  
   },
   listHeading: { fontSize: 20, fontWeight: 'bold', color: '#4A4A4A' },
-  viewAll: { color: '#007BFF', fontSize: 16, fontWeight: '600',textDecorationLine:"underline" },
+  viewAll: { color: '#4A4A4A', fontSize: 16, fontWeight: '600',textDecorationLine:"underline" },
   searchBar: {
     backgroundColor: '#F7F7F7',
     padding: 15,
@@ -245,11 +248,11 @@ const styles = StyleSheet.create({
     borderBottomWidth:1,
     borderBottomColor:"#CCCCCC"
   },
-  placeName: { fontSize: 18, fontWeight: 'bold', marginBottom: 12, color: '#5D5D5D',textDecorationLine:"underline" },
-  placeAddress: { fontSize: 14, color: '#666666' },
+  placeName: { fontSize: 18, fontWeight: 'bold', marginBottom: 12, color: '#4A4A4A',textDecorationLine:"underline" },
+  placeAddress: { fontSize: 14, color: '#4A4A4A' },
   emptyText: { fontSize: 18, color: '#999999', textAlign: 'center', marginTop: 20 },
   showMore: { alignItems: 'center', marginVertical: 10 },
-  showMoreText: { fontSize: 16, color: '#007BFF', fontWeight: '600' },
+  showMoreText: { fontSize: 16, color: '#4A4A4A', fontWeight: '600' },
 });
 
 export default NearbyPlaces;
