@@ -80,6 +80,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Backend_WanderGuide.Controllers.ContactsController",
+    "Method": "AddContact",
+    "RelativePath": "api/Contacts",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contact",
+        "Type": "Backend_WanderGuide.Models.ExtraContacts",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Backend_WanderGuide.Models.ExtraContacts",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Backend_WanderGuide.Controllers.EmergencyContactsController",
     "Method": "SaveEmergencyContacts",
     "RelativePath": "api/EmergencyContacts/save",
@@ -94,6 +120,122 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
+    "Method": "DeleteJourney",
+    "RelativePath": "api/JourneyLookup/{journeyId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journeyId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
+    "Method": "GetJourneyByPhone",
+    "RelativePath": "api/JourneyLookup/GetJourneyByPhone/{phoneNumber}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "phoneNumber",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Backend_WanderGuide.Models.CreateJourney",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
+    "Method": "GetJourneysByUserId",
+    "RelativePath": "api/JourneyLookup/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "JourneyLookupByUserId",
+    "Method": "DeleteJourney",
+    "RelativePath": "api/JourneyLookupByUserId/{journeyId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journeyId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "JourneyLookupByUserId",
+    "Method": "GetJourneysByUserId",
+    "RelativePath": "api/JourneyLookupByUserId/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.JourneysController",
+    "Method": "CreateJourney",
+    "RelativePath": "api/Journeys",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journey",
+        "Type": "Backend_WanderGuide.Models.CreateJourney",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Backend_WanderGuide.Controllers.LocationController",

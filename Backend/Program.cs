@@ -1,6 +1,7 @@
 
 
 using Backend_WanderGuide.Models;
+using Backend_WanderGuide.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultTokenProviders();
 //services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJourneyRepository, JourneyRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+
 
 
 

@@ -89,7 +89,7 @@ const NearbyPlaces = () => {
         </TouchableOpacity>
       
         <Text style={styles.welcomeText}>Welcome back,</Text>
-        <Text style={styles.welcomeName}>Himanshu</Text>
+        <Text style={styles.welcomeName}>Soham</Text>
       </View>
       
       <View style={styles.header}>

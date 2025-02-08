@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend_WanderGuide.Migrations
 {
     /// <inheritdoc />
-    public partial class third : Migration
+    public partial class UpdateJourneyIdToGuid : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,6 +53,19 @@ namespace Backend_WanderGuide.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Contacts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JourneyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContactName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contacts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmergencyContacts",
                 columns: table => new
                 {
@@ -65,6 +78,31 @@ namespace Backend_WanderGuide.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmergencyContacts", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Journeys",
+                columns: table => new
+                {
+                    JourneyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JourneyCreate = table.Column<DateOnly>(type: "date", nullable: false),
+                    JourneyStart = table.Column<DateOnly>(type: "date", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FromMit = table.Column<bool>(type: "bit", nullable: false),
+                    TodayOnly = table.Column<bool>(type: "bit", nullable: false),
+                    IsStarted = table.Column<bool>(type: "bit", nullable: false),
+                    StartLatitude = table.Column<double>(type: "float", nullable: false),
+                    StartLongitude = table.Column<double>(type: "float", nullable: false),
+                    DestinationLatitude = table.Column<double>(type: "float", nullable: false),
+                    DestinationLongitude = table.Column<double>(type: "float", nullable: false),
+                    SeatsAvailable = table.Column<int>(type: "int", nullable: false),
+                    CostPerSeat = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Journeys", x => x.JourneyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -248,7 +286,13 @@ namespace Backend_WanderGuide.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Contacts");
+
+            migrationBuilder.DropTable(
                 name: "EmergencyContacts");
+
+            migrationBuilder.DropTable(
+                name: "Journeys");
 
             migrationBuilder.DropTable(
                 name: "LocationData");
