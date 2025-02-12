@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
@@ -82,7 +82,7 @@ const NearbyPlaces = () => {
   const placesToShow = collapsed ? filteredPlaces.slice(0, 5) : filteredPlaces;
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.welcome}>
         <TouchableOpacity style={styles.menu} onPress={menuPress}>
           <Image source={require('./assets/menu.png')} style={styles.menuIcon}  />
@@ -119,17 +119,56 @@ const NearbyPlaces = () => {
       </View>
 
       <View style={styles.listHeader}>
+        <Text style={styles.listHeading}>My journey</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
+          {/* <Text style={styles.viewAll}>View all</Text> */}
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cont}>
+          <View style={styles.myJourneyCard}>
+            <View style={styles.myJourneyCardCont}> 
+            <Text style={styles.myJourneyDate}>19th Feb 2025 | 2pm</Text>  
+            <Text style={styles.myJourneyHeading}>HEADING TOWARDS</Text>        
+              <Text style={styles.myJourneyDestination}>Shop No 1 Gulmohor Regency, Symbiosis College Road, Viman Nagar, Pune - 411014</Text>
+              
+              <Text style={1==1 ?styles.started : styles.notStarted}>{1==1 ? "started" : "not started"}</Text>
+            </View>              
+          </View>
+      </View>
+
+
+      <View style={styles.listHeader}>
+        <Text style={styles.listHeading}>People who added me</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
+          <Text style={styles.viewAll}>View all</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.cont}>
+        <TouchableOpacity>
+          <View style={styles.addedMeCard}>
+              <View style={styles.addedMeCardCont}>          
+                <Text style={styles.addedName}>Himanshu Phalke</Text>
+                <Text style={styles.addedJourney}><Text style={styles.to}>Heading towards MIT ADT University Loni Kalbhor on </Text>19th Feb 2025 </Text>
+                <Text style={1==2 ?styles.started : styles.notStarted}>{1==2 ? "started" : "not started"}</Text>
+              </View>              
+            </View>
+        </TouchableOpacity>          
+      </View>
+
+      
+
+      <View style={styles.listHeader}>
         <Text style={styles.listHeading}>Places within 10kms</Text>
         <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
           <Text style={styles.viewAll}>View all</Text>
         </TouchableOpacity>
       </View>
-      {/* <TextInput
+      <TextInput
         style={styles.searchBar}
         placeholder="Search places"
         value={searchQuery}
         onChangeText={setSearchQuery}
-      /> */}
+      />
       <FlatList
         data={placesToShow}
         keyExtractor={(item, index) => index.toString()}
@@ -143,7 +182,7 @@ const NearbyPlaces = () => {
         </TouchableOpacity>
       )}
       
-    </View>
+    </ScrollView>
   );
 };
 
@@ -173,31 +212,29 @@ const styles = StyleSheet.create({
   },
   welcomeText:{
     fontSize:22,
-    color:"#595959"
+    color:"#007BFF"
   },
   welcomeName:{
     fontSize:26,
     fontWeight:"bold",
-    color:"#522D7E",
+    color:"#007BFF",
     marginTop:"-5"
   },
   boxContainer: { marginBottom: 20 },
   box: {
     flexDirection: 'row',
-    backgroundColor: '#522D7E',
+    backgroundColor: '#BA2966',
     padding: 20,
-    borderRadius: 18,
+    borderRadius: 15,
     marginBottom: 10,
     alignItems: 'center',
   },
-  boxContent: { flex: 1,
-   },
+  boxContent: { flex: 1 },
   boxImage: {
     width: 80,
     height: 80,
     borderRadius: 10,
     marginLeft: 10,
-    
   },
   boxTitle: {
     fontSize: 20,
@@ -212,17 +249,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width:"70%"
   },
-  buttonText: { color: '#522D7E', fontSize: 16, fontWeight: '600', textAlign: 'center' },
+  cont:{
+    width:"90%",
+    marginLeft:"5%",
+    marginBottom:20,
+    marginTop:-15
+  },
+  buttonText: { color: '#BA2966', fontSize: 16, fontWeight: '600', textAlign: 'center' },
   listHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 20,
     marginVertical: 10,
-  
   },
-  listHeading: { fontSize: 20, fontWeight: 'bold', color: '#4A4A4A' },
-  viewAll: { color: '#4A4A4A', fontSize: 16, fontWeight: '600',textDecorationLine:"underline" },
+  listHeading: { fontSize: 20, fontWeight: 'bold', color: '#007BFF' },
+  viewAll: { color: '#007BFF', fontSize: 16, fontWeight: '600',textDecorationLine:"underline" },
   searchBar: {
     backgroundColor: '#F7F7F7',
     padding: 15,
@@ -230,7 +272,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#E6E6E6',
+    borderColor: '#007BFF',
   },
   scrollContainer: { paddingHorizontal: 20, paddingBottom: 20 ,borderRadius: 15,height:"auto",backgroundColor:"#EEEEEE",width:"90%",marginLeft:"5%"},
   placeItem: {
@@ -248,11 +290,94 @@ const styles = StyleSheet.create({
     borderBottomWidth:1,
     borderBottomColor:"#CCCCCC"
   },
-  placeName: { fontSize: 18, fontWeight: 'bold', marginBottom: 12, color: '#4A4A4A',textDecorationLine:"underline" },
-  placeAddress: { fontSize: 14, color: '#4A4A4A' },
-  emptyText: { fontSize: 18, color: '#999999', textAlign: 'center', marginTop: 20 },
+  placeName: { fontSize: 18, fontWeight: 'bold', marginBottom: 12, color: '#007BFF',textDecorationLine:"underline" },
+  placeAddress: { fontSize: 14, color: '#BA2966' },
+  emptyText: { fontSize: 18, color: '#007BFF', textAlign: 'center', marginTop: 20 },
   showMore: { alignItems: 'center', marginVertical: 10 },
-  showMoreText: { fontSize: 16, color: '#4A4A4A', fontWeight: '600' },
+  showMoreText: { fontSize: 16, color: '#007BFF', fontWeight: '600' },
+  addedMe:{
+    fontSize:20,
+    fontWeight:"800",
+    color:"#595959"
+  },
+  addedMeCard:{
+    height:"auto",
+    backgroundColor:"#EEEEEE",
+    borderRadius:10,
+    marginTop:15,
+    // borderWidth:1.5,
+    // borderColor:"#BFBFBF"
+  },
+  addedMeCardCont:{
+    width:"90%",
+    marginLeft:"5%",
+    marginTop:15,
+    marginBottom:15
+  },
+  addedName:{
+    fontSize:19,
+    fontWeight:"600",
+    color:"#BA2966"
+  },
+  addedJourney:{
+    color:"#007BFF",
+    fontSize:14,
+    fontWeight:"600",
+    marginTop:10
+  },
+  to:{
+    color:"black",
+    fontWeight:"400"
+  },
+  started:{
+    backgroundColor:"green",
+    alignSelf:"flex-start",
+    paddingLeft:10,paddingRight:10,
+    paddingBottom:2,
+    borderRadius:20,
+    color:"white",
+    marginTop:10
+  },
+  notStarted:{
+    backgroundColor:"#5D5D5D",
+    alignSelf:"flex-start",
+    paddingLeft:10,paddingRight:10,
+    paddingBottom:2,
+    borderRadius:20,
+    color:"white",
+    marginTop:10
+  },
+  myJourneyCard:{
+    height:"auto",
+    backgroundColor:"white",
+    borderRadius:10,
+    marginTop:15,
+     borderWidth:1.5,
+    borderColor:"#BFBFBF"
+  },
+  myJourneyCardCont:{
+    width:"90%",
+    marginLeft:"5%",
+    marginTop:15,
+    marginBottom:15
+  },
+  myJourneyDate:{
+    color:"#0085FF",
+    fontSize:14,
+    fontWeight:"600",
+
+  },
+  myJourneyDestination:{
+    fontSize:16,
+    
+    color:"#5D5D5D",
+
+  },
+  myJourneyHeading:{
+    marginTop:10,
+    color:"#BA2966",
+    fontWeight:800,
+  }
 });
 
 export default NearbyPlaces;

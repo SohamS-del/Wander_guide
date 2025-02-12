@@ -1,5 +1,4 @@
-﻿
-using Backend_WanderGuide.Models;
+﻿using Backend_WanderGuide.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend_WanderGuide.Services
@@ -15,10 +14,12 @@ namespace Backend_WanderGuide.Services
 
         public async Task<CreateJourney> AddJourney(CreateJourney journey)
         {
+            journey.JourneyId = Guid.NewGuid(); // Ensure JourneyId is always generated
             _context.Journeys.Add(journey);
-            await _context.SaveChangesAsync(); // Saves to DB, auto-generating JourneyId
-            return journey; // Now includes generated JourneyId
+            await _context.SaveChangesAsync();
+            return journey; // Return journey with generated ID
         }
+
         public async Task<CreateJourney?> GetJourneyById(Guid journeyId)
         {
             return await _context.Journeys.FirstOrDefaultAsync(j => j.JourneyId == journeyId);

@@ -325,52 +325,6 @@
         }
       }
     },
-    "/api/JourneyLookupByUserId/user/{userId}": {
-      "get": {
-        "tags": [
-          "JourneyLookupByUserId"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/JourneyLookupByUserId/{journeyId}": {
-      "delete": {
-        "tags": [
-          "JourneyLookupByUserId"
-        ],
-        "parameters": [
-          {
-            "name": "journeyId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Journeys": {
       "post": {
         "tags": [

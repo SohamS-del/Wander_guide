@@ -13,16 +13,13 @@ namespace Backend_WanderGuide.Controllers
         private readonly IJourneyRepository _journeyRepository;
         private readonly AuthDbContext _context;
 
-        public JourneyLookupController(IContactRepository contactRepository, IJourneyRepository journeyRepository)
+        public JourneyLookupController(IContactRepository contactRepository, IJourneyRepository journeyRepository, AuthDbContext context)
         {
             _contactRepository = contactRepository;
             _journeyRepository = journeyRepository;
-        }
-        public JourneyLookupController(AuthDbContext context)
-        {
             _context = context;
         }
-
+      
 
 
         [HttpGet("GetJourneyByPhone/{phoneNumber}")]

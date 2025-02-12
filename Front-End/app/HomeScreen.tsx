@@ -41,7 +41,7 @@ const HomeScreen = ({navigation}: {navigation: any}) => {
       
   return (
     <SafeAreaView style = {styles.container}>
-<StatusBar backgroundColor="#522D7E" barStyle="light-content" />
+<StatusBar backgroundColor="#BA2966" barStyle="light-content" />
       <Text style={styles.manageAccount}>Manage your account</Text>
 
       <Text onPress = {gotoEverydayRoutes} style={styles.goback}>
@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
     fontSize:30,
     fontWeight:"700",
     marginTop:30,
-    marginBlock:30
+    marginBlock:30,
+    color:'#BA2966'
+    
   },
   button:{
     backgroundColor:'red'
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
         padding:18,
         borderRadius:10,
         borderLeftWidth:5,
-        borderLeftColor:"#5D5D5D"
+        borderLeftColor:"#BA2999"
       
     },
     loading:{

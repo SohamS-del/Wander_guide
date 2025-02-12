@@ -57,10 +57,11 @@ const EmergencyContacts = () => {
     };
 
     const payload = {
-      userId: userId, // Add userId to the payload
+       // Add userId to the payload
       emergencyPhone1: getPhoneNumber(selectedContacts[0]),
       emergencyPhone2: getPhoneNumber(selectedContacts[1]),
       emergencyPhone3: getPhoneNumber(selectedContacts[2]),
+      userId: userId
     };
 
     try {
@@ -132,9 +133,9 @@ const EmergencyContacts = () => {
   );
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
+    <View style={{ flex: 1, padding: 20 ,backgroundColor:"white"}}>
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 10 }}>
-        Select Emergency Contacts (Max 3)
+        Journey has been created successfully, Add Contacts (Max 3)
       </Text>
 
       <TextInput
@@ -176,12 +177,15 @@ const EmergencyContacts = () => {
 
       <TouchableOpacity
         onPress={saveContactsToBackend}
-        style={[styles.saveButton, { backgroundColor: isSaved ? '#28a745' : '#007bff' }]}
+        style={[styles.saveButton, { backgroundColor: isSaved ? '#28a745' : '#5D5D5D' }]}
         disabled={isSaved}
       >
         <Text style={styles.saveButtonText}>
-          {isSaved ? 'Emergency Contacts Saved' : 'Save Emergency Contacts'}
+          {isSaved ? 'Selected Contacts Saved' : 'Save Selected Contacts'}
         </Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Text style={styles.skip}>skip</Text>
       </TouchableOpacity>
     </View>
   );
@@ -216,12 +220,25 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 15,
     borderRadius: 5,
+    backgroundColor:"#5D5D5D"
   },
   saveButtonText: {
     color: 'white',
     fontSize: 16,
     textAlign: 'center',
   },
+  skip:{
+    textAlign:"center",
+    borderWidth:2,
+    borderColor:"grey",
+    padding:15,
+    borderRadius:5,
+    fontSize: 16,
+    fontWeight:"600",
+    color:"grey",
+    marginTop:15
+
+  }
 });
 
 export default EmergencyContacts;

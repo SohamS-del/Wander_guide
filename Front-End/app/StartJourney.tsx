@@ -10,7 +10,7 @@ import { RadioButton } from 'react-native-paper';
 import { handleUrlParams } from 'expo-router/build/fork/getStateFromPath-forks';
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const StartJourney =()=>{
+const StartJourney =({navigation}:{navigation:any})=>{
     const[travelDirection,setTravelDirection] = useState("from");
     const[travelType, setTravelType] = useState("today")
 
@@ -38,12 +38,32 @@ const StartJourney =()=>{
           setDate(selectedDate);
         }
       };
-    const createJourney = () =>{
-        console.log("Created")
+    // const createJourney = () =>{
+    //     navigation.navigate("EmergencyContacts")
+    // }
+
+    const createJourney = async () =>{
+        try{
+            const response = await fetch("create journey endpoint",{
+                method:"POST",
+                headers:{
+                    'content-type':'aplication/json'
+                },
+                body:"",
+            });
+            const data = await response.json();
+            if(data.status = "SUCCESS"){
+                const journeyId = data.id;
+                navigation.navigate("EmergencyContacts", {Id:journeyId});
+            }
+        }
+        catch{
+
+        }
     }
     return(
         <ScrollView style={styles.cont}>
-            <StatusBar backgroundColor="#5D5D5D" barStyle="light-content" />
+            <StatusBar backgroundColor="#BA2966" barStyle="light-content" />
             <View style={styles.createHeader}>
                 <Text style={styles.headerInfo}>Lets create a journey so people can join you
                 and get details on what all is there on route! </Text>
@@ -132,7 +152,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     createHeader:{
-        backgroundColor:"#5D5D5D",
+        backgroundColor:"#BA2966",
         height:300
     },
     headerInfo:{
@@ -175,15 +195,15 @@ const styles = StyleSheet.create({
     travelType:{
         fontSize:20,
         fontWeight:"800",
-        color:"#686868",
+        color:"#BA2966",
         marginTop:25
     },
     type:{
-        color:"#686868",
+        color:"#000",
     },
     actionName:{
         fontWeight:"600",
-        color:"#686868",
+        color:"#BA2966",
         fontSize:14,
         backgroundColor:"white",
         alignItems:"flex-start",
@@ -196,7 +216,7 @@ const styles = StyleSheet.create({
         marginTop:20
     },
     create:{
-        backgroundColor:"#5D5D5D",
+        backgroundColor:"#BA2966",
         textAlign:"center",
         paddingTop:15,
         paddingBottom:15,

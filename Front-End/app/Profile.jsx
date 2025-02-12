@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View,StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const ProfileScreen = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -30,18 +29,10 @@ const ProfileScreen = () => {
           <Text>Phone: {userDetails.phoneNumber}</Text>
         </>
       ) : (
-        <Text style = {styles.txt}>Loading...</Text>
+        <Text>Loading...</Text>
       )}
     </View>
   );
 };
 
 export default ProfileScreen;
-
-const styles = StyleSheet.create({
-  txt:{
-    color:"#522D7E",
-    fontSize:50,
-    alignContent:'center'
-  }
-})

@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'r
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const EverydayRoutes = () => {
+const EverydayRoutes = ({navigation}:{navigation:any}) => {
   const [startingPoint, setStartingPoint] = useState('MIT ADT University');
   const [destination, setDestination] = useState('');
 
@@ -24,6 +24,10 @@ const EverydayRoutes = () => {
   
   };
 
+  const seeDetails =() =>{
+    navigation.navigate("RideInfo")
+  }
+
   const handleDateChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false); // Hide picker after selection
     if (selectedDate) {
@@ -35,6 +39,7 @@ const EverydayRoutes = () => {
     {
       id: '1',
       driver: 'Shravani',
+      status:1,
       route: 'MIT-ADT → Katraj',
       car: 'Mercedes G-Wagon',
       date: '27th January 2025',
@@ -43,6 +48,7 @@ const EverydayRoutes = () => {
     {
       id: '2',
       driver: 'Soham',
+      status:1,
       route: 'MIT-ADT → Katraj',
       car: 'Lexus',
       date: '27th January 2025',
@@ -51,6 +57,7 @@ const EverydayRoutes = () => {
     {
       id: '3',
       driver: 'Vedant',
+      status:0,
       route: 'MIT-ADT → Katraj',
       car: 'BMW M2',
       date: '27th January 2025',
@@ -59,6 +66,7 @@ const EverydayRoutes = () => {
     {
       id: '4',
       driver: 'Kang',
+      status:1,
       route: 'MIT-ADT → Hadapsar',
       car: 'Range Rover SV Ranthambore',
       date: '27th January 2025',
@@ -73,11 +81,12 @@ const EverydayRoutes = () => {
         <Text style={styles.routeHighlight}>{item.route.split('→')[0].trim()}</Text> →{' '}
         <Text style={styles.routeHighlight}>{item.route.split('→')[1].trim()}</Text>
       </Text>
+      <Text style={item.status ==1 ? styles.rideStatus : styles.rideStatusOff}>{item.status ==1? "started" : "not started"}</Text>
       <Text style={styles.details}>
         {item.car} | {item.date} | {item.time}
       </Text>
-      <TouchableOpacity style={styles.bookButton}>
-        <Text style={styles.bookButtonText}>book a seat</Text>
+      <TouchableOpacity style={styles.bookButton} onPress={seeDetails}>
+        <Text style={styles.bookButtonText}>see details</Text>
       </TouchableOpacity>
     </View>
   );
@@ -242,6 +251,30 @@ const styles = StyleSheet.create({
 dateTxt:{
     color:"grey",
  
+},
+rideStatus:{
+  color:"white",
+  alignSelf:"flex-start",
+  backgroundColor:"green",
+  paddingLeft:10,
+  borderRadius:15,
+  paddingRight:10,
+  paddingBottom:2, 
+  fontSize:12,
+  marginTop:10,
+  marginBottom:10 
+},
+rideStatusOff:{
+  color:"white",
+  paddingLeft:10,
+  borderRadius:15,
+  paddingRight:10,
+  paddingBottom:2,
+  alignSelf:"flex-start",
+  backgroundColor:"grey",
+  fontSize:12,
+  marginTop:10,
+  marginBottom:10
 }
 });
 

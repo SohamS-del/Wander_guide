@@ -180,38 +180,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "JourneyLookupByUserId",
-    "Method": "DeleteJourney",
-    "RelativePath": "api/JourneyLookupByUserId/{journeyId}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "journeyId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "JourneyLookupByUserId",
-    "Method": "GetJourneysByUserId",
-    "RelativePath": "api/JourneyLookupByUserId/user/{userId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "Backend_WanderGuide.Controllers.JourneysController",
     "Method": "CreateJourney",
     "RelativePath": "api/Journeys",

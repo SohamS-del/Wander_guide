@@ -35,6 +35,7 @@ namespace Backend_WanderGuide.Controllers
 
             try
             {
+                request.Id = Guid.NewGuid(); // Auto-generate GUID for Id
                 _context.EmergencyContacts.Add(request);
                 await _context.SaveChangesAsync();
 
