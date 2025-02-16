@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute  } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { GoogleMapsAPI, GoogleMapsAPIJson } from './components/url';
+import { AuthContext } from './AuthContext';
 
+//menuPress
+//useEffect
 const NearbyPlaces = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [places, setPlaces] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [collapsed, setCollapsed] = useState(true);
-
+  const [journeyDetails, setJourneyDetails] = useState(null);
   const navigation = useNavigation();
-
+  const route = useRoute();
+ const { user } = useContext(AuthContext);
+  // if (!userId) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text>Error: userId is missing.</Text>
+  //     </View>
+  //   );
+  // }
+//journeyDetails
   const requestLocationPermission = async () => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -47,14 +59,33 @@ const NearbyPlaces = () => {
       });
       setPlaces(response.data.results);
     } catch (error) {
-      console.error('Error fetching places:', error);
-      setErrorMsg('Error fetching nearby places.');
+      if (error.code === 'ECONNABORTED') {
+        setErrorMsg('Request timed out. Try again.');
+      } else {
+        setErrorMsg('Error fetching nearby places.');
+      }
+    }
+  };
+  const fetchJourneyDetails = async () => {
+    try {
+      if (!user) {
+        console.error("Error: userId is undefined.");
+        return;
+      }
+
+      const response = await axios.get(`https://localhost:7209/api/JourneyLookup/user/${user.id}`);
+      setJourneyDetails(response.data); // Store journey details in state
+    } catch (error) {
+      console.error('Error fetching journey details:', error);
+      setErrorMsg('Error fetching journey details.');
     }
   };
 
   useEffect(() => {
+    if (user) {
+      fetchJourneyDetails();
+    }
     requestLocationPermission();
-
     const intervalId = setInterval(async () => {
       try {
         let currentLocation = await Location.getCurrentPositionAsync({});
@@ -62,11 +93,13 @@ const NearbyPlaces = () => {
         fetchNearbyPlaces(currentLocation.coords.latitude, currentLocation.coords.longitude);
       } catch (error) {
         console.error('Error updating location:', error);
+        setErrorMsg('Failed to update location.');
       }
-    }, 60000);
-
+    }, 60000,[user]);
+  
     return () => clearInterval(intervalId);
   }, []);
+  
 
   const renderItem = ({ item }) => (
     <View style={styles.placeItem}>
@@ -89,7 +122,8 @@ const NearbyPlaces = () => {
         </TouchableOpacity>
       
         <Text style={styles.welcomeText}>Welcome back,</Text>
-        <Text style={styles.welcomeName}>Soham</Text>
+        <Text style={styles.welcomeName}>{user?.username || "Guest"}</Text>
+
       </View>
       
       <View style={styles.header}>
@@ -100,7 +134,7 @@ const NearbyPlaces = () => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => navigation.navigate('StartJourney')}
-              >
+              > 
                 <Text style={styles.buttonText}>Let’s start a journey</Text>
               </TouchableOpacity>
             </View>
@@ -124,17 +158,39 @@ const NearbyPlaces = () => {
           {/* <Text style={styles.viewAll}>View all</Text> */}
         </TouchableOpacity>
       </View>
+      
       <View style={styles.cont}>
-          <View style={styles.myJourneyCard}>
-            <View style={styles.myJourneyCardCont}> 
-            <Text style={styles.myJourneyDate}>19th Feb 2025 | 2pm</Text>  
-            <Text style={styles.myJourneyHeading}>HEADING TOWARDS</Text>        
-              <Text style={styles.myJourneyDestination}>Shop No 1 Gulmohor Regency, Symbiosis College Road, Viman Nagar, Pune - 411014</Text>
-              
-              <Text style={1==1 ?styles.started : styles.notStarted}>{1==1 ? "started" : "not started"}</Text>
-            </View>              
-          </View>
-      </View>
+  <View style={styles.myJourneyCard}>
+    <View style={styles.myJourneyCardCont}> 
+      <Text style={styles.myJourneyDate}>
+        {journeyDetails?.journeyCreate || "Journey Create Date not available"} | 
+        {journeyDetails?.timestamp || "Start Time not available"}
+      </Text>  
+      <Text style={styles.myJourneyHeading}>HEADING TOWARDS</Text>        
+      <Text style={styles.myJourneyDestination}>
+        {journeyDetails?.destinationLatitude || "Destination not available"}
+      </Text>
+      
+      {journeyDetails && (
+  <Text style={journeyDetails.isStarted ? styles.started : styles.notStarted}>
+    {journeyDetails.isStarted ? "Started" : "Not Started"}
+  </Text>
+)}
+
+      
+      {/* Additional Journey Details */}
+      <Text style={styles.journeyDetailText}>Journey ID: {journeyDetails?.journeyId || "N/A"}</Text>
+      <Text style={styles.journeyDetailText}>From MIT: {journeyDetails?.fromMit ? "Yes" : "No"}</Text>
+      <Text style={styles.journeyDetailText}>Seats Available: {journeyDetails?.seatsAvailable || "N/A"}</Text>
+      <Text style={styles.journeyDetailText}>Cost Per Seat: ₹{journeyDetails?.costPerSeat || "N/A"}</Text>
+      <Text style={styles.journeyDetailText}>Start Location: {journeyDetails?.startLatitude}, {journeyDetails?.startLongitude}</Text>
+      <Text style={styles.journeyDetailText}>Destination Location: {journeyDetails?.destinationLatitude}, {journeyDetails?.destinationLongitude}</Text>
+      <Text style={styles.journeyDetailText}>Today's Journey: {journeyDetails?.todayOnly ? "Yes" : "No"}</Text>
+    </View>              
+  </View>
+
+</View>
+
 
 
       <View style={styles.listHeader}>
@@ -166,7 +222,7 @@ const NearbyPlaces = () => {
       <TextInput
         style={styles.searchBar}
         placeholder="Search places"
-        value={searchQuery}
+        value={searchQuery || ""}
         onChangeText={setSearchQuery}
       />
       <FlatList
@@ -377,7 +433,15 @@ const styles = StyleSheet.create({
     marginTop:10,
     color:"#BA2966",
     fontWeight:800,
-  }
+  },
+  journeyDetailText: {
+    fontSize: 14,
+    color: '#555',
+    marginVertical: 5,
+    paddingLeft: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: '#4caf50', // Or any color you prefer
+  },
 });
 
 export default NearbyPlaces;

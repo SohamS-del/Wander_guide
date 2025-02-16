@@ -8,9 +8,10 @@ type RootStackParamList = {
   HomeScreen: undefined;
 };
 
-type Props = NativeStackScreenProps<RootStackParamList, "SosScreen">;
+// Correcting the type of Props to include NativeStackScreenProps
+type Props = NativeStackScreenProps<RootStackParamList, 'SosScreen'>;
 
-const SosScreen: React.FC<Props> = ({ navigation }) => {
+const SosScreen = ({ navigation }: {navigation:any}) => {
   const [pressTimes, setPressTimes] = useState<number[]>([]);
   const MAX_SPAM_COUNT = 6;
   const SPAM_INTERVAL = 10000;

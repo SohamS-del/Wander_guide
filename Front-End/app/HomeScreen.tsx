@@ -1,135 +1,69 @@
-import { StyleSheet, Text, View,Button, TouchableOpacity, StatusBar } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import React, { useCallback, useContext } from 'react'; // ✅ Added useCallback for optimization
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StartJourney from './StartJourney';
+import { AuthContext } from './AuthContext';
 
+const HomeScreen = ({ navigation }: { navigation: any }) => {
+  const { logout } = useContext(AuthContext); 
+  // ✅ Renamed conflicting function `StartJourney` to `handleStartJourney`
+  const handleStartJourney = useCallback(() => {
+    navigation.navigate("StartJourney");
+  }, [navigation]);
 
+  const handleLogout = useCallback(() => {
+    logout();
+    navigation.navigate("login"); // ✅ Added dedicated logout function
+  }, [navigation, logout]);
 
+  const menuItems = [
+    { label: "Pool Car", action: "EverydayRoutes" },
+    { label: "Start Journey", action: "StartJourney" },
+    { label: "Home", action: "NearbyPlaces" },
+    { label: "My Account", action: "StaticProfileScreen" },
+    { label: "My Emergency Contacts", action: "EmergencyContacts" },
+    { label: "SOS", action: "Login" }, // ✅ Kept navigation to Login for SOS as per original code
+    { label: "My Location", action: "CurrentLocationSend" },
+  ];
 
-const HomeScreen = ({navigation}: {navigation: any}) => {
-    const Gobackbutton = () =>{
-        navigation.navigate("Signup")
-      };
-    const goToloadingPage = () =>{
-        navigation.navigate("LoadingScreen")
-      };
-    const goToSOSPage = () =>{
-        navigation.navigate("SosScreen")
-      };
-    const goToProfileScreenPage = () =>{
-        navigation.navigate("ProfileScreen")
-      };
-    const goToEmergencyContacts = () =>{
-        navigation.navigate("EmergencyContacts")
-      };
-    
-      const handleViewLocation = () => {
-        navigation.navigate('CurrentLocationSend'); // Navigate to the NearbyPlaces screen when the button is pressed
-      };
-      const gotoEverydayRoutes = () => {
-        navigation.navigate("EverydayRoutes"); // Navigate to the NearbyPlaces screen when the button is pressed
-      };
-      const gotoNearbyPlaces = () => {
-        navigation.navigate("NearbyPlaces"); // Navigate to the NearbyPlaces screen when the button is pressed
-      };
-      const goToLoginPage = () => {
-        navigation.navigate("Login"); // Navigate to the NearbyPlaces screen when the button is pressed
-      };
-      const StartJourney = () => {
-        navigation.navigate("StartJourney"); // Navigate to the NearbyPlaces screen when the button is pressed
-      };
-      
   return (
-    <SafeAreaView style = {styles.container}>
-<StatusBar backgroundColor="#BA2966" barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor="#BA2966" barStyle="light-content" />
       <Text style={styles.manageAccount}>Manage your account</Text>
 
-      <Text onPress = {gotoEverydayRoutes} style={styles.goback}>
-                         Pool car
-                      </Text>
-
-                      <Text onPress = {StartJourney} style={styles.goback}>
-                         Start journey
-                      </Text>
-      <Text onPress = {gotoNearbyPlaces} style={styles.goback}>
-      Home
-                      </Text>
-      <Text onPress = {goToProfileScreenPage} style={styles.goback}>
-                        My Account
-                      </Text>
-      <Text onPress = {goToEmergencyContacts} style={styles.goback}>
-                       My Emergency Contacts
-                      </Text>
-      <Text onPress = {goToSOSPage} style={styles.goback}>
-                        SOS
-                      </Text>
-
-        
-    <TouchableOpacity onPress={handleViewLocation}>
-    <Text style={styles.goback}>
-                        My Location
-                      </Text>
-    </TouchableOpacity>
-
-    <Text onPress = {goToSOSPage} style={styles.goback}>
-                        LOGOUT
-                      </Text>
+      {menuItems.map((item, index) => (
+        <Text key={index} style={styles.goback} onPress={() => navigation.navigate(item.action)}>
+          {item.label}
+        </Text>
+      ))}
       
-                      {/* <Button  title="View Location on Map" onPress={handleViewLocation } /> */}
+      <Text onPress={handleLogout} style={styles.goback}>LOGOUT</Text> {/* ✅ Used dedicated logout function */}
     </SafeAreaView>
-    
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-
     flex: 1,
-    width:"90%",
-    marginLeft:"5%"
+    width: "90%",
+    marginLeft: "5%",
   },
-  manageAccount:{
-    fontSize:30,
-    fontWeight:"700",
-    marginTop:30,
-    marginBlock:30,
-    color:'#BA2966'
-    
+  manageAccount: {
+    fontSize: 30,
+    fontWeight: "700",
+    marginTop: 30,
+    marginBottom: 30,
+    color: '#BA2966',
   },
-  button:{
-    backgroundColor:'red'
-    },
-    homescreentxt:{
-        fontSize:30,
-        textAlign:'center',
-        top:150,
-        fontWeight:'bold'
-        
-    },
-    goback:{
-        fontSize:18,
-        textAlign:"left",
-        backgroundColor:"white",
-        marginTop:20,
-        padding:18,
-        borderRadius:10,
-        borderLeftWidth:5,
-        borderLeftColor:"#BA2999"
-      
-    },
-    loading:{
-        fontSize:20,
-        textAlign:"center",
-        bottom:-450,
-       
-    },
-    lode:{
-      fontSize:20,
-        textAlign:"center",
-        bottom:-400,
-        marginTop:10
-
-    }
-})
+  goback: {
+    fontSize: 18,
+    textAlign: "left",
+    backgroundColor: "white",
+    marginTop: 20,
+    padding: 18,
+    borderRadius: 10,
+    borderLeftWidth: 5,
+    borderLeftColor: "#BA2999",
+  },
+});

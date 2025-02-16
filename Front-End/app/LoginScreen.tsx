@@ -1,160 +1,187 @@
-  import React, { useState } from 'react';
-  import { StyleSheet, TextInput, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
-  import { SafeAreaView } from 'react-native-safe-area-context';
-  import { Snackbar } from 'react-native-paper';
-  import { Loginurl } from './components/url';
-  import AsyncStorage from '@react-native-async-storage/async-storage';
-  import { useNavigation } from '@react-navigation/native';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, TextInput, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Snackbar } from 'react-native-paper';
+import { Loginurl } from './components/url';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from './AuthContext';// Import AuthContext
 
+const Login = ({ navigation }: { navigation: any }) => {
+  const { login } = useContext(AuthContext); // Access AuthContext
+  const [UserEmail, SetEmail] = useState('');
+  const [UserPassword, SetPassword] = useState('');
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    
+  // Navigate to SignUp
+  const goToSignUpPage = () => {
+    navigation.navigate('Signup');
+  };
 
+  // Navigate to Forgot Password
+  const forgotpass = () => {
+    navigation.navigate('ForgotPasswordScreen');
+  };
 
-  const Login = ({ navigation }: { navigation: any }) => {
-    const [UserEmail, SetEmail] = React.useState('');
-    const [UserPassword, SetPassword] = React.useState('');
-    const [snackbarVisible, setSnackbarVisible] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
+  // Handle Login API Call
+  const goToHomePage = async () => {
+    if (!validateInput() || loading) return;
 
-    // Navigate to SignUp
-    const goToSignUpPage = () => {
-      navigation.navigate('Signup');
-    };
-
-    // Go to forgot password page
-    const forgotpass = () => {
-      navigation.navigate('ForgotPasswordScreen');
-    };
-
-    // API call button
-    const goToHomePage = async () => {
-      if (!validateInput()) {
-        return;
+    setLoading(true);
+    try {
+      let response = await fetch(Loginurl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',
+        },
+        body: JSON.stringify({
+          email: UserEmail,
+          password: UserPassword,
+        }),
+      });
+      
+      console.log("Login response status:", response.status);
+      
+      // ✅ Clone response before reading
+      const responseClone = response.clone();
+      console.log("Login response body:", await responseClone.text());
+      
+      if (!response.ok) {
+        const error = await response.json(); // ✅ Now this won't fail
+        throw new Error(error.message || 'Login failed. Please try again.');
       }
-      try {
-        let response = await fetch(Loginurl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true',
-          },
-          body: JSON.stringify({
-            email: UserEmail,
-            password: UserPassword,
-          }),
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          showSnackbar(error.message || 'Login failed. Please try again');
-          return;
-        }
-
-        const result = await response.json();
-        console.log('API Response:', result);
-
-        if (!result || !result.userDetails) {
-          showSnackbar('Invalid server response. Please try again.');
-          return;
-        }
-
-        // Save userDetails in AsyncStorage
-        const { userDetails } = result;
-        try {
-          await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
-          console.log('User details saved successfully.');
-          
-          // Pass the userId to the next page
-          navigation.navigate('HomeScreen', { userId: userDetails.userId });
-
-        } catch (error) {
-          console.error('Error saving user details:', error);
-          showSnackbar('Failed to save user details. Please try again.');
-          return;
-        }
-
-        showSnackbar('Login Successful');
-      } catch (error) {
-        console.error('Login Error:', error);
-        showSnackbar('Something went wrong. Please try again.');
+      
+      const result = await response.json();
+      
+      if (!result || !result.userDetails) {
+        throw new Error('Invalid server response.');
       }
-    };
 
-    const validateInput = () => {
-      if (!UserEmail.trim()) {
-        showSnackbar('Email is required');
-        return false;
-      }
-      if (!/\S+@\S+\.\S+/.test(UserEmail)) {
-        showSnackbar('Invalid email format');
-        return false;
-      }
-      if (!UserPassword.trim()) {
-        showSnackbar('Password is required');
-        return false;
-      }
-      if (UserPassword.length < 6) {
-        showSnackbar('Password must be at least 6 characters long');
-        return false;
-      }
-      return true;
-    };
+      const { userId } = result.userDetails;
+      if (!userId) throw new Error('User ID missing in response.');
+      console.log("Login result:", result);
 
-    const showSnackbar = (message: string) => {
-      setSnackbarMessage(message);
-      setSnackbarVisible(true);
-    };
+      // Fetch user details using userId
+      const userDetailsResponse = await fetch(`${Loginurl}/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    return (
-      <SafeAreaView style={[styles.safeArea, styles.container]}>
-        <ImageBackground source={require('./assets/mit.png')} resizeMode="cover" style={styles.backimage}></ImageBackground>
-        <Text onPress={goToSignUpPage} style={styles.signUpLink}>
-          Sign up
+      if (!userDetailsResponse.ok) throw new Error('Failed to fetch user details');
+
+      const userDetails = await userDetailsResponse.json();
+
+      // Store user details in AuthContext
+      login(userDetails);
+
+      // Save in AsyncStorage for persistence
+      await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+      // Navigate to home screen
+      navigation.navigate('NearbyPlaces');
+
+      showSnackbar('Login Successful');
+    } catch (error: any) {
+      showSnackbar(error.message || 'Something went wrong.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Validate Input
+  const validateInput = () => {
+    if (!UserEmail.trim()) {
+      showSnackbar('Email is required');
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(UserEmail)) {
+      showSnackbar('Invalid email format');
+      return false;
+    }
+    if (!UserPassword.trim()) {
+      showSnackbar('Password is required');
+      return false;
+    }
+    if (UserPassword.length < 6) {
+      showSnackbar('Password must be at least 6 characters long');
+      return false;
+    }
+    return true;
+  };
+
+  // Show Snackbar
+  const showSnackbar = (message: string) => {
+    setSnackbarMessage(message);
+    setSnackbarVisible(true);
+  };
+  navigation.navigate('NearbyPlaces');
+  return (
+    <SafeAreaView style={[styles.safeArea, styles.container]}>
+      <ImageBackground source={require('./assets/mit.png')} resizeMode="cover" style={styles.backimage} />
+      
+      <Text onPress={goToSignUpPage} style={styles.signUpLink}>Sign up</Text>
+      <Text style={styles.titleLogin}>Log in</Text>
+
+      <TouchableOpacity 
+        style={[styles.loginButtonStyle, loading && { opacity: 0.6 }]} 
+        onPress={goToHomePage} 
+        activeOpacity={0.8} 
+        disabled={loading}
+      >
+        <Text style={styles.loginButtonTextStyle}>
+          {loading ? 'Logging in...' : 'Log in'}
         </Text>
-        <Text style={styles.titleLogin}>Log in</Text>
-        <TouchableOpacity style={styles.loginButtonStyle} onPress={goToHomePage} activeOpacity={0.8}>
-          <Text style={styles.loginButtonTextStyle}>Log in</Text>
-        </TouchableOpacity>
-        <Text style={styles.socialAccText}>or sign in with Google</Text>
-        <View style={styles.Emailcontainer}>
-          <TextInput
-            style={styles.EmailtextInput}
-            placeholder="   Enter Your Email"
-            placeholderTextColor="#761B89"
-            onChangeText={(text) => SetEmail(text)}
-            value={UserEmail}
-          />
-        </View>
-        <View style={styles.Passcontainer}>
-          <TextInput
-            placeholder="   Enter Your Password"
-            placeholderTextColor="#761B89"
-            onChangeText={(text) => SetPassword(text)}
-            value={UserPassword}
-            style={styles.PasstextInput}
-            secureTextEntry
-          />
-        </View>
-        <TouchableOpacity onPress={forgotpass}>
+      </TouchableOpacity>
+
+      <Text style={styles.socialAccText}>or sign in with Google</Text>
+
+      <View style={styles.Emailcontainer}>
+        <TextInput
+          style={styles.EmailtextInput}
+          placeholder="   Enter Your Email"
+          placeholderTextColor="#761B89"
+          onChangeText={SetEmail}
+          value={UserEmail}
+        />
+      </View>
+
+      <View style={styles.Passcontainer}>
+        <TextInput
+          placeholder="   Enter Your Password"
+          placeholderTextColor="#761B89"
+          onChangeText={SetPassword}
+          value={UserPassword}
+          style={styles.PasstextInput}
+          secureTextEntry
+        />
+      </View>
+
+      <TouchableOpacity onPress={forgotpass} style={styles.forgotpassTouch}>
           <Text style={styles.ForgotPassText}>Forgot Password ?</Text>
         </TouchableOpacity>
 
-        <Snackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          duration={3000}
-          action={{
-            label: 'Close',
-            onPress: () => setSnackbarVisible(false),
-          }}
-        >
-          {snackbarMessage}
-        </Snackbar>
-      </SafeAreaView>
-    );
-  };
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        action={{
+          label: 'Close',
+          onPress: () => setSnackbarVisible(false),
+        }}
+      >
+        {snackbarMessage}
+      </Snackbar>
+    </SafeAreaView>
+  );
+};
 
-  export default Login;
+export default Login;
+
+
 
   const styles = StyleSheet.create({
     safeArea: {
@@ -237,9 +264,12 @@
       borderRadius: 7,
     },
     ForgotPassText: {
+      color: '#522D7E',
+    },
+    forgotpassTouch:{
+      
       fontSize: 14,
       top: -90,
       right: -88,
-      color: '#522D7E',
-    },
+    }
   });
