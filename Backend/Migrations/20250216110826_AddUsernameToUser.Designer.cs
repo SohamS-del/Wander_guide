@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend_WanderGuide.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20250209070037_EmergencyContacts")]
-    partial class EmergencyContacts
+    [Migration("20250216110826_AddUsernameToUser")]
+    partial class AddUsernameToUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

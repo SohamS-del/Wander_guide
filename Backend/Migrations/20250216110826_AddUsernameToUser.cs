@@ -5,7 +5,7 @@
 namespace Backend_WanderGuide.Migrations
 {
     /// <inheritdoc />
-    public partial class EmergencyContacts : Migration
+    public partial class AddUsernameToUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -371,4 +371,4 @@ D:\Github\Wander_guide\Backend\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abs
 D:\Github\Wander_guide\Backend\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 D:\Github\Wander_guide\Backend\bin\Debug\net8.0\Microsoft.Extensions.WebEncoders.dll
 D:\Github\Wander_guide\Backend\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
-D:\Github\Wander_guide\Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+D:\GitHub\Wander_guide\Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

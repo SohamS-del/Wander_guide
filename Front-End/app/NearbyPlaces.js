@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import { GoogleMapsAPI, GoogleMapsAPIJson } from './components/url';
 import { AuthContext } from './AuthContext';
+import { ActivityIndicator } from 'react-native';
 
 //menuPress
 //useEffect
@@ -16,7 +17,7 @@ const NearbyPlaces = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [journeyDetails, setJourneyDetails] = useState(null);
   const navigation = useNavigation();
-  const route = useRoute();
+  const [loading, setLoading] = useState(false); 
  const { user } = useContext(AuthContext);
   // if (!userId) {
   //   return (
@@ -48,7 +49,19 @@ const NearbyPlaces = () => {
   }
 
   const fetchNearbyPlaces = async (latitude, longitude) => {
+    if (!latitude || !longitude) return;
+  
+    // Prevent unnecessary API calls if location is nearly the same
+    if (
+      location &&
+      Math.abs(location.coords.latitude - latitude) < 0.001 &&
+      Math.abs(location.coords.longitude - longitude) < 0.001
+    ) {
+      return;
+    }
+  
     try {
+      setLoading(true);
       const response = await axios.get(GoogleMapsAPIJson, {
         params: {
           location: `${latitude},${longitude}`,
@@ -59,33 +72,33 @@ const NearbyPlaces = () => {
       });
       setPlaces(response.data.results);
     } catch (error) {
-      if (error.code === 'ECONNABORTED') {
-        setErrorMsg('Request timed out. Try again.');
-      } else {
-        setErrorMsg('Error fetching nearby places.');
-      }
+      setErrorMsg(error.code === 'ECONNABORTED' ? 'Request timed out. Try again.' : 'Error fetching nearby places.');
+    } finally {
+      setLoading(false);
     }
   };
+  
   const fetchJourneyDetails = async () => {
     try {
       if (!user) {
         console.error("Error: userId is undefined.");
         return;
       }
-
+      setLoading(true); // Start loading
       const response = await axios.get(`https://localhost:7209/api/JourneyLookup/user/${user.id}`);
-      setJourneyDetails(response.data); // Store journey details in state
+      setJourneyDetails(response.data);
     } catch (error) {
       console.error('Error fetching journey details:', error);
       setErrorMsg('Error fetching journey details.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   useEffect(() => {
-    if (user) {
-      fetchJourneyDetails();
-    }
+    if (user) fetchJourneyDetails();
     requestLocationPermission();
+  
     const intervalId = setInterval(async () => {
       try {
         let currentLocation = await Location.getCurrentPositionAsync({});
@@ -95,10 +108,11 @@ const NearbyPlaces = () => {
         console.error('Error updating location:', error);
         setErrorMsg('Failed to update location.');
       }
-    }, 60000,[user]);
+    }, 60000);
   
     return () => clearInterval(intervalId);
-  }, []);
+  }, [user]); 
+  
   
 
   const renderItem = ({ item }) => (
@@ -113,7 +127,7 @@ const NearbyPlaces = () => {
   );
 
   const placesToShow = collapsed ? filteredPlaces.slice(0, 5) : filteredPlaces;
-
+//FlatList
   return (
     <ScrollView style={styles.container}>
       <View style={styles.welcome}>
@@ -225,13 +239,17 @@ const NearbyPlaces = () => {
         value={searchQuery || ""}
         onChangeText={setSearchQuery}
       />
-      <FlatList
-        data={placesToShow}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={styles.scrollContainer}
-        ListEmptyComponent={<Text style={styles.emptyText}>No nearby places found.</Text>}
-      />
+     {loading ? (
+  <ActivityIndicator size="large" color="#0000ff" style={{ marginVertical: 20 }} />
+) : (
+  <FlatList
+    data={placesToShow}
+    keyExtractor={(item, index) => index.toString()}
+    renderItem={renderItem}
+    contentContainerStyle={styles.scrollContainer}
+    ListEmptyComponent={<Text style={styles.emptyText}>No nearby places found.</Text>}
+  />
+)}
       {collapsed && filteredPlaces.length > 5 && (
         <TouchableOpacity style={styles.showMore} onPress={() => setCollapsed(false)}>
           <Text style={styles.showMoreText}>Show More</Text>

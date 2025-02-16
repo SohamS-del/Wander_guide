@@ -22,23 +22,36 @@ import { AuthContext, AuthProvider } from '../AuthContext';
 
 const Stack = createNativeStackNavigator();
 
-const MyStack = () => { 
-    const { user, isLoading, isFirstLaunch } = useContext(AuthContext);
+const MyStack = () => {
+  const { user, isLoading, isFirstLaunch } = useContext(AuthContext);
+
+  // ✅ Don't render navigation until authentication is determined
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: true, gestureDirection: "horizontal" }}>
-      {/* Handle Authentication Flow */}
-      {isLoading ? (
-        <Stack.Screen name="Loading" component={LoadingScreen} />
-      ) : user ? (
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      ) : isFirstLaunch ? (
-        <Stack.Screen name="Signup" component={Signup} />
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+      }}
+    >
+      {/* Authentication Screens */}
+      {!user ? (
+        <>
+          {isFirstLaunch ? (
+            <Stack.Screen name="Signup" component={Signup} />
+          ) : (
+            <Stack.Screen name="Login" component={Login} />
+          )}
+        </>
       ) : (
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
       )}
 
-      {/* Additional Screens */}
+      {/* Other Screens */}
       <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
       <Stack.Screen name="SosScreen" component={SosScreen} />
       <Stack.Screen name="ValidateOtp" component={ValidateOtp} />

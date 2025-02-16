@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Backend_WanderGuide")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a1578ee55c78cd8dfdac9bbf1ded963392ed3f2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+03a72f11d821ff4fdcbf0c70d6e5806936b20792")]
 [assembly: System.Reflection.AssemblyProductAttribute("Backend_WanderGuide")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Backend_WanderGuide")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

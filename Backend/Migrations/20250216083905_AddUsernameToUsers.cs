@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend_WanderGuide.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateJourneyIdToGuid : Migration
+    public partial class AddUsernameToUsers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

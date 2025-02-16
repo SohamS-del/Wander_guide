@@ -30,16 +30,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFirstLaunch, setIsFirstLaunch] = useState(false);
 
-  // Load user data when the app starts
   useEffect(() => {
     const checkUser = async () => {
       try {
         const storedUser = await AsyncStorage.getItem('userDetails');
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          try {
+            setUser(JSON.parse(storedUser)); // Handle parsing error
+          } catch (parseError) {
+            console.error("Error parsing user data:", parseError);
+            await AsyncStorage.removeItem('userDetails'); // Clear corrupted data
+          }
         }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      }
+    };
 
-        // Check if the app is launching for the first time
+    const checkFirstLaunch = async () => {
+      try {
         const firstLaunch = await AsyncStorage.getItem('firstLaunch');
         if (firstLaunch === null) {
           setIsFirstLaunch(true);
@@ -48,15 +57,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setIsFirstLaunch(false);
         }
       } catch (error) {
-        console.error('Error loading user data:', error);
-      } finally {
-        setIsLoading(false);
+        console.error('Error checking first launch:', error);
       }
     };
-    checkUser();
+
+    const initializeApp = async () => {
+      await checkUser();
+      await checkFirstLaunch();
+      setIsLoading(false);
+    };
+
+    initializeApp();
   }, []);
 
-  // Login Function
   const login = async (userData: UserType) => {
     try {
       await AsyncStorage.setItem('userDetails', JSON.stringify(userData));
@@ -66,7 +79,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  // Logout Function
   const logout = async () => {
     try {
       await AsyncStorage.removeItem('userDetails');
