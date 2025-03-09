@@ -34,6 +34,8 @@ namespace Backend_WanderGuide.Models
 
         public int CostPerSeat { get; set; }
         public DateTime StartTime { get; set; }
+        public int TotalSeats { get; set; }
+        public bool IsPrivate { get; set; }
 
 
     }

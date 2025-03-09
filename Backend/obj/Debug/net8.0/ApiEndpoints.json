@@ -122,6 +122,43 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Backend_WanderGuide.Controllers.JoinJourneyController",
+    "Method": "ApproveJoinRequest",
+    "RelativePath": "api/JoinJourney/approve",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "joinId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.JoinJourneyController",
+    "Method": "JoinJourney",
+    "RelativePath": "api/JoinJourney/join",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journeyId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
     "Method": "DeleteJourney",
     "RelativePath": "api/JourneyLookup/{journeyId}",

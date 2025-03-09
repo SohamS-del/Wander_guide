@@ -9,6 +9,7 @@ public class AuthDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<EmergencyContacts> EmergencyContacts { get; set; }
     public DbSet<CreateJourney> Journeys { get; set; }
     public DbSet<ExtraContacts> Contacts { get; set; }
+    public DbSet<JoinJourney> JoinJourneys { get; set; }
+
 
 }
-    
