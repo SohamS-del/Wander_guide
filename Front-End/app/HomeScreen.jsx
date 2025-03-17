@@ -1,19 +1,27 @@
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
-import React, { useCallback, useContext } from 'react'; // ✅ Added useCallback for optimization
+import React, { useCallback, useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AuthContext } from './AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = ({ navigation }: { navigation: any }) => {
-  const { logout } = useContext(AuthContext); 
-  // ✅ Renamed conflicting function `StartJourney` to `handleStartJourney`
+const HomeScreen = () => {
+  const navigation = useNavigation();  // ✅ useNavigation() hook
+  const { logout } = useContext(AuthContext);
+
   const handleStartJourney = useCallback(() => {
     navigation.navigate("StartJourney");
   }, [navigation]);
 
-  const handleLogout = useCallback(() => {
-    logout();
-    navigation.navigate("login"); // ✅ Added dedicated logout function
+  const handleLogout = useCallback(async () => {
+    await logout();  // Clears user session
+  
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],  // ✅ Reset stack to show only the Login screen
+    });
   }, [navigation, logout]);
+  
+  
 
   const menuItems = [
     { label: "Pool Car", action: "EverydayRoutes" },
@@ -21,7 +29,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
     { label: "Home", action: "NearbyPlaces" },
     { label: "My Account", action: "StaticProfileScreen" },
     { label: "My Emergency Contacts", action: "EmergencyContacts" },
-    { label: "SOS", action: "Login" }, // ✅ Kept navigation to Login for SOS as per original code
+    { label: "SOS", action: "Login" },
     { label: "My Location", action: "CurrentLocationSend" },
   ];
 
@@ -36,7 +44,7 @@ const HomeScreen = ({ navigation }: { navigation: any }) => {
         </Text>
       ))}
       
-      <Text onPress={handleLogout} style={styles.goback}>LOGOUT</Text> {/* ✅ Used dedicated logout function */}
+      <Text onPress={handleLogout} style={styles.goback}>LOGOUT</Text>
     </SafeAreaView>
   );
 };

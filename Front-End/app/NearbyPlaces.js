@@ -1,14 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
-import { useNavigation, useRoute  } from '@react-navigation/native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { GoogleMapsAPI, GoogleMapsAPIJson } from './components/url';
 import { AuthContext } from './AuthContext';
-import { ActivityIndicator } from 'react-native';
 
-//menuPress
-//useEffect
 const NearbyPlaces = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -17,16 +14,11 @@ const NearbyPlaces = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [journeyDetails, setJourneyDetails] = useState(null);
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(false); 
- const { user } = useContext(AuthContext);
-  // if (!userId) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text>Error: userId is missing.</Text>
-  //     </View>
-  //   );
-  // }
-//journeyDetails
+  const [loading, setLoading] = useState(false);
+  const { user } = useContext(AuthContext);
+  
+  console.log(user);
+
   const requestLocationPermission = async () => {
     try {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -44,22 +36,15 @@ const NearbyPlaces = () => {
     }
   };
 
-  const menuPress = () =>{
-    navigation.navigate("HomeScreen")
-  }
-
   const fetchNearbyPlaces = async (latitude, longitude) => {
     if (!latitude || !longitude) return;
-  
-    // Prevent unnecessary API calls if location is nearly the same
-    if (
-      location &&
-      Math.abs(location.coords.latitude - latitude) < 0.001 &&
-      Math.abs(location.coords.longitude - longitude) < 0.001
-    ) {
+
+    if (location &&
+        Math.abs(location.coords.latitude - latitude) < 0.0001 &&
+        Math.abs(location.coords.longitude - longitude) < 0.0001) {
       return;
     }
-  
+
     try {
       setLoading(true);
       const response = await axios.get(GoogleMapsAPIJson, {
@@ -77,28 +62,34 @@ const NearbyPlaces = () => {
       setLoading(false);
     }
   };
-  
+
   const fetchJourneyDetails = async () => {
     try {
-      if (!user) {
+      if (!user || !user.id) {
         console.error("Error: userId is undefined.");
         return;
       }
-      setLoading(true); // Start loading
-      const response = await axios.get(`https://localhost:7209/api/JourneyLookup/user/${user.id}`);
+      setLoading(true);
+
+      const serverUrl = 'http://localhost:7209/api/JourneyLookup/user';
+      const response = await axios.get(`${serverUrl}/${user.id}`);
+
       setJourneyDetails(response.data);
     } catch (error) {
       console.error('Error fetching journey details:', error);
       setErrorMsg('Error fetching journey details.');
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (user) fetchJourneyDetails();
     requestLocationPermission();
-  
+  }, []);
+
+  useEffect(() => {
+    if (user) fetchJourneyDetails();
+
     const intervalId = setInterval(async () => {
       try {
         let currentLocation = await Location.getCurrentPositionAsync({});
@@ -109,24 +100,9 @@ const NearbyPlaces = () => {
         setErrorMsg('Failed to update location.');
       }
     }, 60000);
-  
+
     return () => clearInterval(intervalId);
-  }, [user]); 
-  
-  
-
-  const renderItem = ({ item }) => (
-    <View style={styles.placeItem}>
-      <Text style={styles.placeName}>{item.name}</Text>
-      <Text style={styles.placeAddress}>{item.vicinity || 'No address available'}</Text>
-    </View>
-  );
-
-  const filteredPlaces = places.filter(place =>
-    place.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const placesToShow = collapsed ? filteredPlaces.slice(0, 5) : filteredPlaces;
+  }, [user]);
 //FlatList
   return (
     <ScrollView style={styles.container}>
@@ -136,7 +112,8 @@ const NearbyPlaces = () => {
         </TouchableOpacity>
       
         <Text style={styles.welcomeText}>Welcome back,</Text>
-        <Text style={styles.welcomeName}>{user?.username || "Guest"}</Text>
+        <Text style={styles.welcomeName}>{user?.username ?? "Guest"}</Text>
+
 
       </View>
       

@@ -2,7 +2,7 @@ import React,{useEffect} from 'react';
 import { StyleSheet, View, Image, Text, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoadingScreen({navigation}: {navigation: any}){
+export default function LoadingScreen({navigation}: {navigation?: any}){
   const newbutton1 = () =>{
     navigation.navigate("HomeScreen")
   }

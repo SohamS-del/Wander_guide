@@ -24,12 +24,13 @@ const Login = ({ navigation }: { navigation: any }) => {
     navigation.navigate('ForgotPasswordScreen');
   };
 
-  // Handle Login API Call
   const goToHomePage = async () => {
     if (!validateInput() || loading) return;
-
     setLoading(true);
+  
     try {
+      console.log("Starting login process...");
+      
       let response = await fetch(Loginurl, {
         method: 'POST',
         headers: {
@@ -41,56 +42,56 @@ const Login = ({ navigation }: { navigation: any }) => {
           password: UserPassword,
         }),
       });
-      
-      console.log("Login response status:", response.status);
-      
-      // ✅ Clone response before reading
-      const responseClone = response.clone();
-      console.log("Login response body:", await responseClone.text());
-      
-      if (!response.ok) {
-        const error = await response.json(); // ✅ Now this won't fail
-        throw new Error(error.message || 'Login failed. Please try again.');
+  
+      console.log("Login response received. Status:", response.status);
+  
+      let result;
+      try {
+        result = await response.json();
+      } catch (e) {
+        console.error("JSON parsing error:", e);
+        throw new Error("Invalid JSON response from server.");
       }
-      
-      const result = await response.json();
-      
-      if (!result || !result.userDetails) {
-        throw new Error('Invalid server response.');
+  
+      console.log("Login response JSON:", result);
+  
+      if (!result?.userDetails?.userId) {
+        throw new Error("User ID is missing in the response.");
       }
-
+  
       const { userId } = result.userDetails;
-      if (!userId) throw new Error('User ID missing in response.');
-      console.log("Login result:", result);
-
-      // Fetch user details using userId
+      console.log("User ID:", userId);
+  
+      // Fetch user details
+      console.log(`Fetching user details for userId: ${userId}`);
       const userDetailsResponse = await fetch(`${Loginurl}/${userId}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       });
-
-      if (!userDetailsResponse.ok) throw new Error('Failed to fetch user details');
-
+  
+      if (!userDetailsResponse.ok) {
+        throw new Error("Failed to fetch user details.");
+      }
+  
       const userDetails = await userDetailsResponse.json();
-
-      // Store user details in AuthContext
+      console.log("User details received:", userDetails);
+  
       login(userDetails);
-
-      // Save in AsyncStorage for persistence
       await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
-
-      // Navigate to home screen
-      navigation.navigate('NearbyPlaces');
-
-      showSnackbar('Login Successful');
-    } catch (error: any) {
-      showSnackbar(error.message || 'Something went wrong.');
+  
+      console.log("Navigating to NearbyPlaces...");
+      navigation.navigate('NearbyPlaces', { userDetails });
+  
+      showSnackbar("Login Successful");
+    } catch (error) {
+      console.error("Login error:", error);
+      //showSnackbar(error.message || "Something went wrong.");
     } finally {
       setLoading(false);
+      console.log("Login process completed.");
     }
   };
+  
 
   // Validate Input
   const validateInput = () => {
@@ -118,7 +119,7 @@ const Login = ({ navigation }: { navigation: any }) => {
     setSnackbarMessage(message);
     setSnackbarVisible(true);
   };
-  navigation.navigate('NearbyPlaces');
+ 
   return (
     <SafeAreaView style={[styles.safeArea, styles.container]}>
       <ImageBackground source={require('./assets/mit.png')} resizeMode="cover" style={styles.backimage} />
