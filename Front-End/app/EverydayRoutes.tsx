@@ -1,16 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EverydayRoutes = ({navigation}:{navigation:any}) => {
-  const [startingPoint, setStartingPoint] = useState('MIT ADT University');
-  const [destination, setDestination] = useState('');
-
+  const [journey, setJourneys] = useState([]); // Store fetched journeys
+  const [loading, setLoading] = useState(false); // Handle loading state
+  const [travelDirection, setTravelDirection] = useState("");
+  const [startingPoint, setStartingPoint] = useState("");
+  const [destination, setDestination] = useState("");
   const [date, setDate] = useState(new Date());
-      const [showPicker, setShowPicker] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
 
-  const[travelDirection,setTravelDirection] = useState("from");
+    const [userSession, setUserSession] = useState(null);
+     const [userId, setUserId] = useState("12345");
+     const loggedInUserId = userId;
+
+
+     useEffect(() => {
+      getUserData();
+    }, []);
+  
+    const fetchJourneys = async () => {
+      setLoading(true);
+      try {
+          const response = await fetch("https://your-backend-api.com/journeys");
+          const data = await response.json();
+
+          if (response.ok) {
+              // ✅ Filter: Show only public journeys not created by logged-in user
+              const filteredJourneys = data.filter(
+                  (journey: { isPrivate: any; userId: string; }) => !journey.isPrivate && journey.userId !== loggedInUserId
+              );
+              setJourneys(filteredJourneys);
+          } else {
+              console.error("Failed to fetch journeys:", data);
+          }
+      } catch (error) {
+          console.error("Error fetching journeys:", error);
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  const getUserData = async () => {
+      try {
+        const storedUserData = await AsyncStorage.getItem('userDetails');
+        if (storedUserData) {
+          const parsedUserData = JSON.parse(storedUserData);
+          console.log('User Data:', parsedUserData);
+          setUserSession(parsedUserData); // Store parsed user data in state
+          setUserId(parsedUserData.userId || 'Guest');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
       
   const handleselection = (value:string) =>{
     setTravelDirection(value);

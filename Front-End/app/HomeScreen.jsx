@@ -1,12 +1,11 @@
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import React, { useCallback, useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from './AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const navigation = useNavigation();  // ✅ useNavigation() hook
-  const { logout } = useContext(AuthContext);
+ 
 
   const handleStartJourney = useCallback(() => {
     navigation.navigate("StartJourney");

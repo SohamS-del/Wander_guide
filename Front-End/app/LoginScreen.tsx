@@ -4,10 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Snackbar } from 'react-native-paper';
 import { Loginurl } from './components/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AuthContext } from './AuthContext';// Import AuthContext
+
 
 const Login = ({ navigation }: { navigation: any }) => {
-  const { login } = useContext(AuthContext); // Access AuthContext
+
   const [UserEmail, SetEmail] = useState('');
   const [UserPassword, SetPassword] = useState('');
   const [snackbarVisible, setSnackbarVisible] = useState(false);
@@ -30,7 +30,7 @@ const Login = ({ navigation }: { navigation: any }) => {
   
     try {
       console.log("Starting login process...");
-      
+  
       let response = await fetch(Loginurl, {
         method: 'POST',
         headers: {
@@ -55,42 +55,27 @@ const Login = ({ navigation }: { navigation: any }) => {
   
       console.log("Login response JSON:", result);
   
-      if (!result?.userDetails?.userId) {
-        throw new Error("User ID is missing in the response.");
+      if (!result?.userDetails) {
+        throw new Error("User details are missing in the response.");
       }
   
-      const { userId } = result.userDetails;
-      console.log("User ID:", userId);
+      const userDetails = result.userDetails;
+      console.log("User details:", userDetails);
   
-      // Fetch user details
-      console.log(`Fetching user details for userId: ${userId}`);
-      const userDetailsResponse = await fetch(`${Loginurl}/${userId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-  
-      if (!userDetailsResponse.ok) {
-        throw new Error("Failed to fetch user details.");
-      }
-  
-      const userDetails = await userDetailsResponse.json();
-      console.log("User details received:", userDetails);
-  
-      login(userDetails);
       await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
   
       console.log("Navigating to NearbyPlaces...");
-      navigation.navigate('NearbyPlaces', { userDetails });
+      navigation.navigate('NearbyPlaces');
   
       showSnackbar("Login Successful");
     } catch (error) {
       console.error("Login error:", error);
-      //showSnackbar(error.message || "Something went wrong.");
     } finally {
       setLoading(false);
       console.log("Login process completed.");
     }
   };
+  
   
 
   // Validate Input
