@@ -44,6 +44,23 @@ namespace Backend_WanderGuide.Controllers
             return Ok("Join request sent.");
         }
 
+        [HttpPut("UpdateJourneyStartTime")]
+        public async Task<IActionResult> UpdateJourneyStartTime(Guid journeyId)
+
+        {
+            var journey = await _journeyRepository.GetJourneyById(journeyId);
+
+            if (journey == null)
+                return NotFound("Journey not found.");
+
+
+            journey.StartTime = DateTime.UtcNow;
+
+            _journeyRepository.Update(journey); 
+            await _journeyRepository.SaveChangesAsync();
+            return Ok("Journey Start Time Updated");
+
+        }
 
         // Approve a join request
         [HttpPost("approve")]

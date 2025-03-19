@@ -159,6 +159,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Backend_WanderGuide.Controllers.JoinJourneyController",
+    "Method": "UpdateJourneyStartTime",
+    "RelativePath": "api/JoinJourney/UpdateJourneyStartTime",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journeyId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
     "Method": "DeleteJourney",
     "RelativePath": "api/JourneyLookup/{journeyId}",
@@ -173,6 +189,26 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
+    "Method": "GetAllJourneys",
+    "RelativePath": "api/JourneyLookup/GetAllJourneys",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Backend_WanderGuide.Models.CreateJourney, Backend_WanderGuide, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",

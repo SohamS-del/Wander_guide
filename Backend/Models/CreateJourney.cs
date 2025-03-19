@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Backend_WanderGuide.Models
 {
@@ -33,7 +35,8 @@ namespace Backend_WanderGuide.Models
         public int SeatsAvailable { get; set; }
 
         public int CostPerSeat { get; set; }
-        public DateTime StartTime { get; set; }
+        [DefaultValue(null)]
+        public DateTime? StartTime { get; set; } = null;
         public int TotalSeats { get; set; }
         public bool IsPrivate { get; set; }
 
