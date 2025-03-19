@@ -1,7 +1,7 @@
 ﻿using Backend_WanderGuide.Models;
 
 using Microsoft.AspNetCore.Mvc;
-
+//add controllers to every function 
 namespace Backend_WanderGuide.Controllers
 {
     [Route("api/[controller]")]

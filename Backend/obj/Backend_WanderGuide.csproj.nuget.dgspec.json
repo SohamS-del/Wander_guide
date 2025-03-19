@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Github\\Wander_guide\\Backend\\Backend_WanderGuide.csproj": {}
+    "D:\\GitHub\\Wander_guide\\Backend\\Backend_WanderGuide.csproj": {}
   },
   "projects": {
-    "D:\\Github\\Wander_guide\\Backend\\Backend_WanderGuide.csproj": {
+    "D:\\GitHub\\Wander_guide\\Backend\\Backend_WanderGuide.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github\\Wander_guide\\Backend\\Backend_WanderGuide.csproj",
+        "projectUniqueName": "D:\\GitHub\\Wander_guide\\Backend\\Backend_WanderGuide.csproj",
         "projectName": "Backend_WanderGuide",
-        "projectPath": "D:\\Github\\Wander_guide\\Backend\\Backend_WanderGuide.csproj",
-        "packagesPath": "C:\\Users\\samja\\.nuget\\packages\\",
-        "outputPath": "D:\\Github\\Wander_guide\\Backend\\obj\\",
+        "projectPath": "D:\\GitHub\\Wander_guide\\Backend\\Backend_WanderGuide.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "D:\\GitHub\\Wander_guide\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\samja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -80,6 +80,10 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[7.2.0, )"
@@ -104,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
