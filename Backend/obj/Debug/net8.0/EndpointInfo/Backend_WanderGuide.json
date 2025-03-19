@@ -270,6 +270,28 @@
         }
       }
     },
+    "/api/JoinJourney/UpdateJourneyStartTime": {
+      "put": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/JoinJourney/approve": {
       "post": {
         "tags": [
@@ -350,6 +372,44 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/GetAllJourneys": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CreateJourney"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CreateJourney"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CreateJourney"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -524,7 +584,9 @@
           },
           "startTime": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "default": null,
+            "nullable": true
           },
           "totalSeats": {
             "type": "integer",

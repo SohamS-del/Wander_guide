@@ -61,5 +61,16 @@ namespace Backend_WanderGuide.Services
             _context.JoinJourneys.Update(joinJourney);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public void Update(CreateJourney journey)
+        {
+            _context.Journeys.Update(journey); // Marks the entity as modified
+        }
+
+        // Implement SaveChangesAsync to persist changes
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
