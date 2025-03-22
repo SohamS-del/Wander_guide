@@ -1,18 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\GitHub\\Wander_guide\\Backend\\",
+  "WorkspaceRootPath": "D:\\Github\\Wander_guide\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|d:\\github\\wander_guide\\backend\\models\\signuprequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|solutionrelative:models\\signuprequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|d:\\github\\wander_guide\\backend\\controllers\\journeylookupcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|solutionrelative:controllers\\journeylookupcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|d:\\github\\wander_guide\\backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|d:\\github\\wander_guide\\backend\\models\\createjourney.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{88940EC5-01C5-45FD-BED5-368AD1D9C313}|Backend_WanderGuide.csproj|solutionrelative:models\\createjourney.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,48 +14,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SignupRequest.cs",
-              "DocumentMoniker": "D:\\GitHub\\Wander_guide\\Backend\\Models\\SignupRequest.cs",
-              "RelativeDocumentMoniker": "Models\\SignupRequest.cs",
-              "ToolTip": "D:\\GitHub\\Wander_guide\\Backend\\Models\\SignupRequest.cs",
-              "RelativeToolTip": "Models\\SignupRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Title": "CreateJourney.cs",
+              "DocumentMoniker": "D:\\Github\\Wander_guide\\Backend\\Models\\CreateJourney.cs",
+              "RelativeDocumentMoniker": "Models\\CreateJourney.cs",
+              "ToolTip": "D:\\Github\\Wander_guide\\Backend\\Models\\CreateJourney.cs",
+              "RelativeToolTip": "Models\\CreateJourney.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-16T08:34:44.012Z",
+              "WhenOpened": "2025-03-21T11:59:07.104Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\GitHub\\Wander_guide\\Backend\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "D:\\GitHub\\Wander_guide\\Backend\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-02-13T19:22:08.752Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "JourneyLookupController.cs",
-              "DocumentMoniker": "D:\\GitHub\\Wander_guide\\Backend\\Controllers\\JourneyLookupController.cs",
-              "RelativeDocumentMoniker": "Controllers\\JourneyLookupController.cs",
-              "ToolTip": "D:\\GitHub\\Wander_guide\\Backend\\Controllers\\JourneyLookupController.cs",
-              "RelativeToolTip": "Controllers\\JourneyLookupController.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAYwC4AAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-13T18:20:17.153Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             }
           ]
         }
