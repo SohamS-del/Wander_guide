@@ -10,10 +10,10 @@ namespace Backend_WanderGuide.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Ensures auto-increment
         public Guid JourneyId { get; set; }
-
+        public string UserName { get; set; }
         public Guid UserId { get; set; }
         public DateOnly JourneyCreate { get; set; }
-        public DateOnly JourneyStart { get; set; }
+        public DateOnly JourneyStartDate { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
         public bool FromMit { get; set; }
         public bool TodayOnly { get; set; }
@@ -36,7 +36,7 @@ namespace Backend_WanderGuide.Models
 
         public int CostPerSeat { get; set; }
         [DefaultValue(null)]
-        public DateTime? StartTime { get; set; } = null;
+        public TimeOnly? JourneyStartTime { get; set; } = null;
         public int TotalSeats { get; set; }
         public bool IsPrivate { get; set; }
 

@@ -293,5 +293,21 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Backend_WanderGuide.Controllers.UserController",
+    "Method": "GetUserNameById",
+    "RelativePath": "api/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   }
 ]

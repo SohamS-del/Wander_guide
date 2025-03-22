@@ -1,4 +1,5 @@
 ﻿using Backend_WanderGuide.Models;
+using Backend_WanderGuide.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
+
+  
 
     [HttpPost("signup")]
     public Task<IActionResult> Signup([FromBody] SignupRequest request)
@@ -42,5 +45,7 @@ public class AuthController : ControllerBase
     {
         return _authService.ResetPassword(request);
     }
+
+   
 
 }
