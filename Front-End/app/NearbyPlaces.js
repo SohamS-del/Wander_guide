@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, TouchableOpacity, menuPress, TextInput, renderItem, Image } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, TouchableOpacity, TextInput, renderItem, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { GoogleMapsAPI, GoogleMapsAPIJson } from './components/url';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { parse } from '@babel/core';
 
 const NearbyPlaces = () => {
   const [location, setLocation] = useState(null);
@@ -20,6 +19,9 @@ const NearbyPlaces = () => {
   const [journeyData, setJourneyData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const menuPress = (navigation) => {
+    navigation.navigate('HomeScreen');
+  };
 
   // useEffect to fetch user data and request location permission on mount
   useEffect(() => {
@@ -156,7 +158,7 @@ const NearbyPlaces = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.welcome}>
-        <TouchableOpacity style={styles.menu} onPress={menuPress}>
+        <TouchableOpacity style={styles.menu} onPress={()=>navigation.navigate("HomeScreen")}>
           <Image source={require('./assets/menu.png')} style={styles.menuIcon}  />
         </TouchableOpacity>
       
@@ -203,13 +205,11 @@ const NearbyPlaces = () => {
   <View style={styles.myJourneyCard}>
     <View style={styles.myJourneyCardCont}> 
       <Text style={styles.myJourneyDate}>
-        {journeyDetails?.journeyCreate || "Journey Create Date not available"} | 
-        {journeyDetails?.timestamp || "Start Time not available"}
+        {journeyData?.date || "Journey Create Date not available"} | 
+        {journeyData?.startTime || "Start Time not available"}
       </Text>  
       <Text style={styles.myJourneyHeading}>HEADING TOWARDS</Text>        
-      <Text style={styles.myJourneyDestination}>
-        {journeyDetails?.destinationLatitude || "Destination not available"}
-      </Text>
+     
       
       {journeyDetails && (
   <Text style={journeyDetails.isStarted ? styles.started : styles.notStarted}>
@@ -219,14 +219,11 @@ const NearbyPlaces = () => {
 
 {journeyData ? (
                 <View>
-                    <Text style={styles.label}>User ID: <Text style={styles.value}>{journeyData.userId}</Text></Text>
                     <Text style={styles.label}>Direction: <Text style={styles.value}>{journeyData.travelDirection}</Text></Text>
                     <Text style={styles.label}>Start Point: <Text style={styles.value}>{journeyData.startPoint}</Text></Text>
                     <Text style={styles.label}>Drop Point: <Text style={styles.value}>{journeyData.dropPoint}</Text></Text>
                     <Text style={styles.label}>Seats Available: <Text style={styles.value}>{journeyData.seatsAvailable}</Text></Text>
                     <Text style={styles.label}>Cost Per Seat: <Text style={styles.value}>{journeyData.costPerSeat}</Text></Text>
-                    <Text style={styles.label}>Start Time: <Text style={styles.value}>{new Date(journeyData.startTime).toLocaleString()}</Text></Text>
-                    <Text style={styles.label}>Date: <Text style={styles.value}>{journeyData.date}</Text></Text>
                     <Text style={styles.label}>Travel Type: <Text style={styles.value}>{journeyData.travelType}</Text></Text>
                     <Text style={styles.label}>Private Journey: <Text style={styles.value}>{journeyData.isPrivate ? "Yes" : "No"}</Text></Text>
                 </View>

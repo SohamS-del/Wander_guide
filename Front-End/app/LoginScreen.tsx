@@ -58,11 +58,16 @@ const Login = ({ navigation }: { navigation: any }) => {
       if (!result?.userDetails) {
         throw new Error("User details are missing in the response.");
       }
-  
+ 
       const userDetails = result.userDetails;
       console.log("User details:", userDetails);
+      const filteredData = {
+        userId: userDetails.userId,
+        name: userDetails.name,
+      };
   
       await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
+      await AsyncStorage.setItem('userDetails', JSON.stringify(filteredData));
   
       console.log("Navigating to NearbyPlaces...");
       navigation.navigate('NearbyPlaces');

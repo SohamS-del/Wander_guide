@@ -3,9 +3,16 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'r
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RoutesUrl } from './components/url';
+
+interface Journey {
+  id: string;
+  route: string;
+  time: string;
+}
 
 const EverydayRoutes = ({navigation}:{navigation:any}) => {
-  const [journey, setJourneys] = useState([]); // Store fetched journeys
+  const [journey, setJourney] = useState<Journey[]>([]); // Store fetched journeys
   const [loading, setLoading] = useState(false); // Handle loading state
   const [travelDirection, setTravelDirection] = useState("");
   const [startingPoint, setStartingPoint] = useState("");
@@ -14,50 +21,86 @@ const EverydayRoutes = ({navigation}:{navigation:any}) => {
   const [showPicker, setShowPicker] = useState(false);
 
     const [userSession, setUserSession] = useState(null);
-     const [userId, setUserId] = useState("12345");
-     const loggedInUserId = userId;
+     const [User, setUser] = useState({ userId: '', name: '' });
+  
 
 
      useEffect(() => {
+      const getUserData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('userDetails');
+          if (jsonValue !== null) {
+            const { userId, name } = JSON.parse(jsonValue); // Extract only userId & userName
+            setUser({ userId, name });
+          }
+        } catch (error) {
+          console.error('Error reading user details', error);
+        }
+      };
+  
       getUserData();
     }, []);
-  
-    const fetchJourneys = async () => {
+    useEffect (() => {
+      fetchJourneys(User.userId);
+    })
+    // const getUserData = async () => {
+    //   try {
+    //     const storedUserData = await AsyncStorage.getItem('userDetails');
+    //     if (storedUserData) {
+    //       const parsedUserData = JSON.parse(storedUserData);
+    //       console.log('User Data:', parsedUserData);
+    //       setUserSession(parsedUserData);
+    //       const newUserId = parsedUserData.userId || 'Guest'; // Ensure valid userId
+    //       setUserId(newUserId);
+    //       fetchJourneys(newUserId); // Fetch journeys after updating userId
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching user data:', error);
+    //   }
+    // };
+    
+    const fetchJourneys = async (currentUserId: string) => {
       setLoading(true);
       try {
-          const response = await fetch("https://your-backend-api.com/journeys");
-          const data = await response.json();
-
-          if (response.ok) {
-              // ✅ Filter: Show only public journeys not created by logged-in user
-              const filteredJourneys = data.filter(
-                  (journey: { isPrivate: any; userId: string; }) => !journey.isPrivate && journey.userId !== loggedInUserId
-              );
-              setJourneys(filteredJourneys);
-          } else {
-              console.error("Failed to fetch journeys:", data);
-          }
-      } catch (error) {
-          console.error("Error fetching journeys:", error);
-      } finally {
-          setLoading(false);
-      }
-  };
-
-  const getUserData = async () => {
-      try {
-        const storedUserData = await AsyncStorage.getItem('userDetails');
-        if (storedUserData) {
-          const parsedUserData = JSON.parse(storedUserData);
-          console.log('User Data:', parsedUserData);
-          setUserSession(parsedUserData); // Store parsed user data in state
-          setUserId(parsedUserData.userId || 'Guest');
+        const response = await fetch(RoutesUrl);
+        const data = await response.json();
+    
+        if (response.ok) {
+          // Filter out private journeys and those created by the current user
+          const filteredJourneys = data.filter(
+            (journey: { isPrivate: boolean; userId: string }) => !journey.isPrivate && journey.userId !== currentUserId
+          );
+    
+          // Store in AsyncStorage
+          await AsyncStorage.setItem('journeys', JSON.stringify(filteredJourneys));
+    
+          // Update state
+          setJourney(filteredJourneys);
+        } else {
+          console.error('Failed to fetch journeys:', data);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching journeys:', error);
+      } finally {
+        setLoading(false);
       }
     };
-      
+    const loadJourneysFromStorage = async () => {
+      try {
+        const storedJourneys = await AsyncStorage.getItem('journeys');
+        if (storedJourneys) {
+          setJourney(JSON.parse(storedJourneys));
+        }
+      } catch (error) {
+        console.error('Error loading journeys from storage:', error);
+      }
+    };
+
+    useEffect(() => {
+      loadJourneysFromStorage(); // Load from AsyncStorage
+    }, []);
+    
+    
   const handleselection = (value:string) =>{
     setTravelDirection(value);
     if (value === "from") {
@@ -81,44 +124,45 @@ const EverydayRoutes = ({navigation}:{navigation:any}) => {
     }
   };
 
-  const routes = [
-    {
-      id: '1',
-      driver: 'Shravani',
-      status:1,
-      route: 'MIT-ADT → Katraj',
-      car: 'Mercedes G-Wagon',
-      date: '27th January 2025',
-      time: '4:45 pm',
-    },
-    {
-      id: '2',
-      driver: 'Soham',
-      status:1,
-      route: 'MIT-ADT → Katraj',
-      car: 'Lexus',
-      date: '27th January 2025',
-      time: '4:45 pm',
-    },
-    {
-      id: '3',
-      driver: 'Vedant',
-      status:0,
-      route: 'MIT-ADT → Katraj',
-      car: 'BMW M2',
-      date: '27th January 2025',
-      time: '4:45 pm',
-    },
-    {
-      id: '4',
-      driver: 'Kang',
-      status:1,
-      route: 'MIT-ADT → Hadapsar',
-      car: 'Range Rover SV Ranthambore',
-      date: '27th January 2025',
-      time: '4:45 pm',
-    },
-  ];
+  // const routes = [
+  //   {
+  //     id: '1',
+  //     driver: 'Shravani',
+  //     status:1,
+  //     route: 'MIT-ADT → Katraj',
+  //     car: 'Mercedes G-Wagon',
+  //     date: '27th January 2025',
+  //     time: '4:45 pm',
+  //   },
+  //   {
+  //     id: '2',
+  //     driver: 'Soham',
+  //     status:1,
+  //     route: 'MIT-ADT → Katraj',
+  //     car: 'Lexus',
+  //     date: '27th January 2025',
+  //     time: '4:45 pm',
+  //   },
+  //   {
+  //     id: '3',
+  //     driver: 'Vedant',
+  //     status:0,
+  //     route: 'MIT-ADT → Katraj',
+  //     car: 'BMW M2',
+  //     date: '27th January 2025',
+  //     time: '4:45 pm',
+  //   },
+  //   {
+  //     id: '4',
+  //     driver: 'Kang',
+  //     status:1,
+  //     route: 'MIT-ADT → Hadapsar',
+  //     car: 'Range Rover SV Ranthambore',
+  //     date: '27th January 2025',
+  //     time: '4:45 pm',
+  //   },
+  // ];
+
 
   const renderRouteCard = ({ item }:any) => (
     <View style={styles.card}>
@@ -194,7 +238,7 @@ const EverydayRoutes = ({navigation}:{navigation:any}) => {
         <Text style={styles.findButtonText}>find available cars</Text>
       </TouchableOpacity>
       <FlatList
-        data={routes}
+        data={journey}
         keyExtractor={(item) => item.id}
         renderItem={renderRouteCard}
         contentContainerStyle={styles.list}
