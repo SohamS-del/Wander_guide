@@ -1,0 +1,3709 @@
+18-03-2025 14:24:31: Information - Now listening on: https://0.0.0.0:7209
+18-03-2025 14:24:32: Information - Application started. Press Ctrl+C to shut down.
+18-03-2025 14:24:32: Information - Hosting environment: Development
+18-03-2025 14:24:32: Information - Content root path: D:\GitHub\Wander_guide\Backend
+18-03-2025 14:24:34: Information - LoggingMiddleware is processing request...
+18-03-2025 14:24:34: Information -  Incoming Request: GET /index.html  | Body: 
+18-03-2025 14:24:37: Information -  Response: Status: 200 | Body: <!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+       
+</head>
+
+<body>
+    <div id="swagger-ui"></div>
+
+    <script src="./swagger-ui-bundle.js" charset="utf-8"></script>
+    <script src="./swagger-ui-standalone-preset.js" charset="utf-8"></script>
+    <script src="index.js" charset="utf-8"></script>
+</body>
+</html>
+ | Time Taken: 3202ms
+18-03-2025 14:24:37: Information - LoggingMiddleware is processing request...
+18-03-2025 14:24:37: Information -  Incoming Request: GET /index.js  | Body: 
+18-03-2025 14:24:38: Information -  Response: Status: 200 | Body: /* Source: https://gist.github.com/lamberta/3768814
+ * Parse a string function definition and return a function object. Does not use eval.
+ * @param {string} str
+ * @return {function}
+ *
+ * Example:
+ *  var f = function (x, y) { return x * y; };
+ *  var g = parseFunction(f.toString());
+ *  g(33, 3); //=> 99
+ */
+function parseFunction(str) {
+    if (!str) return void (0);
+
+    var fn_body_idx = str.indexOf('{'),
+        fn_body = str.substring(fn_body_idx + 1, str.lastIndexOf('}')),
+        fn_declare = str.substring(0, fn_body_idx),
+        fn_params = fn_declare.substring(fn_declare.indexOf('(') + 1, fn_declare.lastIndexOf(')')),
+        args = fn_params.split(',');
+
+    args.push(fn_body);
+
+    function Fn() {
+        return Function.apply(this, args);
+    }
+    Fn.prototype = Function.prototype;
+
+    return new Fn();
+}
+
+window.onload = function () {
+    var configObject = JSON.parse('{"urls":[{"url":"/swagger/v1/swagger.json","name":"Auth API v1"}],"deepLinking":false,"persistAuthorization":false,"displayOperationId":false,"defaultModelsExpandDepth":1,"defaultModelExpandDepth":1,"defaultModelRendering":"example","displayRequestDuration":false,"docExpansion":"list","showExtensions":false,"showCommonExtensions":false,"supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],"tryItOutEnabled":false}');
+    var oauthConfigObject = JSON.parse('{"scopeSeparator":" ","scopes":[],"useBasicAuthenticationWithAccessCodeGrant":false,"usePkceWithAuthorizationCodeGrant":false}');
+
+    // Workaround for https://github.com/swagger-api/swagger-ui/issues/5945
+    configObject.urls.forEach(function (item) {
+        if (item.url.startsWith("http") || item.url.startsWith("/")) return;
+        item.url = window.location.href.replace("index.html", item.url).split('#')[0];
+    });
+
+    // If validatorUrl is not explicitly provided, disable the feature by setting to null
+    if (!configObject.hasOwnProperty("validatorUrl"))
+        configObject.validatorUrl = null
+
+    // If oauth2RedirectUrl isn't specified, use the built-in default
+    if (!configObject.hasOwnProperty("oauth2RedirectUrl"))
+        configObject.oauth2RedirectUrl = (new URL("oauth2-redirect.html", window.location.href)).href;
+
+    // Apply mandatory parameters
+    configObject.dom_id = "#swagger-ui";
+    configObject.presets = [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset];
+    configObject.layout = "StandaloneLayout";
+
+    // Parse and add interceptor functions
+    var interceptors = JSON.parse('{}');
+    if (interceptors.RequestInterceptorFunction)
+        configObject.requestInterceptor = parseFunction(interceptors.RequestInterceptorFunction);
+    if (interceptors.ResponseInterceptorFunction)
+        configObject.responseInterceptor = parseFunction(interceptors.ResponseInterceptorFunction);
+
+    if (configObject.plugins) {
+        configObject.plugins = configObject.plugins.map(eval);
+    }
+    
+    // Begin Swagger UI call region
+
+    const ui = SwaggerUIBundle(configObject);
+
+    ui.initOAuth(oauthConfigObject);
+
+    // End Swagger UI call region
+
+    window.ui = ui
+}
+ | Time Taken: 81ms
+18-03-2025 14:24:38: Information - LoggingMiddleware is processing request...
+18-03-2025 14:24:38: Information -  Incoming Request: GET /swagger/v1/swagger.json  | Body: 
+18-03-2025 14:24:38: Information -  Response: Status: 200 | Body: {
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Auth API",
+    "description": "API for Authentication, Authorization, and User Management",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/Validate-Otp-Request": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/reset-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Contacts": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmergencyContacts/save": {
+      "post": {
+        "tags": [
+          "EmergencyContacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/join": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/approve": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "joinId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/GetJourneyByPhone/{phoneNumber}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "phoneNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/user/{userId}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/{journeyId}": {
+      "delete": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Journeys": {
+      "post": {
+        "tags": [
+          "Journeys"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Location": {
+      "put": {
+        "tags": [
+          "Location"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateJourney": {
+        "required": [
+          "destinationLatitude",
+          "destinationLongitude",
+          "startLatitude",
+          "startLongitude"
+        ],
+        "type": "object",
+        "properties": {
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyCreate": {
+            "type": "string",
+            "format": "date"
+          },
+          "journeyStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fromMit": {
+            "type": "boolean"
+          },
+          "todayOnly": {
+            "type": "boolean"
+          },
+          "isStarted": {
+            "type": "boolean"
+          },
+          "startLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "startLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "seatsAvailable": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "costPerSeat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPrivate": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmergencyContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "emergencyPhone1": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone2": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone3": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtraContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contactName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationData": {
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "latitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "confirmPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignupRequest": {
+        "required": [
+          "confirmPassword",
+          "email",
+          "name",
+          "password",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string"
+          },
+          "confirmPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "phone": {
+            "maxLength": 10,
+            "minLength": 10,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidateOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "otp": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer' [space] and then your token in the text input below.\n\nExample: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+} | Time Taken: 96ms
+18-03-2025 14:24:47: Information - LoggingMiddleware is processing request...
+18-03-2025 14:24:47: Information -  Incoming Request: POST /api/Auth/signup  | Body: {
+  "email": "user@example.com",
+  "password": "stringst",
+  "confirmPassword": "string",
+  "name": "string",
+  "phone": "stringstri"
+}
+18-03-2025 14:24:48: Information -  Response: Status: 400 | Body: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"ConfirmPassword":["'ConfirmPassword' and 'Password' do not match."]},"traceId":"00-32791f266ddcf7affb0aac542203dbab-5d5a8acd3f5d6858-00"} | Time Taken: 849ms
+18-03-2025 14:54:51: Information - Now listening on: https://0.0.0.0:7209
+18-03-2025 14:54:52: Information - Application started. Press Ctrl+C to shut down.
+18-03-2025 14:54:52: Information - Hosting environment: Development
+18-03-2025 14:54:52: Information - Content root path: D:\GitHub\Wander_guide\Backend
+18-03-2025 14:54:53: Information - LoggingMiddleware is processing request...
+18-03-2025 14:54:53: Information -  Incoming Request: GET /index.html  | Body: 
+18-03-2025 14:54:57: Information -  Response: Status: 200 | Body: <!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+       
+</head>
+
+<body>
+    <div id="swagger-ui"></div>
+
+    <script src="./swagger-ui-bundle.js" charset="utf-8"></script>
+    <script src="./swagger-ui-standalone-preset.js" charset="utf-8"></script>
+    <script src="index.js" charset="utf-8"></script>
+</body>
+</html>
+ | Time Taken: 3671ms
+18-03-2025 14:54:57: Information - LoggingMiddleware is processing request...
+18-03-2025 14:54:57: Information -  Incoming Request: GET /index.js  | Body: 
+18-03-2025 14:54:57: Information -  Response: Status: 200 | Body: /* Source: https://gist.github.com/lamberta/3768814
+ * Parse a string function definition and return a function object. Does not use eval.
+ * @param {string} str
+ * @return {function}
+ *
+ * Example:
+ *  var f = function (x, y) { return x * y; };
+ *  var g = parseFunction(f.toString());
+ *  g(33, 3); //=> 99
+ */
+function parseFunction(str) {
+    if (!str) return void (0);
+
+    var fn_body_idx = str.indexOf('{'),
+        fn_body = str.substring(fn_body_idx + 1, str.lastIndexOf('}')),
+        fn_declare = str.substring(0, fn_body_idx),
+        fn_params = fn_declare.substring(fn_declare.indexOf('(') + 1, fn_declare.lastIndexOf(')')),
+        args = fn_params.split(',');
+
+    args.push(fn_body);
+
+    function Fn() {
+        return Function.apply(this, args);
+    }
+    Fn.prototype = Function.prototype;
+
+    return new Fn();
+}
+
+window.onload = function () {
+    var configObject = JSON.parse('{"urls":[{"url":"/swagger/v1/swagger.json","name":"Auth API v1"}],"deepLinking":false,"persistAuthorization":false,"displayOperationId":false,"defaultModelsExpandDepth":1,"defaultModelExpandDepth":1,"defaultModelRendering":"example","displayRequestDuration":false,"docExpansion":"list","showExtensions":false,"showCommonExtensions":false,"supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],"tryItOutEnabled":false}');
+    var oauthConfigObject = JSON.parse('{"scopeSeparator":" ","scopes":[],"useBasicAuthenticationWithAccessCodeGrant":false,"usePkceWithAuthorizationCodeGrant":false}');
+
+    // Workaround for https://github.com/swagger-api/swagger-ui/issues/5945
+    configObject.urls.forEach(function (item) {
+        if (item.url.startsWith("http") || item.url.startsWith("/")) return;
+        item.url = window.location.href.replace("index.html", item.url).split('#')[0];
+    });
+
+    // If validatorUrl is not explicitly provided, disable the feature by setting to null
+    if (!configObject.hasOwnProperty("validatorUrl"))
+        configObject.validatorUrl = null
+
+    // If oauth2RedirectUrl isn't specified, use the built-in default
+    if (!configObject.hasOwnProperty("oauth2RedirectUrl"))
+        configObject.oauth2RedirectUrl = (new URL("oauth2-redirect.html", window.location.href)).href;
+
+    // Apply mandatory parameters
+    configObject.dom_id = "#swagger-ui";
+    configObject.presets = [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset];
+    configObject.layout = "StandaloneLayout";
+
+    // Parse and add interceptor functions
+    var interceptors = JSON.parse('{}');
+    if (interceptors.RequestInterceptorFunction)
+        configObject.requestInterceptor = parseFunction(interceptors.RequestInterceptorFunction);
+    if (interceptors.ResponseInterceptorFunction)
+        configObject.responseInterceptor = parseFunction(interceptors.ResponseInterceptorFunction);
+
+    if (configObject.plugins) {
+        configObject.plugins = configObject.plugins.map(eval);
+    }
+    
+    // Begin Swagger UI call region
+
+    const ui = SwaggerUIBundle(configObject);
+
+    ui.initOAuth(oauthConfigObject);
+
+    // End Swagger UI call region
+
+    window.ui = ui
+}
+ | Time Taken: 36ms
+18-03-2025 14:54:57: Information - LoggingMiddleware is processing request...
+18-03-2025 14:54:57: Information -  Incoming Request: GET /swagger/v1/swagger.json  | Body: 
+18-03-2025 14:54:58: Information -  Response: Status: 200 | Body: {
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Auth API",
+    "description": "API for Authentication, Authorization, and User Management",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/Validate-Otp-Request": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/reset-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Contacts": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmergencyContacts/save": {
+      "post": {
+        "tags": [
+          "EmergencyContacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/join": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/approve": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "joinId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/GetJourneyByPhone/{phoneNumber}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "phoneNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/user/{userId}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/{journeyId}": {
+      "delete": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Journeys": {
+      "post": {
+        "tags": [
+          "Journeys"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Location": {
+      "put": {
+        "tags": [
+          "Location"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateJourney": {
+        "required": [
+          "destinationLatitude",
+          "destinationLongitude",
+          "startLatitude",
+          "startLongitude"
+        ],
+        "type": "object",
+        "properties": {
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyCreate": {
+            "type": "string",
+            "format": "date"
+          },
+          "journeyStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fromMit": {
+            "type": "boolean"
+          },
+          "todayOnly": {
+            "type": "boolean"
+          },
+          "isStarted": {
+            "type": "boolean"
+          },
+          "startLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "startLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "seatsAvailable": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "costPerSeat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPrivate": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmergencyContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "emergencyPhone1": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone2": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone3": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtraContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contactName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationData": {
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "latitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "confirmPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignupRequest": {
+        "required": [
+          "confirmPassword",
+          "email",
+          "name",
+          "password",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string"
+          },
+          "confirmPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "phone": {
+            "maxLength": 10,
+            "minLength": 10,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidateOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "otp": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer' [space] and then your token in the text input below.\n\nExample: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+} | Time Taken: 79ms
+18-03-2025 16:47:34: Information - Now listening on: https://0.0.0.0:7209
+18-03-2025 16:47:34: Information - Application started. Press Ctrl+C to shut down.
+18-03-2025 16:47:34: Information - Hosting environment: Development
+18-03-2025 16:47:34: Information - Content root path: D:\GitHub\Wander_guide\Backend
+18-03-2025 16:47:36: Information - LoggingMiddleware is processing request...
+18-03-2025 16:47:36: Information -  Incoming Request: GET /index.html  | Body: 
+18-03-2025 16:47:39: Information -  Response: Status: 200 | Body: <!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+       
+</head>
+
+<body>
+    <div id="swagger-ui"></div>
+
+    <script src="./swagger-ui-bundle.js" charset="utf-8"></script>
+    <script src="./swagger-ui-standalone-preset.js" charset="utf-8"></script>
+    <script src="index.js" charset="utf-8"></script>
+</body>
+</html>
+ | Time Taken: 2624ms
+18-03-2025 16:47:39: Information - LoggingMiddleware is processing request...
+18-03-2025 16:47:39: Information -  Incoming Request: GET /index.js  | Body: 
+18-03-2025 16:47:39: Information -  Response: Status: 200 | Body: /* Source: https://gist.github.com/lamberta/3768814
+ * Parse a string function definition and return a function object. Does not use eval.
+ * @param {string} str
+ * @return {function}
+ *
+ * Example:
+ *  var f = function (x, y) { return x * y; };
+ *  var g = parseFunction(f.toString());
+ *  g(33, 3); //=> 99
+ */
+function parseFunction(str) {
+    if (!str) return void (0);
+
+    var fn_body_idx = str.indexOf('{'),
+        fn_body = str.substring(fn_body_idx + 1, str.lastIndexOf('}')),
+        fn_declare = str.substring(0, fn_body_idx),
+        fn_params = fn_declare.substring(fn_declare.indexOf('(') + 1, fn_declare.lastIndexOf(')')),
+        args = fn_params.split(',');
+
+    args.push(fn_body);
+
+    function Fn() {
+        return Function.apply(this, args);
+    }
+    Fn.prototype = Function.prototype;
+
+    return new Fn();
+}
+
+window.onload = function () {
+    var configObject = JSON.parse('{"urls":[{"url":"/swagger/v1/swagger.json","name":"Auth API v1"}],"deepLinking":false,"persistAuthorization":false,"displayOperationId":false,"defaultModelsExpandDepth":1,"defaultModelExpandDepth":1,"defaultModelRendering":"example","displayRequestDuration":false,"docExpansion":"list","showExtensions":false,"showCommonExtensions":false,"supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],"tryItOutEnabled":false}');
+    var oauthConfigObject = JSON.parse('{"scopeSeparator":" ","scopes":[],"useBasicAuthenticationWithAccessCodeGrant":false,"usePkceWithAuthorizationCodeGrant":false}');
+
+    // Workaround for https://github.com/swagger-api/swagger-ui/issues/5945
+    configObject.urls.forEach(function (item) {
+        if (item.url.startsWith("http") || item.url.startsWith("/")) return;
+        item.url = window.location.href.replace("index.html", item.url).split('#')[0];
+    });
+
+    // If validatorUrl is not explicitly provided, disable the feature by setting to null
+    if (!configObject.hasOwnProperty("validatorUrl"))
+        configObject.validatorUrl = null
+
+    // If oauth2RedirectUrl isn't specified, use the built-in default
+    if (!configObject.hasOwnProperty("oauth2RedirectUrl"))
+        configObject.oauth2RedirectUrl = (new URL("oauth2-redirect.html", window.location.href)).href;
+
+    // Apply mandatory parameters
+    configObject.dom_id = "#swagger-ui";
+    configObject.presets = [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset];
+    configObject.layout = "StandaloneLayout";
+
+    // Parse and add interceptor functions
+    var interceptors = JSON.parse('{}');
+    if (interceptors.RequestInterceptorFunction)
+        configObject.requestInterceptor = parseFunction(interceptors.RequestInterceptorFunction);
+    if (interceptors.ResponseInterceptorFunction)
+        configObject.responseInterceptor = parseFunction(interceptors.ResponseInterceptorFunction);
+
+    if (configObject.plugins) {
+        configObject.plugins = configObject.plugins.map(eval);
+    }
+    
+    // Begin Swagger UI call region
+
+    const ui = SwaggerUIBundle(configObject);
+
+    ui.initOAuth(oauthConfigObject);
+
+    // End Swagger UI call region
+
+    window.ui = ui
+}
+ | Time Taken: 11ms
+18-03-2025 16:47:40: Information - LoggingMiddleware is processing request...
+18-03-2025 16:47:40: Information -  Incoming Request: GET /swagger/v1/swagger.json  | Body: 
+18-03-2025 16:47:40: Information -  Response: Status: 200 | Body: {
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Auth API",
+    "description": "API for Authentication, Authorization, and User Management",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/Validate-Otp-Request": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/reset-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Contacts": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmergencyContacts/save": {
+      "post": {
+        "tags": [
+          "EmergencyContacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/join": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/approve": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "joinId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/GetJourneyByPhone/{phoneNumber}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "phoneNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/user/{userId}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/{journeyId}": {
+      "delete": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Journeys": {
+      "post": {
+        "tags": [
+          "Journeys"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Location": {
+      "put": {
+        "tags": [
+          "Location"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateJourney": {
+        "required": [
+          "destinationLatitude",
+          "destinationLongitude",
+          "startLatitude",
+          "startLongitude"
+        ],
+        "type": "object",
+        "properties": {
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyCreate": {
+            "type": "string",
+            "format": "date"
+          },
+          "journeyStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fromMit": {
+            "type": "boolean"
+          },
+          "todayOnly": {
+            "type": "boolean"
+          },
+          "isStarted": {
+            "type": "boolean"
+          },
+          "startLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "startLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "seatsAvailable": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "costPerSeat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPrivate": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmergencyContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "emergencyPhone1": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone2": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone3": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtraContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contactName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationData": {
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "latitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "confirmPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignupRequest": {
+        "required": [
+          "confirmPassword",
+          "email",
+          "name",
+          "password",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string"
+          },
+          "confirmPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "phone": {
+            "maxLength": 10,
+            "minLength": 10,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidateOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "otp": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer' [space] and then your token in the text input below.\n\nExample: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+} | Time Taken: 134ms
+18-03-2025 16:47:48: Information - LoggingMiddleware is processing request...
+18-03-2025 16:47:48: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 16:47:48: Information -  Response: Status: 204 | Body:  | Time Taken: 50ms
+18-03-2025 16:47:48: Information - LoggingMiddleware is processing request...
+18-03-2025 16:47:48: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 16:47:53: Information - Executed DbCommand (342ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 16:47:53: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 4862ms
+18-03-2025 17:00:42: Information - LoggingMiddleware is processing request...
+18-03-2025 17:00:42: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:00:42: Information -  Response: Status: 204 | Body:  | Time Taken: 78ms
+18-03-2025 17:00:42: Information - LoggingMiddleware is processing request...
+18-03-2025 17:00:42: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:00:43: Information - Executed DbCommand (108ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:00:43: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 939ms
+18-03-2025 17:01:31: Information - LoggingMiddleware is processing request...
+18-03-2025 17:01:31: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:01:31: Information -  Response: Status: 204 | Body:  | Time Taken: 25ms
+18-03-2025 17:01:31: Information - LoggingMiddleware is processing request...
+18-03-2025 17:01:31: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:01:31: Information - Executed DbCommand (22ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:01:31: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 269ms
+18-03-2025 17:21:20: Information - LoggingMiddleware is processing request...
+18-03-2025 17:21:20: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:21:20: Information -  Response: Status: 204 | Body:  | Time Taken: 77ms
+18-03-2025 17:21:20: Information - LoggingMiddleware is processing request...
+18-03-2025 17:21:20: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:21:20: Information - Executed DbCommand (134ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:21:20: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 465ms
+18-03-2025 17:27:44: Information - LoggingMiddleware is processing request...
+18-03-2025 17:27:44: Information -  Incoming Request: POST /api/Auth/login  | Body: {
+  "email": "user@example.com",
+  "password": "string"
+}
+18-03-2025 17:27:44: Information - Executed DbCommand (109ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:27:44: Information -  Response: Status: 401 | Body: {"message":"Invalid email or password"} | Time Taken: 351ms
+18-03-2025 17:28:06: Information - LoggingMiddleware is processing request...
+18-03-2025 17:28:06: Information -  Incoming Request: POST /api/Auth/login  | Body: {
+  "email": "ghongdeshravani@gmail.com",
+  "password": "Hello@123"
+}
+18-03-2025 17:28:06: Information - Executed DbCommand (27ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:28:06: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 143ms
+18-03-2025 17:31:22: Information - LoggingMiddleware is processing request...
+18-03-2025 17:31:23: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:31:23: Information -  Response: Status: 204 | Body:  | Time Taken: 47ms
+18-03-2025 17:31:23: Information - LoggingMiddleware is processing request...
+18-03-2025 17:31:23: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:31:23: Information - Executed DbCommand (112ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:31:23: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 294ms
+18-03-2025 17:38:42: Information - LoggingMiddleware is processing request...
+18-03-2025 17:38:42: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:38:42: Information -  Response: Status: 204 | Body:  | Time Taken: 66ms
+18-03-2025 17:38:42: Information - LoggingMiddleware is processing request...
+18-03-2025 17:38:42: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:38:42: Information - Executed DbCommand (37ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:38:42: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 282ms
+18-03-2025 17:39:53: Information - LoggingMiddleware is processing request...
+18-03-2025 17:39:53: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:39:53: Information -  Response: Status: 204 | Body:  | Time Taken: 9ms
+18-03-2025 17:39:53: Information - LoggingMiddleware is processing request...
+18-03-2025 17:39:53: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:39:53: Information - Executed DbCommand (30ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:39:53: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 153ms
+18-03-2025 17:41:10: Information - LoggingMiddleware is processing request...
+18-03-2025 17:41:10: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:41:10: Information -  Response: Status: 204 | Body:  | Time Taken: 16ms
+18-03-2025 17:41:10: Information - LoggingMiddleware is processing request...
+18-03-2025 17:41:10: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:41:10: Information - Executed DbCommand (26ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:41:10: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 154ms
+18-03-2025 17:41:46: Information - LoggingMiddleware is processing request...
+18-03-2025 17:41:46: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:41:46: Information -  Response: Status: 204 | Body:  | Time Taken: 9ms
+18-03-2025 17:41:46: Information - LoggingMiddleware is processing request...
+18-03-2025 17:41:46: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:41:46: Information - Executed DbCommand (25ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:41:46: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 131ms
+18-03-2025 17:48:09: Information - LoggingMiddleware is processing request...
+18-03-2025 17:48:09: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:48:09: Information -  Response: Status: 204 | Body:  | Time Taken: 76ms
+18-03-2025 17:48:09: Information - LoggingMiddleware is processing request...
+18-03-2025 17:48:09: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:48:10: Information - Executed DbCommand (165ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:48:10: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 494ms
+18-03-2025 17:48:55: Information - LoggingMiddleware is processing request...
+18-03-2025 17:48:55: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:48:55: Information -  Response: Status: 204 | Body:  | Time Taken: 8ms
+18-03-2025 17:48:55: Information - LoggingMiddleware is processing request...
+18-03-2025 17:48:55: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:48:55: Information - Executed DbCommand (22ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:48:55: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 110ms
+18-03-2025 17:50:09: Information - LoggingMiddleware is processing request...
+18-03-2025 17:50:09: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:50:09: Information -  Response: Status: 204 | Body:  | Time Taken: 39ms
+18-03-2025 17:50:09: Information - LoggingMiddleware is processing request...
+18-03-2025 17:50:09: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:50:09: Information - Executed DbCommand (23ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:50:09: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 135ms
+18-03-2025 17:50:36: Information - LoggingMiddleware is processing request...
+18-03-2025 17:50:36: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:50:36: Information -  Response: Status: 204 | Body:  | Time Taken: 8ms
+18-03-2025 17:50:36: Information - LoggingMiddleware is processing request...
+18-03-2025 17:50:36: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:50:36: Information - Executed DbCommand (49ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:50:36: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 163ms
+18-03-2025 17:52:34: Information - LoggingMiddleware is processing request...
+18-03-2025 17:52:34: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:52:34: Information -  Response: Status: 204 | Body:  | Time Taken: 37ms
+18-03-2025 17:52:34: Information - LoggingMiddleware is processing request...
+18-03-2025 17:52:34: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:52:34: Information - Executed DbCommand (16ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:52:34: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 246ms
+18-03-2025 17:54:13: Information - LoggingMiddleware is processing request...
+18-03-2025 17:54:13: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:54:13: Information -  Response: Status: 204 | Body:  | Time Taken: 19ms
+18-03-2025 17:54:13: Information - LoggingMiddleware is processing request...
+18-03-2025 17:54:13: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:54:13: Information - Executed DbCommand (32ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:54:13: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 146ms
+18-03-2025 17:56:11: Information - LoggingMiddleware is processing request...
+18-03-2025 17:56:11: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:56:11: Information -  Response: Status: 204 | Body:  | Time Taken: 19ms
+18-03-2025 17:56:11: Information - LoggingMiddleware is processing request...
+18-03-2025 17:56:11: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:56:11: Information - Executed DbCommand (29ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:56:11: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 129ms
+18-03-2025 17:57:07: Information - LoggingMiddleware is processing request...
+18-03-2025 17:57:07: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+18-03-2025 17:57:07: Information -  Response: Status: 204 | Body:  | Time Taken: 20ms
+18-03-2025 17:57:07: Information - LoggingMiddleware is processing request...
+18-03-2025 17:57:07: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+18-03-2025 17:57:07: Information - Executed DbCommand (30ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+18-03-2025 17:57:07: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 126ms
+19-03-2025 04:56:58: Information - Now listening on: https://0.0.0.0:7209
+19-03-2025 04:56:59: Information - Application started. Press Ctrl+C to shut down.
+19-03-2025 04:56:59: Information - Hosting environment: Development
+19-03-2025 04:56:59: Information - Content root path: D:\GitHub\Wander_guide\Backend
+19-03-2025 04:57:03: Information - LoggingMiddleware is processing request...
+19-03-2025 04:57:03: Information -  Incoming Request: GET /index.html  | Body: 
+19-03-2025 04:57:04: Information -  Response: Status: 200 | Body: <!-- HTML for static distribution bundle build -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+       
+</head>
+
+<body>
+    <div id="swagger-ui"></div>
+
+    <script src="./swagger-ui-bundle.js" charset="utf-8"></script>
+    <script src="./swagger-ui-standalone-preset.js" charset="utf-8"></script>
+    <script src="index.js" charset="utf-8"></script>
+</body>
+</html>
+ | Time Taken: 1668ms
+19-03-2025 04:57:04: Information - LoggingMiddleware is processing request...
+19-03-2025 04:57:04: Information -  Incoming Request: GET /index.js  | Body: 
+19-03-2025 04:57:05: Information -  Response: Status: 200 | Body: /* Source: https://gist.github.com/lamberta/3768814
+ * Parse a string function definition and return a function object. Does not use eval.
+ * @param {string} str
+ * @return {function}
+ *
+ * Example:
+ *  var f = function (x, y) { return x * y; };
+ *  var g = parseFunction(f.toString());
+ *  g(33, 3); //=> 99
+ */
+function parseFunction(str) {
+    if (!str) return void (0);
+
+    var fn_body_idx = str.indexOf('{'),
+        fn_body = str.substring(fn_body_idx + 1, str.lastIndexOf('}')),
+        fn_declare = str.substring(0, fn_body_idx),
+        fn_params = fn_declare.substring(fn_declare.indexOf('(') + 1, fn_declare.lastIndexOf(')')),
+        args = fn_params.split(',');
+
+    args.push(fn_body);
+
+    function Fn() {
+        return Function.apply(this, args);
+    }
+    Fn.prototype = Function.prototype;
+
+    return new Fn();
+}
+
+window.onload = function () {
+    var configObject = JSON.parse('{"urls":[{"url":"/swagger/v1/swagger.json","name":"Auth API v1"}],"deepLinking":false,"persistAuthorization":false,"displayOperationId":false,"defaultModelsExpandDepth":1,"defaultModelExpandDepth":1,"defaultModelRendering":"example","displayRequestDuration":false,"docExpansion":"list","showExtensions":false,"showCommonExtensions":false,"supportedSubmitMethods":["get","put","post","delete","options","head","patch","trace"],"tryItOutEnabled":false}');
+    var oauthConfigObject = JSON.parse('{"scopeSeparator":" ","scopes":[],"useBasicAuthenticationWithAccessCodeGrant":false,"usePkceWithAuthorizationCodeGrant":false}');
+
+    // Workaround for https://github.com/swagger-api/swagger-ui/issues/5945
+    configObject.urls.forEach(function (item) {
+        if (item.url.startsWith("http") || item.url.startsWith("/")) return;
+        item.url = window.location.href.replace("index.html", item.url).split('#')[0];
+    });
+
+    // If validatorUrl is not explicitly provided, disable the feature by setting to null
+    if (!configObject.hasOwnProperty("validatorUrl"))
+        configObject.validatorUrl = null
+
+    // If oauth2RedirectUrl isn't specified, use the built-in default
+    if (!configObject.hasOwnProperty("oauth2RedirectUrl"))
+        configObject.oauth2RedirectUrl = (new URL("oauth2-redirect.html", window.location.href)).href;
+
+    // Apply mandatory parameters
+    configObject.dom_id = "#swagger-ui";
+    configObject.presets = [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset];
+    configObject.layout = "StandaloneLayout";
+
+    // Parse and add interceptor functions
+    var interceptors = JSON.parse('{}');
+    if (interceptors.RequestInterceptorFunction)
+        configObject.requestInterceptor = parseFunction(interceptors.RequestInterceptorFunction);
+    if (interceptors.ResponseInterceptorFunction)
+        configObject.responseInterceptor = parseFunction(interceptors.ResponseInterceptorFunction);
+
+    if (configObject.plugins) {
+        configObject.plugins = configObject.plugins.map(eval);
+    }
+    
+    // Begin Swagger UI call region
+
+    const ui = SwaggerUIBundle(configObject);
+
+    ui.initOAuth(oauthConfigObject);
+
+    // End Swagger UI call region
+
+    window.ui = ui
+}
+ | Time Taken: 119ms
+19-03-2025 04:57:06: Information - LoggingMiddleware is processing request...
+19-03-2025 04:57:06: Information -  Incoming Request: GET /swagger/v1/swagger.json  | Body: 
+19-03-2025 04:57:06: Information -  Response: Status: 200 | Body: {
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Auth API",
+    "description": "API for Authentication, Authorization, and User Management",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Auth/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/Validate-Otp-Request": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Auth/reset-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Contacts": {
+      "post": {
+        "tags": [
+          "Contacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtraContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtraContacts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/EmergencyContacts/save": {
+      "post": {
+        "tags": [
+          "EmergencyContacts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmergencyContacts"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/join": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JoinJourney/approve": {
+      "post": {
+        "tags": [
+          "JoinJourney"
+        ],
+        "parameters": [
+          {
+            "name": "joinId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/GetJourneyByPhone/{phoneNumber}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "phoneNumber",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateJourney"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/user/{userId}": {
+      "get": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JourneyLookup/{journeyId}": {
+      "delete": {
+        "tags": [
+          "JourneyLookup"
+        ],
+        "parameters": [
+          {
+            "name": "journeyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Journeys": {
+      "post": {
+        "tags": [
+          "Journeys"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJourney"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Location": {
+      "put": {
+        "tags": [
+          "Location"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateJourney": {
+        "required": [
+          "destinationLatitude",
+          "destinationLongitude",
+          "startLatitude",
+          "startLongitude"
+        ],
+        "type": "object",
+        "properties": {
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyCreate": {
+            "type": "string",
+            "format": "date"
+          },
+          "journeyStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "fromMit": {
+            "type": "boolean"
+          },
+          "todayOnly": {
+            "type": "boolean"
+          },
+          "isStarted": {
+            "type": "boolean"
+          },
+          "startLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "startLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLatitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "destinationLongitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "seatsAvailable": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "costPerSeat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "totalSeats": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isPrivate": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmergencyContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "emergencyPhone1": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone2": {
+            "type": "string",
+            "nullable": true
+          },
+          "emergencyPhone3": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ExtraContacts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "journeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "contactName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocationData": {
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "latitude": {
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "format": "double"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "confirmPassword": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SignupRequest": {
+        "required": [
+          "confirmPassword",
+          "email",
+          "name",
+          "password",
+          "phone"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 8,
+            "type": "string"
+          },
+          "confirmPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "phone": {
+            "maxLength": 10,
+            "minLength": 10,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValidateOtpRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "otp": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer' [space] and then your token in the text input below.\n\nExample: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+} | Time Taken: 29ms
+19-03-2025 05:04:19: Information - LoggingMiddleware is processing request...
+19-03-2025 05:04:19: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+19-03-2025 05:04:19: Information -  Response: Status: 204 | Body:  | Time Taken: 98ms
+19-03-2025 05:04:19: Information - LoggingMiddleware is processing request...
+19-03-2025 05:04:19: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+19-03-2025 05:04:23: Information - Executed DbCommand (277ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 05:04:23: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 4114ms
+19-03-2025 05:09:25: Information - LoggingMiddleware is processing request...
+19-03-2025 05:09:25: Information -  Incoming Request: POST /api/Journeys  | Body: {
+  "journeyId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "journeyCreate": "2025-03-19",
+  "journeyStart": "2025-03-19",
+  "timestamp": "2025-03-19T05:09:23.547Z",
+  "fromMit": true,
+  "todayOnly": true,
+  "isStarted": true,
+  "startLatitude": 90,
+  "startLongitude": 180,
+  "destinationLatitude": 90,
+  "destinationLongitude": 180,
+  "seatsAvailable": 0,
+  "costPerSeat": 0,
+  "startTime": "2025-03-19T05:09:23.547Z",
+  "totalSeats": 0,
+  "isPrivate": true
+}
+19-03-2025 05:09:26: Information - Executed DbCommand (61ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 05:09:26: Information -  Response: Status: 201 | Body: {"journeyId":"9967cdab-108c-4c21-96b4-5263a758d14b"} | Time Taken: 378ms
+19-03-2025 05:12:06: Information - LoggingMiddleware is processing request...
+19-03-2025 05:12:06: Information -  Incoming Request: POST /api/Auth/login  | Body: {
+  "email": "ghongdeshravani@gmail.com",
+  "password": "Hello@123"
+}
+19-03-2025 05:12:06: Information - Executed DbCommand (48ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 05:12:06: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 238ms
+19-03-2025 05:29:31: Information - LoggingMiddleware is processing request...
+19-03-2025 05:29:31: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+19-03-2025 05:29:31: Information -  Response: Status: 204 | Body:  | Time Taken: 50ms
+19-03-2025 05:29:31: Information - LoggingMiddleware is processing request...
+19-03-2025 05:29:31: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+19-03-2025 05:29:31: Information - Executed DbCommand (49ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 05:29:31: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 336ms
+19-03-2025 05:29:49: Information - LoggingMiddleware is processing request...
+19-03-2025 05:29:49: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 05:29:49: Information -  Response: Status: 204 | Body:  | Time Taken: 7ms
+19-03-2025 05:29:49: Information - LoggingMiddleware is processing request...
+19-03-2025 05:29:49: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"from","startPoint":"MIT ADT University","dropPoint":"","seatsAvailable":"","costPerSeat":"","startTime":"","date":"2025-03-19","travelType":"today","isPrivate":false}
+19-03-2025 05:29:49: Information -  Response: Status: 400 | Body: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"journey":["The journey field is required."],"$.seatsAvailable":["The JSON value could not be converted to System.Int32. Path: $.seatsAvailable | LineNumber: 0 | BytePositionInLine: 142."]},"traceId":"00-e064439ca44c9d330fd54a02aea68f2c-7e04f2cce7e87616-00"} | Time Taken: 130ms
+19-03-2025 05:30:21: Information - LoggingMiddleware is processing request...
+19-03-2025 05:30:21: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 05:30:21: Information -  Response: Status: 204 | Body:  | Time Taken: 16ms
+19-03-2025 05:30:21: Information - LoggingMiddleware is processing request...
+19-03-2025 05:30:21: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"from","startPoint":"MIT ADT University","dropPoint":"Pune","seatsAvailable":"2","costPerSeat":"50","startTime":"12:00","date":"2025-03-19","travelType":"today","isPrivate":true}
+19-03-2025 05:30:21: Information -  Response: Status: 400 | Body: {"type":"https://tools.ietf.org/html/rfc9110#section-15.5.1","title":"One or more validation errors occurred.","status":400,"errors":{"journey":["The journey field is required."],"$.startTime":["The JSON value could not be converted to System.DateTime. Path: $.startTime | LineNumber: 0 | BytePositionInLine: 186."]},"traceId":"00-e87f24e9585c0c2dc28aeb93e71ddcef-6938b638c3e5f6d3-00"} | Time Taken: 12ms
+19-03-2025 05:40:53: Information - LoggingMiddleware is processing request...
+19-03-2025 05:40:53: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+19-03-2025 05:40:53: Information -  Response: Status: 204 | Body:  | Time Taken: 27ms
+19-03-2025 05:40:53: Information - LoggingMiddleware is processing request...
+19-03-2025 05:40:53: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+19-03-2025 05:40:54: Information - Executed DbCommand (79ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 05:40:54: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 288ms
+19-03-2025 05:41:18: Information - LoggingMiddleware is processing request...
+19-03-2025 05:41:18: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 05:41:18: Information -  Response: Status: 204 | Body:  | Time Taken: 7ms
+19-03-2025 05:41:18: Information - LoggingMiddleware is processing request...
+19-03-2025 05:41:18: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"from","startPoint":"MIT ADT University","dropPoint":"katraj","seatsAvailable":2,"costPerSeat":50,"startTime":"2001-11-30T18:30:00.000Z","date":"2025-03-19","travelType":"today","isPrivate":false}
+19-03-2025 05:41:18: Information - Executed DbCommand (53ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 05:41:18: Information -  Response: Status: 201 | Body: {"journeyId":"87c248e0-a842-4ae1-940b-fe245c1727e4"} | Time Taken: 93ms
+19-03-2025 05:41:31: Information - LoggingMiddleware is processing request...
+19-03-2025 05:41:31: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 05:41:31: Information -  Response: Status: 204 | Body:  | Time Taken: 26ms
+19-03-2025 05:41:31: Information - LoggingMiddleware is processing request...
+19-03-2025 05:41:31: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"from","startPoint":"MIT ADT University","dropPoint":"katraj","seatsAvailable":2,"costPerSeat":50,"startTime":"2001-11-30T18:30:00.000Z","date":"2025-03-19","travelType":"today","isPrivate":false}
+19-03-2025 05:41:31: Information - Executed DbCommand (21ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 05:41:31: Information -  Response: Status: 201 | Body: {"journeyId":"d32c176b-bc40-4a0f-b710-063bd5874278"} | Time Taken: 33ms
+19-03-2025 05:42:59: Information - LoggingMiddleware is processing request...
+19-03-2025 05:42:59: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 05:42:59: Information -  Response: Status: 204 | Body:  | Time Taken: 30ms
+19-03-2025 05:42:59: Information - LoggingMiddleware is processing request...
+19-03-2025 05:42:59: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"from","startPoint":"MIT ADT University","dropPoint":"katraj","seatsAvailable":2,"costPerSeat":50,"startTime":"2001-11-30T18:30:00.000Z","date":"2025-03-19","travelType":"today","isPrivate":true}
+19-03-2025 05:42:59: Information - Executed DbCommand (14ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 05:42:59: Information -  Response: Status: 201 | Body: {"journeyId":"497ecb69-e087-4dd8-812f-46262dae5fbb"} | Time Taken: 23ms
+19-03-2025 05:52:58: Information - LoggingMiddleware is processing request...
+19-03-2025 05:52:58: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+19-03-2025 05:52:58: Information -  Response: Status: 204 | Body:  | Time Taken: 45ms
+19-03-2025 05:52:58: Information - LoggingMiddleware is processing request...
+19-03-2025 05:52:58: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+19-03-2025 05:52:58: Information - Executed DbCommand (82ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 05:52:58: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 288ms
+19-03-2025 05:53:30: Information - LoggingMiddleware is processing request...
+19-03-2025 05:53:30: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 05:53:30: Information -  Response: Status: 204 | Body:  | Time Taken: 20ms
+19-03-2025 05:53:30: Information - LoggingMiddleware is processing request...
+19-03-2025 05:53:30: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"from","startPoint":"MIT ADT University","dropPoint":"katraj","seatsAvailable":4,"costPerSeat":100,"startTime":"2001-01-31T18:30:00.000Z","date":"2025-03-19","travelType":"today","isPrivate":true}
+19-03-2025 05:53:30: Information - Executed DbCommand (46ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 05:53:30: Information -  Response: Status: 201 | Body: {"journeyId":"64b1e2af-56f4-4a05-95f5-8b3e09a5bcf9"} | Time Taken: 74ms
+19-03-2025 05:56:00: Information - LoggingMiddleware is processing request...
+19-03-2025 05:56:00: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+19-03-2025 05:56:00: Information -  Response: Status: 204 | Body:  | Time Taken: 16ms
+19-03-2025 05:56:00: Information - LoggingMiddleware is processing request...
+19-03-2025 05:56:00: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+19-03-2025 05:56:00: Information - Executed DbCommand (40ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 05:56:00: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 117ms
+19-03-2025 06:17:05: Information - LoggingMiddleware is processing request...
+19-03-2025 06:17:05: Information -  Incoming Request: OPTIONS /api/Auth/login  | Body: 
+19-03-2025 06:17:05: Information -  Response: Status: 204 | Body:  | Time Taken: 37ms
+19-03-2025 06:17:05: Information - LoggingMiddleware is processing request...
+19-03-2025 06:17:05: Information -  Incoming Request: POST /api/Auth/login  | Body: {"email":"ghongdeshravani@gmail.com","password":"Hello@123"}
+19-03-2025 06:17:05: Information - Executed DbCommand (107ms) [Parameters=[@__normalizedEmail_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(2) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[Name], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[Phone], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedEmail] = @__normalizedEmail_0
+19-03-2025 06:17:05: Information -  Response: Status: 200 | Body: {"message":"Login Successful","userDetails":{"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","name":"shravani","email":"ghongdeshravani@gmail.com","phoneNumber":"9284964161"}} | Time Taken: 370ms
+19-03-2025 06:46:14: Information - LoggingMiddleware is processing request...
+19-03-2025 06:46:14: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 06:46:14: Information -  Response: Status: 204 | Body:  | Time Taken: 162ms
+19-03-2025 06:46:14: Information - LoggingMiddleware is processing request...
+19-03-2025 06:46:14: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"to","startPoint":"Bibvewadi","dropPoint":"MIT ADT University","seatsAvailable":1,"costPerSeat":75,"startTime":"2001-03-31T18:30:00.000Z","date":"2025-03-19","travelType":"today","isPrivate":false}
+19-03-2025 06:46:14: Information - Executed DbCommand (81ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 06:46:14: Information -  Response: Status: 201 | Body: {"journeyId":"7c5e346e-a420-46e4-8ed7-e8eb2885cea8"} | Time Taken: 358ms
+19-03-2025 06:46:31: Information - LoggingMiddleware is processing request...
+19-03-2025 06:46:31: Information -  Incoming Request: OPTIONS /api/Journeys  | Body: 
+19-03-2025 06:46:31: Information -  Response: Status: 204 | Body:  | Time Taken: 22ms
+19-03-2025 06:46:31: Information - LoggingMiddleware is processing request...
+19-03-2025 06:46:31: Information -  Incoming Request: POST /api/Journeys  | Body: {"userId":"ef7c31da-d72b-4564-8fec-8b613cef3a9f","travelDirection":"to","startPoint":"Bibvewadi","dropPoint":"MIT ADT University","seatsAvailable":1,"costPerSeat":75,"startTime":"2001-03-31T18:30:00.000Z","date":"2025-03-19","travelType":"today","isPrivate":false}
+19-03-2025 06:46:31: Information - Executed DbCommand (23ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Int32), @p2='?' (DbType = Double), @p3='?' (DbType = Double), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Date), @p8='?' (DbType = Date), @p9='?' (DbType = Int32), @p10='?' (DbType = Double), @p11='?' (DbType = Double), @p12='?' (DbType = DateTime2), @p13='?' (DbType = DateTime2), @p14='?' (DbType = Boolean), @p15='?' (DbType = Int32), @p16='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Journeys] ([JourneyId], [CostPerSeat], [DestinationLatitude], [DestinationLongitude], [FromMit], [IsPrivate], [IsStarted], [JourneyCreate], [JourneyStart], [SeatsAvailable], [StartLatitude], [StartLongitude], [StartTime], [Timestamp], [TodayOnly], [TotalSeats], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16);
+19-03-2025 06:46:31: Information -  Response: Status: 201 | Body: {"journeyId":"548af813-fca0-4da8-a9ba-c9cae6bef605"} | Time Taken: 42ms

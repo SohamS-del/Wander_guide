@@ -9,3 +9,5 @@ export const ResetPassUrl = 'https://54f1-2401-4900-1c17-1003-99f9-503c-b224-512
 export const locationUrl = 'https://54f1-2401-4900-1c17-1003-99f9-503c-b224-512.ngrok-free.app/api/Location';
 export const GoogleMapsAPI = "AIzaSyBKt1C4naUd88TQqYnp2dcRcesZkLMDSMQ";
 export const GoogleMapsAPIJson = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+export const CreateJourneyUrl = "https://localhost:7209/api/Journeys";
+export const RoutesUrl = "https://localhost:7209/api/JourneyLookup/GetAllJourneys";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet,Button, TouchableOpacity, TextInput, Image , StatusBar, ScrollView} from 'react-native';
+import { View, Text, FlatList, StyleSheet,Button, TouchableOpacity, TextInput, Image , StatusBar, ScrollView, Alert} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
@@ -9,10 +9,12 @@ import Checkbox from 'expo-checkbox';
 import { RadioButton } from 'react-native-paper';
 import { handleUrlParams } from 'expo-router/build/fork/getStateFromPath-forks';
 import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CreateJourneyUrl } from './components/url';
 
 const StartJourney =({navigation}:{navigation:any})=>{
     const[travelDirection,setTravelDirection] = useState("from");
-    const[travelType, setTravelType] = useState("today")
+    const[travelType, setTravelType] = useState("today");
 
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
@@ -20,6 +22,20 @@ const StartJourney =({navigation}:{navigation:any})=>{
     const[startPoint, setStartPoint] = useState("MIT ADT University");
     const[dropPoint, setDropPoint] = useState("");
 
+    const [userSession, setUserSession] = useState(null);
+    const [userId, setUserId] = useState("12345");
+
+    const [seatsAvailable, setSeatsAvailable] = useState("");
+const [costPerSeat, setCostPerSeat] = useState("");
+const [startTime, setStartTime] = useState(""); 
+const [isPrivate, setIsPrivate] = useState(false);
+
+
+
+
+    useEffect(() => {
+        getUserData();
+      }, []);
     const handleselection = (value:string) =>{
 
         setTravelDirection(value);
@@ -42,25 +58,83 @@ const StartJourney =({navigation}:{navigation:any})=>{
     //     navigation.navigate("EmergencyContacts")
     // }
 
-    const createJourney = async () =>{
-        try{
-            const response = await fetch("create journey endpoint",{
-                method:"POST",
-                headers:{
-                    'content-type':'aplication/json'
-                },
-                body:"",
-            });
-            const data = await response.json();
-            if(data.status = "SUCCESS"){
-                const journeyId = data.id;
-                navigation.navigate("EmergencyContacts", {Id:journeyId});
-            }
+     const getUserData = async () => {
+        try {
+          const storedUserData = await AsyncStorage.getItem('userDetails');
+          if (storedUserData) {
+            const parsedUserData = JSON.parse(storedUserData);
+            console.log('User Data:', parsedUserData);
+            setUserSession(parsedUserData); // Store parsed user data in state
+            setUserId(parsedUserData.userId || 'Guest');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
         }
-        catch{
+      };
 
+     
+      const createJourney = async () => {
+        // Prepare journey data
+        if (!startTime) {
+            console.error("Error: startTime is missing or invalid.");
+            Alert.alert("Error", "Please select a valid start time.");
+            return;
         }
-    }
+    
+        let formattedStartTime;
+        try {
+            formattedStartTime = new Date(startTime).toISOString(); // Convert to ISO format
+        } catch (error) {
+            console.error("Invalid startTime format:", startTime);
+            Alert.alert("Error", "Invalid start time format.");
+            return;
+        }
+        const journeyData = {
+            userId: userId, // Replace with actual logged-in user ID
+            travelDirection,
+            startPoint,
+            dropPoint,
+            seatsAvailable: parseInt(seatsAvailable) || 0, // Convert to number, default 0 if NaN
+            costPerSeat: parseFloat(costPerSeat) || 0,  // Convert to number, default 0 if NaN
+            startTime: new Date(startTime).toISOString(),  // Ensure correct format
+            date: date.toISOString().split("T")[0], // Format date for API
+            travelType,
+            isPrivate: Boolean(isPrivate), // Ensure it's a boolean
+        };
+ //Storing Journey data in AsynStorage 
+        try {
+            await AsyncStorage.setItem("journeyData", JSON.stringify(journeyData));
+            console.log("Journey Data stored successfully!");
+        } catch (error) {
+            console.error("Error storing journey data:", error);
+        }
+    
+        console.log("Sending Journey Data:", journeyData); // Debugging log
+    
+        try {
+            const response = await fetch(CreateJourneyUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(journeyData),
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                const journeyId = data.id;
+                navigation.navigate("EmergencyContacts", { Id: journeyId });
+            } else {
+                console.error("Failed to create journey:", data);
+                Alert.alert("Error", data?.message || "Failed to create journey.");
+            }
+        } catch (error) {
+            console.error("Error creating journey:", error);
+            Alert.alert("Error", "Something went wrong. Please try again.");
+        }
+    };
+    
+    
     return(
         <ScrollView style={styles.cont}>
             <StatusBar backgroundColor="#BA2966" barStyle="light-content" />
@@ -93,13 +167,13 @@ const StartJourney =({navigation}:{navigation:any})=>{
                     <TextInput style={styles.input} value={dropPoint} onChangeText={(text) => setDropPoint(text)} editable={startPoint == "MIT ADT University"}></TextInput>
 
                     <Text style={styles.actionName}>Seats Available</Text>
-                    <TextInput style={styles.input}></TextInput>
+                    <TextInput style={styles.input} value={seatsAvailable} onChangeText={(text) => setSeatsAvailable(text)} keyboardType="numeric"/> 
 
                     <Text style={styles.actionName}>Cost per seat</Text>
-                    <TextInput style={styles.input}></TextInput>
+                    <TextInput style={styles.input} value={costPerSeat} onChangeText={(text) => setCostPerSeat(text)}keyboardType="numeric"/>
 
                     <Text style={styles.actionName}>Start Time</Text>
-                    <TextInput style={styles.input}></TextInput>
+                    <TextInput style={styles.input} value={startTime} onChangeText={(text) => setStartTime(text)}/>
 
                     <Text style={styles.actionName}>Date</Text>
                     
@@ -135,6 +209,17 @@ const StartJourney =({navigation}:{navigation:any})=>{
                             <Text style={styles.type}>Everyday same time</Text>
                         </View>
                     </RadioButton.Group>
+                    <Text style={styles.travelType}>Journey Type</Text>
+
+               <View style={{ flexDirection: "row", alignItems: "center" }}>
+                      <Checkbox 
+                          value={isPrivate} 
+                          onValueChange={setIsPrivate} 
+                          color={isPrivate ? "#BA2966" : undefined} 
+                      />
+              <Text style={styles.type}>{isPrivate ? "Private Journey" : "Public Journey"}</Text>
+                     </View>
+
 
                     <TouchableOpacity onPress={createJourney}>
                     <Text style={styles.create} >CREATE JOURNEY</Text>

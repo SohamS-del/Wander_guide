@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, ScrollView, TouchableOpacity, TextInput, renderItem, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { GoogleMapsAPI, GoogleMapsAPIJson } from './components/url';
-import { AuthContext } from './AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NearbyPlaces = () => {
   const [location, setLocation] = useState(null);
@@ -14,28 +14,75 @@ const NearbyPlaces = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [journeyDetails, setJourneyDetails] = useState(null);
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(false);
-  const { user } = useContext(AuthContext);
-  
-  console.log(user);
+  const [userSession, setUserSession] = useState(null); // Store user session
+  const [userName, setUserName] = useState('Guest');
+  const [journeyData, setJourneyData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const requestLocationPermission = async () => {
+  const menuPress = (navigation) => {
+    navigation.navigate('HomeScreen');
+  };
+
+  // useEffect to fetch user data and request location permission on mount
+  useEffect(() => {
+    getUserData();
+    requestLocationPermission();
+    getJourneyData();
+  }, []);
+
+      // Function to fetch journey data from AsyncStorage
+      const getJourneyData = async () => {
+        try {
+            const storedData = await AsyncStorage.getItem("journeyData");
+            if (storedData) {
+                setJourneyData(JSON.parse(storedData));
+            } else {
+                console.log("No Journey Data Found.");
+            }
+        } catch (error) {
+            console.error("Error retrieving journey data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+  // Function to fetch user data from AsyncStorage
+  const getUserData = async () => {
     try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      const storedUserData = await AsyncStorage.getItem('userDetails');
+      if (storedUserData) {
+        const parsedUserData = JSON.parse(storedUserData);
+        console.log('User Data:', parsedUserData);
+        setUserSession(parsedUserData); // Store parsed user data in state
+        setUserName(parsedUserData.name || 'Guest');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  // Request Location Permission & Fetch Nearby Places
+  const requestLocationPermission = useCallback(async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied.');
         return;
       }
 
-      let currentLocation = await Location.getCurrentPositionAsync({});
+      const currentLocation = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+        timeout: 5000,
+      });
+
       setLocation(currentLocation);
       fetchNearbyPlaces(currentLocation.coords.latitude, currentLocation.coords.longitude);
     } catch (error) {
-      console.error('Error requesting location permission:', error);
+      console.error('Error getting location:', error);
       setErrorMsg('Unable to retrieve location.');
     }
-  };
+  }, []);
 
+  // Fetch nearby places from Google Maps API
   const fetchNearbyPlaces = async (latitude, longitude) => {
     if (!latitude || !longitude) return;
 
@@ -63,16 +110,17 @@ const NearbyPlaces = () => {
     }
   };
 
+  // Fetch Journey Details
   const fetchJourneyDetails = async () => {
     try {
-      if (!user || !user.id) {
+      if (!userSession || !userSession.userId) {
         console.error("Error: userId is undefined.");
         return;
       }
       setLoading(true);
 
       const serverUrl = 'http://localhost:7209/api/JourneyLookup/user';
-      const response = await axios.get(`${serverUrl}/${user.id}`);
+      const response = await axios.get(`${serverUrl}/${userSession.userId}`);
 
       setJourneyDetails(response.data);
     } catch (error) {
@@ -83,13 +131,15 @@ const NearbyPlaces = () => {
     }
   };
 
+  // useEffect to fetch journey details when userSession is set
   useEffect(() => {
-    requestLocationPermission();
-  }, []);
+    if (userSession) {
+      fetchJourneyDetails();
+    }
+  }, [userSession]); // Depend on userSession
 
+  // Periodic location updates every 60 seconds
   useEffect(() => {
-    if (user) fetchJourneyDetails();
-
     const intervalId = setInterval(async () => {
       try {
         let currentLocation = await Location.getCurrentPositionAsync({});
@@ -102,17 +152,18 @@ const NearbyPlaces = () => {
     }, 60000);
 
     return () => clearInterval(intervalId);
-  }, [user]);
+  }, []);
+
 //FlatList
   return (
     <ScrollView style={styles.container}>
       <View style={styles.welcome}>
-        <TouchableOpacity style={styles.menu} onPress={menuPress}>
+        <TouchableOpacity style={styles.menu} onPress={()=>navigation.navigate("HomeScreen")}>
           <Image source={require('./assets/menu.png')} style={styles.menuIcon}  />
         </TouchableOpacity>
       
         <Text style={styles.welcomeText}>Welcome back,</Text>
-        <Text style={styles.welcomeName}>{user?.username ?? "Guest"}</Text>
+        <Text style={styles.welcomeName}>{userName}</Text>
 
 
       </View>
@@ -145,8 +196,8 @@ const NearbyPlaces = () => {
 
       <View style={styles.listHeader}>
         <Text style={styles.listHeading}>My journey</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
-          {/* <Text style={styles.viewAll}>View all</Text> */}
+        <TouchableOpacity onPress={() => navigation.navigate('FullListPage')}>
+          <Text style={styles.viewAll}>View all</Text>
         </TouchableOpacity>
       </View>
       
@@ -154,13 +205,11 @@ const NearbyPlaces = () => {
   <View style={styles.myJourneyCard}>
     <View style={styles.myJourneyCardCont}> 
       <Text style={styles.myJourneyDate}>
-        {journeyDetails?.journeyCreate || "Journey Create Date not available"} | 
-        {journeyDetails?.timestamp || "Start Time not available"}
+        {journeyData?.date || "Journey Create Date not available"} | 
+        {journeyData?.startTime || "Start Time not available"}
       </Text>  
       <Text style={styles.myJourneyHeading}>HEADING TOWARDS</Text>        
-      <Text style={styles.myJourneyDestination}>
-        {journeyDetails?.destinationLatitude || "Destination not available"}
-      </Text>
+     
       
       {journeyDetails && (
   <Text style={journeyDetails.isStarted ? styles.started : styles.notStarted}>
@@ -168,15 +217,19 @@ const NearbyPlaces = () => {
   </Text>
 )}
 
-      
-      {/* Additional Journey Details */}
-      <Text style={styles.journeyDetailText}>Journey ID: {journeyDetails?.journeyId || "N/A"}</Text>
-      <Text style={styles.journeyDetailText}>From MIT: {journeyDetails?.fromMit ? "Yes" : "No"}</Text>
-      <Text style={styles.journeyDetailText}>Seats Available: {journeyDetails?.seatsAvailable || "N/A"}</Text>
-      <Text style={styles.journeyDetailText}>Cost Per Seat: ₹{journeyDetails?.costPerSeat || "N/A"}</Text>
-      <Text style={styles.journeyDetailText}>Start Location: {journeyDetails?.startLatitude}, {journeyDetails?.startLongitude}</Text>
-      <Text style={styles.journeyDetailText}>Destination Location: {journeyDetails?.destinationLatitude}, {journeyDetails?.destinationLongitude}</Text>
-      <Text style={styles.journeyDetailText}>Today's Journey: {journeyDetails?.todayOnly ? "Yes" : "No"}</Text>
+{journeyData ? (
+                <View>
+                    <Text style={styles.label}>Direction: <Text style={styles.value}>{journeyData.travelDirection}</Text></Text>
+                    <Text style={styles.label}>Start Point: <Text style={styles.value}>{journeyData.startPoint}</Text></Text>
+                    <Text style={styles.label}>Drop Point: <Text style={styles.value}>{journeyData.dropPoint}</Text></Text>
+                    <Text style={styles.label}>Seats Available: <Text style={styles.value}>{journeyData.seatsAvailable}</Text></Text>
+                    <Text style={styles.label}>Cost Per Seat: <Text style={styles.value}>{journeyData.costPerSeat}</Text></Text>
+                    <Text style={styles.label}>Travel Type: <Text style={styles.value}>{journeyData.travelType}</Text></Text>
+                    <Text style={styles.label}>Private Journey: <Text style={styles.value}>{journeyData.isPrivate ? "Yes" : "No"}</Text></Text>
+                </View>
+            ) : (
+                <Text style={styles.noData}>No journey data available.</Text>
+            )}
     </View>              
   </View>
 
@@ -186,7 +239,7 @@ const NearbyPlaces = () => {
 
       <View style={styles.listHeader}>
         <Text style={styles.listHeading}>People who added me</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
+        <TouchableOpacity onPress={() => navigation.navigate('FullListPage')}>
           <Text style={styles.viewAll}>View all</Text>
         </TouchableOpacity>
       </View>
@@ -202,11 +255,11 @@ const NearbyPlaces = () => {
         </TouchableOpacity>          
       </View>
 
-      
+      {/* filteredPlaces */}
 
       <View style={styles.listHeader}>
         <Text style={styles.listHeading}>Places within 10kms</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('FullListPage', { places: filteredPlaces })}>
+        <TouchableOpacity onPress={() => navigation.navigate('FullListPage')}>
           <Text style={styles.viewAll}>View all</Text>
         </TouchableOpacity>
       </View>
@@ -220,23 +273,23 @@ const NearbyPlaces = () => {
   <ActivityIndicator size="large" color="#0000ff" style={{ marginVertical: 20 }} />
 ) : (
   <FlatList
-    data={placesToShow}
+  //  data={placesToShow}
     keyExtractor={(item, index) => index.toString()}
     renderItem={renderItem}
     contentContainerStyle={styles.scrollContainer}
     ListEmptyComponent={<Text style={styles.emptyText}>No nearby places found.</Text>}
   />
 )}
-      {collapsed && filteredPlaces.length > 5 && (
+      {/* {collapsed && filteredPlaces.length > 5 && (
         <TouchableOpacity style={styles.showMore} onPress={() => setCollapsed(false)}>
           <Text style={styles.showMoreText}>Show More</Text>
         </TouchableOpacity>
-      )}
+      )} */}
       
     </ScrollView>
   );
 };
-
+//Image
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#ffffff' },
   header: {

@@ -1,25 +1,24 @@
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import React, { useCallback, useContext } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AuthContext } from './AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const navigation = useNavigation();  // ✅ useNavigation() hook
-  const { logout } = useContext(AuthContext);
+ 
 
   const handleStartJourney = useCallback(() => {
     navigation.navigate("StartJourney");
   }, [navigation]);
 
-  const handleLogout = useCallback(async () => {
-    await logout();  // Clears user session
+  // const handleLogout = useCallback(async () => {
+  //   await logout();  // Clears user session
   
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Login" }],  // ✅ Reset stack to show only the Login screen
-    });
-  }, [navigation, logout]);
+  //   navigation.reset({
+  //     index: 0,
+  //     routes: [{ name: "Login" }],  // ✅ Reset stack to show only the Login screen
+  //   });
+  // }, [navigation, logout]);
   
   
 
@@ -44,7 +43,7 @@ const HomeScreen = () => {
         </Text>
       ))}
       
-      <Text onPress={handleLogout} style={styles.goback}>LOGOUT</Text>
+      <Text  style={styles.goback}>LOGOUT</Text>
     </SafeAreaView>
   );
 };

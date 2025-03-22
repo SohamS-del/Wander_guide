@@ -1,13 +1,18 @@
 
 
+using Backend_WanderGuide.Middleware;
 using Backend_WanderGuide.Models;
 using Backend_WanderGuide.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,9 +70,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Logging.ClearProviders();
+builder.Logging.AddProvider(new CustomLoggerProvider());
+builder.Logging.AddProvider(new FileLoggerProvider("logs/app.log"));
+
+
+
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
-
 
 
 // Add Swagger
@@ -109,6 +119,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<LoggingMiddleware>();
 // Middleware
 app.UseRouting();
 app.UseAuthentication();
