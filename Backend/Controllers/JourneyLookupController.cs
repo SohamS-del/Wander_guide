@@ -62,6 +62,7 @@ namespace Backend_WanderGuide.Controllers
 
             return Ok(journeys);
         }
+        
         [HttpGet("GetAllJourneys")]
         public async Task<ActionResult<IEnumerable<CreateJourney>>> GetAllJourneys()
         {
