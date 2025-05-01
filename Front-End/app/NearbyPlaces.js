@@ -224,7 +224,7 @@ const NearbyPlaces = () => {
                     <Text style={styles.label}>Drop Point: <Text style={styles.value}>{journeyData.dropPoint}</Text></Text>
                     <Text style={styles.label}>Seats Available: <Text style={styles.value}>{journeyData.seatsAvailable}</Text></Text>
                     <Text style={styles.label}>Cost Per Seat: <Text style={styles.value}>{journeyData.costPerSeat}</Text></Text>
-                    <Text style={styles.label}>Travel Type: <Text style={styles.value}>{journeyData.travelType}</Text></Text>
+                    <Text style={styles.label}>Travel Type: <Text style={styles.value}>{journeyData.travelType ? "Today" : "Everyday"}</Text></Text>
                     <Text style={styles.label}>Private Journey: <Text style={styles.value}>{journeyData.isPrivate ? "Yes" : "No"}</Text></Text>
                 </View>
             ) : (
