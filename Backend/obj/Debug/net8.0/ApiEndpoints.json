@@ -159,22 +159,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Backend_WanderGuide.Controllers.JoinJourneyController",
-    "Method": "UpdateJourneyStartTime",
-    "RelativePath": "api/JoinJourney/UpdateJourneyStartTime",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "journeyId",
-        "Type": "System.Guid",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "Backend_WanderGuide.Controllers.JourneyLookupController",
     "Method": "DeleteJourney",
     "RelativePath": "api/JourneyLookup/{journeyId}",
@@ -289,22 +273,6 @@
       {
         "Name": "location",
         "Type": "Backend_WanderGuide.Models.LocationData",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Backend_WanderGuide.Controllers.UserController",
-    "Method": "GetUserNameById",
-    "RelativePath": "api/user/{userId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.String",
         "IsRequired": true
       }
     ],

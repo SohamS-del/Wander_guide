@@ -1,17 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator
+} from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RoutesUrl } from './components/url';
 
 interface Journey {
-  id: string;
-  route: string;
-  time: string;
+  journeyId: string;
+  userName: string;
+  userId: string;
+  journeyCreate: string;
+  journeyStartDate: string;
+  timestamp: string;
+  fromMit: boolean;
+  todayOnly: boolean;
+  isStarted: boolean;
+  startLatitude: number;
+  startLongitude: number;
+  startPoint: string;
+  destinationLatitude: number;
+  destinationLongitude: number;
+  dropPoint: string;
+  seatsAvailable: number;
+  costPerSeat: number;
+  journeyStartTime: string | null;
+  totalSeats: number;
+  isPrivate: boolean;
 }
 
-const EverydayRoutes = ({ navigation }: { navigation: any }) => {
+const EverydayRoutes = ({ navigation, route }: { navigation: any; route: any }) => {
+
   const [journey, setJourney] = useState<Journey[]>([]);
   const [loading, setLoading] = useState(false);
   const [travelDirection, setTravelDirection] = useState("");
@@ -39,23 +65,23 @@ const EverydayRoutes = ({ navigation }: { navigation: any }) => {
 
   useEffect(() => {
     if (User.userId) {
-      fetchJourneys(User.userId);
+      fetchJourneys();
     }
   }, [User.userId]);
 
-  const fetchJourneys = async (currentUserId: string) => {
+  const fetchJourneys = async () => {
     setLoading(true);
     try {
       const response = await fetch(RoutesUrl);
       const data = await response.json();
 
       if (response.ok) {
-        const filteredJourneys = data.filter(
-          (journey: { isPrivate: boolean; userId: string }) => !journey.isPrivate && journey.userId !== currentUserId
+        const publicJourneys = data.filter(
+          (j: Journey) => !j.isPrivate
         );
 
-        await AsyncStorage.setItem('journeys', JSON.stringify(filteredJourneys));
-        setJourney(filteredJourneys);
+        await AsyncStorage.setItem('journeys', JSON.stringify(publicJourneys));
+        setJourney(publicJourneys);
       } else {
         console.error('Failed to fetch journeys:', data);
       }
@@ -92,9 +118,10 @@ const EverydayRoutes = ({ navigation }: { navigation: any }) => {
     }
   };
 
-  const seeDetails = () => {
-   
+  const seeDetails = (journey: Journey) => {
+    navigation.navigate('JourneyDetails', { journey });
   };
+  
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false);
@@ -103,29 +130,31 @@ const EverydayRoutes = ({ navigation }: { navigation: any }) => {
     }
   };
 
-  const renderRouteCard = ({ item }: any) => {
-    const routeParts = item.route?.split('→') || [];
-    const start = routeParts[0]?.trim() || 'Unknown';
-    const end = routeParts[1]?.trim() || 'Unknown';
+  const renderRouteCard = ({ item }: { item: Journey }) => {
 
     return (
       <View style={styles.card}>
-        <Text style={styles.driverName}>{item.driver}</Text>
+        <Text style={styles.driverName}>{User.name}</Text>
         <Text style={styles.route}>
-          <Text style={styles.routeHighlight}>{start}</Text> →{' '}
-          <Text style={styles.routeHighlight}>{end}</Text>
+          <Text style={styles.routeHighlight}>{item.startPoint}</Text> →{' '}
+          <Text style={styles.routeHighlight}>{item.dropPoint}</Text>
         </Text>
-        <Text style={item.status === 1 ? styles.rideStatus : styles.rideStatusOff}>
-          {item.status === 1 ? "started" : "not started"}
+        <Text style={item.isStarted === true ? styles.rideStatus : styles.rideStatusOff}>
+          {item.isStarted === true ? "started" : "not started"}
         </Text>
         <Text style={styles.details}>
-          {item.car} | {item.date} | {item.time}
+          {item.userName} |  {item.journeyStartDate} | {item.journeyStartTime}
         </Text>
-        <TouchableOpacity style={styles.bookButton} onPress={seeDetails}>
+        <TouchableOpacity style={styles.bookButton} onPress={() => seeDetails(item)}>
           <Text style={styles.bookButtonText}>see details</Text>
         </TouchableOpacity>
       </View>
     );
+  };
+
+  const renderEmptyComponent = () => {
+    if (loading) return null;
+    return <Text style={{ textAlign: 'center', marginTop: 20, color: '#666' }}>No journeys available</Text>;
   };
 
   return (
@@ -167,16 +196,21 @@ const EverydayRoutes = ({ navigation }: { navigation: any }) => {
         <Text style={styles.dateTxt}>Select date: {date.toDateString()}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.findButton} onPress={seeDetails}>
+      <TouchableOpacity style={styles.findButton} >
         <Text style={styles.findButtonText}>find available cars</Text>
       </TouchableOpacity>
 
-      <FlatList
-        data={journey}
-        keyExtractor={(item) => item.id}
-        renderItem={renderRouteCard}
-        contentContainerStyle={styles.list}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#007BFF" style={{ marginTop: 20 }} />
+      ) : (
+        <FlatList
+          data={journey}
+          keyExtractor={(item) => item.journeyId}
+          renderItem={renderRouteCard}
+          contentContainerStyle={styles.list}
+          ListEmptyComponent={renderEmptyComponent}
+        />
+      )}
     </View>
   );
 };

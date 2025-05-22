@@ -13,7 +13,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CreateJourneyUrl } from './components/url';
 
 
-const StartJourney = ({ navigation }: { navigation: any }) => {
+const StartJourney = () => {
+    const navigation = useNavigation();
     const [travelDirection, setTravelDirection] = useState("from");
     const [travelType, setTravelType] = useState("today");
 
@@ -124,7 +125,7 @@ const StartJourney = ({ navigation }: { navigation: any }) => {
 
         const journeyData = {
             userId,
-            userName,
+            userName: userName,
             journeyCreate: new Date().toISOString().split("T")[0],
             journeyStartDate: date.toISOString().split("T")[0],
             timestamp: new Date().toISOString(),
@@ -159,7 +160,8 @@ const StartJourney = ({ navigation }: { navigation: any }) => {
             const result = await response.json();
             if (response.ok) {
                 const journeyId = result.journeyId;
-                navigation.navigate("EmergencyContacts", { Id: journeyId });
+                console.log("Navigating to EmergencyContacts with ID:", journeyId);
+                (navigation as any).navigate("EmergencyContacts",{id:journeyId});
             } else {
                 Alert.alert("Error", result?.message || "Failed to create journey.");
             }

@@ -25,13 +25,18 @@ namespace Backend_WanderGuide.Models
         [Required]
         [Range(-180, 180)]
         public double StartLongitude { get; set; }
+        [DefaultValue(null)]
+        public string StartPoint { get; set; }
         [Required]
         [Range(-90, 90)]
         public double DestinationLatitude { get; set; }
 
         [Required]
         [Range(-180, 180)]
-        public double DestinationLongitude { get; set; }
+        public double DestinationLongitude { get; set;  }
+        [DefaultValue(null)]
+        public string DropPoint { get; set; }
+
         public int SeatsAvailable { get; set; }
 
         public int CostPerSeat { get; set; }

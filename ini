@@ -1,0 +1,297 @@
+[33mcommit 530b74ef3f87047712bb6b317e4ca068f9a589de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Mar 22 13:58:19 2025 +0530
+
+    depend
+
+[33mcommit 4e874f393b2060e69d9e146a5c8117fd1106124f[m
+Merge: 4aa30bd 48e178f
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Mar 22 13:56:54 2025 +0530
+
+    Merge branch 'main' of https://github.com/SohamS-del/Wander_guide
+
+[33mcommit 4aa30bd93c1ee1594f23704d4fcc59093bdc1765[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Mar 22 13:52:32 2025 +0530
+
+    Gitignore
+
+[33mcommit 48e178fd00bcc4af8b2fcaf527f970fed1aa0296[m
+Merge: f7a9282 b99ae82
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Sat Mar 22 13:43:02 2025 +0530
+
+    Merge branch 'main' of https://github.com/SohamS-del/Wander_guide
+
+[33mcommit f7a92823fdcd210f84aabcdd82cc6fdfac59abfc[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Sat Mar 22 13:41:05 2025 +0530
+
+    new
+
+[33mcommit b99ae821cddc59ed1e5f5e00b6b60789f53a60d4[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Mar 22 13:28:43 2025 +0530
+
+    Updated Model of CreateJourney
+
+[33mcommit ff705293d5b3443c3a9c3293ac5271c7dbb9399d[m
+Merge: a942c45 04b2216
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Wed Mar 19 15:51:11 2025 +0530
+
+    Merge branch 'main' of https://github.com/SohamS-del/Wander_guide
+
+[33mcommit 04b2216a58682422b84ca485a1f75f20f5e76525[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Wed Mar 19 14:37:35 2025 +0530
+
+    2 new Apis
+    
+    1. Fetch all journeys
+    2. Update journey start time
+
+[33mcommit a942c459507c6ec3a798e0a2c6549801bb66ad69[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Wed Mar 19 13:33:35 2025 +0530
+
+    updates
+
+[33mcommit 621a10c0b84bbb9a1bc05945ddd79d2097487043[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Wed Mar 19 13:32:45 2025 +0530
+
+    loggers implemented
+
+[33mcommit 769d0c36d7a9fe2f7250cd9debc3ebf1b07bd550[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Wed Mar 19 13:22:34 2025 +0530
+
+    updates !!
+    
+    new update
+    front end intgration
+
+[33mcommit 9b111142446041fd22ae127ca7089380c5661423[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Mon Mar 17 15:34:01 2025 +0530
+
+    login fix
+    
+    Fix the Login
+
+[33mcommit 3095f4d77924c19faecf93b43a5885ece8be7318[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sun Mar 9 12:03:13 2025 +0530
+
+    Backend
+
+[33mcommit 0a94ca105822ebd72dcf01937fb8582cccfcba61[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Sun Feb 16 18:53:26 2025 +0530
+
+    new2
+
+[33mcommit 03a72f11d821ff4fdcbf0c70d6e5806936b20792[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Sun Feb 16 16:41:03 2025 +0530
+
+    Removed .vs from tracking
+
+[33mcommit 56171bc0f34ac636c33fc0e72f362d01fbaa68de[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Wed Feb 12 15:21:47 2025 +0530
+
+    Updated
+
+[33mcommit 7a1578ee55c78cd8dfdac9bbf1ded963392ed3f2[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sun Feb 9 00:04:50 2025 +0530
+
+    JoutneyLookUp
+    
+    using userid and phone no.
+
+[33mcommit 518305c16cb79d7927f083c338d7cf8eaf4fc309[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Feb 1 21:21:34 2025 +0530
+
+    Styles
+
+[33mcommit e96de0d128f684274392f8a8d861e2528a38f3b6[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Feb 1 16:06:57 2025 +0530
+
+    Himanshu's Update
+
+[33mcommit 0c1e1aff40b3011f331a8c86652a8d41faee02fd[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Wed Jan 29 20:12:33 2025 +0530
+
+    Updated
+
+[33mcommit 40ba2b40bde64618f980525ef8adf6ec9657560a[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Wed Jan 29 20:11:42 2025 +0530
+
+    FIXED
+
+[33mcommit 62a728c16dddc776e112e64944ebd0a5f7d0de9d[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Wed Jan 29 15:19:32 2025 +0530
+
+    With Errors(debugging necessary)
+
+[33mcommit 8d82fe72fe3006d89ef334fd4624409e60de9cad[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Tue Jan 28 19:27:05 2025 +0530
+
+    Debugging Necessary
+
+[33mcommit 81ddb5a217a31d8ce03f3c148d61e9d21e1246ff[m[33m ([m[1;31mupstream/main[m[33m, [m[1;31mupstream/HEAD[m[33m)[m
+Merge: 84d3745 d0b53db
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Jan 25 16:29:24 2025 +0530
+
+    Merged Commit
+
+[33mcommit 84d37454cdf8f9aff64420a3afa74b68e1f34a3e[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Sat Jan 25 16:24:44 2025 +0530
+
+    Location table and Api created
+
+[33mcommit d0b53db22f83be0e8836c007f788c545ed02a402[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Fri Jan 24 19:33:50 2025 +0530
+
+    snackbars updated!!
+
+[33mcommit c779724c9a58461d4ce0d91411a30a88b0ec449b[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Fri Jan 24 15:59:43 2025 +0530
+
+    nearbyPlaces
+
+[33mcommit b5909491894b19b018a1d4612ef1137957f06caa[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 24 14:56:29 2025 +0530
+
+    New Changes
+
+[33mcommit 691536d3f10e83a2731fd0b1751661d2fb5710a9[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 23 22:45:48 2025 +0530
+
+    Code Refactored
+
+[33mcommit 7c0a200a9ff514658dd28fb29d91326d773ec920[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 23 22:00:39 2025 +0530
+
+    Otp Feature
+    
+    Otp Feature added successfully
+
+[33mcommit 943e90aa3169bafaebab95356957642f19dd229e[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Mon Jan 20 21:43:50 2025 +0530
+
+    backend_wanderguide
+    
+    Backend Files
+
+[33mcommit f94678b9a51bcc463431d9701daf736c35ef6528[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 10 23:04:44 2025 +0530
+
+    Merged Commit
+    
+    Debugged errors caused due to merging
+
+[33mcommit f8be846265a198a87d69b04fc06de5515e43166a[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 10 21:05:37 2025 +0530
+
+    Update SignupScreen.tsx
+
+[33mcommit c4e73e6f9b6590a3418d2549a9684cd951ce5419[m
+Merge: 4171b99 62d0522
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 10 21:04:43 2025 +0530
+
+    Merge branch 'main' of https://github.com/SohamS-del/Wander_guide
+
+[33mcommit 4171b997af6ae8972ab03de71bda76ce1b27e25a[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 10 20:10:20 2025 +0530
+
+    forgot pass
+
+[33mcommit 62d0522d23c3ed2ed4060d21b18fd066fe1df3c4[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Fri Jan 10 20:00:46 2025 +0530
+
+    try catch in login and signup
+
+[33mcommit 9ead20cd4d546bac9ecc4509cdac8fc0c098ee4b[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Fri Jan 10 14:01:48 2025 +0530
+
+    test commit
+    
+    checking if pull works
+
+[33mcommit c50aeca372fdc262fda74dcf064d633fecc7065d[m
+Author: Shravani <132183348+Shrawebwiz@users.noreply.github.com>
+Date:   Fri Jan 10 13:59:01 2025 +0530
+
+    Update Frontend.txt
+
+[33mcommit 18a4446e850d9c997df8b8536d008cbb90f41de9[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 10 13:49:51 2025 +0530
+
+    Api integration in FrontEnd
+
+[33mcommit 807bbbefbde16182a56c1e825bd91ab69ec4eca9[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Fri Jan 10 01:54:43 2025 +0530
+
+    Frontend.txt edit
+
+[33mcommit 2a38899bec3e3c49f87740ee99652c989967f016[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 9 20:22:53 2025 +0530
+
+    Front-End folder
+
+[33mcommit 70966196bf1e55ba3b4b2f69ae9bcea4bbd76eef[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 9 20:22:22 2025 +0530
+
+    deletion
+
+[33mcommit f005b8bb35c1e51708ad29a07b809cd3d16f0aef[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 9 20:15:27 2025 +0530
+
+    Deleted Content removed
+
+[33mcommit f49cf8e6be5403794b65d8f343a14cbf4ce9461e[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 9 20:09:00 2025 +0530
+
+    First Commit
+    
+    Front End:
+             1.Loading Screen
+             2.Login Screen
+             3.Sign Up Screen
+
+[33mcommit f39a33b299bb9ca0a56fc2dee6dbe78df11c9979[m
+Author: SohamS-del <sohamjayeshs@gmail.com>
+Date:   Thu Jan 9 19:56:13 2025 +0530
+
+    Initial commit

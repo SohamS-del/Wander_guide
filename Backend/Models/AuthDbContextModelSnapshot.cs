@@ -109,6 +109,10 @@ namespace Backend_WanderGuide.Migrations
                     b.Property<double>("DestinationLongitude")
                         .HasColumnType("float");
 
+                    b.Property<string>("DropPoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("FromMit")
                         .HasColumnType("bit");
 
@@ -135,6 +139,10 @@ namespace Backend_WanderGuide.Migrations
 
                     b.Property<double>("StartLongitude")
                         .HasColumnType("float");
+
+                    b.Property<string>("StartPoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
