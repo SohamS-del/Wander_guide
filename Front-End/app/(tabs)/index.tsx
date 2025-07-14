@@ -15,11 +15,14 @@ import StartJourney from '../StartJourney';
 import RideInfo from '../RideInfo';
 import StaticProfileScreen from '../static_profile';
 import HomeScreen from '../HomeScreen'; // Added HomeScreen
+import JourneyDetails from '../JourneyDetails'; // Added JourneyDetails
+import { NavigationContainer } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {
   return (
+
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
       <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }}/>
@@ -36,6 +39,7 @@ const MyStack = () => {
       <Stack.Screen name="StartJourney" component={StartJourney} options={{ headerShown: false }}/>
       <Stack.Screen name="RideInfo" component={RideInfo} options={{ headerShown: false }}/>
       <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="JourneyDetails" component={JourneyDetails} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };
