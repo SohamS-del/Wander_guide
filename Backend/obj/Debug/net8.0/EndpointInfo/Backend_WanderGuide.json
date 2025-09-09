@@ -270,28 +270,6 @@
         }
       }
     },
-    "/api/JoinJourney/UpdateJourneyStartTime": {
-      "put": {
-        "tags": [
-          "JoinJourney"
-        ],
-        "parameters": [
-          {
-            "name": "journeyId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/JoinJourney/approve": {
       "post": {
         "tags": [
@@ -508,28 +486,6 @@
           }
         }
       }
-    },
-    "/api/user/{userId}": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -547,6 +503,10 @@
             "type": "string",
             "format": "uuid"
           },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
           "userId": {
             "type": "string",
             "format": "uuid"
@@ -555,7 +515,7 @@
             "type": "string",
             "format": "date"
           },
-          "journeyStart": {
+          "journeyStartDate": {
             "type": "string",
             "format": "date"
           },
@@ -584,6 +544,11 @@
             "type": "number",
             "format": "double"
           },
+          "startPoint": {
+            "type": "string",
+            "default": null,
+            "nullable": true
+          },
           "destinationLatitude": {
             "maximum": 90,
             "minimum": -90,
@@ -596,6 +561,11 @@
             "type": "number",
             "format": "double"
           },
+          "dropPoint": {
+            "type": "string",
+            "default": null,
+            "nullable": true
+          },
           "seatsAvailable": {
             "type": "integer",
             "format": "int32"
@@ -604,9 +574,9 @@
             "type": "integer",
             "format": "int32"
           },
-          "startTime": {
+          "journeyStartTime": {
             "type": "string",
-            "format": "date-time",
+            "format": "time",
             "default": null,
             "nullable": true
           },

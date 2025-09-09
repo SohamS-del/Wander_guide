@@ -77,6 +77,7 @@ const EmergencyContacts = () => {
 
       if (response.ok) {
         Alert.alert('Success', data.message);
+        navigation.navigate('SavedContacts', { contacts: selectedContacts });//
       } else {
         Alert.alert('Error', data.message || 'Failed to save contacts.');
       }
@@ -184,7 +185,7 @@ const EmergencyContacts = () => {
           {isSaved ? 'Selected Contacts Saved' : 'Save Selected Contacts'}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => (navigation as any).navigate('NearbyPlaces')}>
         <Text style={styles.skip}>skip</Text>
       </TouchableOpacity>
     </View>

@@ -12,106 +12,143 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CreateJourneyUrl } from './components/url';
 
-const StartJourney =({navigation}:{navigation:any})=>{
-    const[travelDirection,setTravelDirection] = useState("from");
-    const[travelType, setTravelType] = useState("today");
+
+const StartJourney = () => {
+    const navigation = useNavigation();
+    const [travelDirection, setTravelDirection] = useState("from");
+    const [travelType, setTravelType] = useState("today");
 
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
 
-    const[startPoint, setStartPoint] = useState("MIT ADT University");
-    const[dropPoint, setDropPoint] = useState("");
+    const [startPoint, setStartPoint] = useState("MIT ADT University");
+    const [dropPoint, setDropPoint] = useState("");
 
-    const [userSession, setUserSession] = useState(null);
-    const [userId, setUserId] = useState("12345");
+    const [userSession, setUserSession] = useState<any>(null);
+    const [userId, setUserId] = useState("00000000-0000-0000-0000-000000000000");
+    const [userName, setUserName] = useState("");
 
     const [seatsAvailable, setSeatsAvailable] = useState("");
-const [costPerSeat, setCostPerSeat] = useState("");
-const [startTime, setStartTime] = useState(""); 
-const [isPrivate, setIsPrivate] = useState(false);
+    const [costPerSeat, setCostPerSeat] = useState("");
+    const [startTime, setStartTime] = useState(""); 
+    const [isPrivate, setIsPrivate] = useState(false);
 
+    const [startCoords, setStartCoords] = useState({ lat: 0, lng: 0 });
+    const [destCoords, setDestCoords] = useState({ lat: 0, lng: 0 });
 
+    
 
 
     useEffect(() => {
         getUserData();
-      }, []);
-    const handleselection = (value:string) =>{
+        getLocation();
+    }, []);
+    
+    const getLocation = async () => {
+        try {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== "granted") {
+                Alert.alert("Permission Denied", "Location permission is required to create a journey.");
+                return;
+            }
+    
+            let location = await Location.getCurrentPositionAsync({});
+            setStartCoords({
+                lat: location.coords.latitude,
+                lng: location.coords.longitude,
+            });
+    
+            // If going "from" MIT, destination is default (e.g., Pune), otherwise MIT
+            if (travelDirection === "from") {
+                setDestCoords({
+                    lat: 18.5204, // Pune default
+                    lng: 73.8567,
+                });
+            } else {
+                setDestCoords({
+                    lat: 18.5185, // MIT ADT
+                    lng: 73.9197,
+                });
+            }
+        } catch (error) {
+            console.error("Error getting location:", error);
+            Alert.alert("Error", "Could not retrieve location.");
+        }
+    };
 
+    const handleselection = (value: string) => {
         setTravelDirection(value);
         if (value === "from") {
             setStartPoint("MIT ADT University");
-            setDropPoint(""); // Reset Drop Point for user input
-          } else {
-            setStartPoint(""); // Reset Starting Point for user input
+            setDropPoint("");
+            setDestCoords({ lat: 18.5204, lng: 73.8567 }); // Pune
+        } else {
+            setStartPoint("");
             setDropPoint("MIT ADT University");
-          }
-
+            setDestCoords({ lat: 18.5185, lng: 73.9197 }); // MIT
+        }
     };
-    const handleDateChange = (event: any, selectedDate?: Date) => {
-        setShowPicker(false); // Hide picker after selection
-        if (selectedDate) {
-          setDate(selectedDate);
-        }
-      };
-    // const createJourney = () =>{
-    //     navigation.navigate("EmergencyContacts")
-    // }
-
-     const getUserData = async () => {
-        try {
-          const storedUserData = await AsyncStorage.getItem('userDetails');
-          if (storedUserData) {
-            const parsedUserData = JSON.parse(storedUserData);
-            console.log('User Data:', parsedUserData);
-            setUserSession(parsedUserData); // Store parsed user data in state
-            setUserId(parsedUserData.userId || 'Guest');
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      };
-
-     
-      const createJourney = async () => {
-        // Prepare journey data
-        if (!startTime) {
-            console.error("Error: startTime is missing or invalid.");
-            Alert.alert("Error", "Please select a valid start time.");
-            return;
-        }
     
-        let formattedStartTime;
+
+    const handleDateChange = (event: any, selectedDate?: Date) => {
+        setShowPicker(false);
+        if (selectedDate) {
+            setDate(selectedDate);
+        }
+    };
+
+    const getUserData = async () => {
         try {
-            formattedStartTime = new Date(startTime).toISOString(); // Convert to ISO format
+            const storedUserData = await AsyncStorage.getItem("userDetails");
+            if (storedUserData) {
+                const parsed = JSON.parse(storedUserData);
+                setUserSession(parsed);
+                setUserId(parsed.userId);
+                setUserName(parsed.userName || "Guest");
+            }
         } catch (error) {
-            console.error("Invalid startTime format:", startTime);
-            Alert.alert("Error", "Invalid start time format.");
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    const createJourney = async () => {
+        if (!startTime) {
+            Alert.alert("Error", "Please enter a valid start time (HH:mm format).");
             return;
         }
+
+        const [hour, minute] = startTime.split(":").map(Number);
+        if (isNaN(hour) || isNaN(minute)) {
+            Alert.alert("Error", "Invalid time format. Please use HH:mm.");
+            return;
+        }
+
         const journeyData = {
-            userId: userId, // Replace with actual logged-in user ID
-            travelDirection,
-            startPoint,
-            dropPoint,
-            seatsAvailable: parseInt(seatsAvailable) || 0, // Convert to number, default 0 if NaN
-            costPerSeat: parseFloat(costPerSeat) || 0,  // Convert to number, default 0 if NaN
-            startTime: new Date(startTime).toISOString(),  // Ensure correct format
-            date: date.toISOString().split("T")[0], // Format date for API
-            travelType,
-            isPrivate: Boolean(isPrivate), // Ensure it's a boolean
+            userId,
+            userName: userName,
+            journeyCreate: new Date().toISOString().split("T")[0],
+            journeyStartDate: date.toISOString().split("T")[0],
+            timestamp: new Date().toISOString(),
+            fromMit: travelDirection === "from",
+            todayOnly: travelType === "today",
+            isStarted: false,
+            startLatitude: startCoords.lat,
+            startLongitude: startCoords.lng,
+            startPoint:startPoint,
+            destinationLatitude: destCoords.lat,
+            destinationLongitude: destCoords.lng,
+            dropPoint:dropPoint,
+            seatsAvailable: parseInt(seatsAvailable) || 0,
+            costPerSeat: parseInt(costPerSeat) || 0,
+            journeyStartTime: `${hour}:${minute}`,
+            totalSeats: parseInt(seatsAvailable) || 0,
+            isPrivate,
         };
- //Storing Journey data in AsynStorage 
+
         try {
             await AsyncStorage.setItem("journeyData", JSON.stringify(journeyData));
-            console.log("Journey Data stored successfully!");
-        } catch (error) {
-            console.error("Error storing journey data:", error);
-        }
-    
-        console.log("Sending Journey Data:", journeyData); // Debugging log
-    
-        try {
+            console.log("Storing Journey Data:", journeyData);
+
             const response = await fetch(CreateJourneyUrl, {
                 method: "POST",
                 headers: {
@@ -119,18 +156,18 @@ const [isPrivate, setIsPrivate] = useState(false);
                 },
                 body: JSON.stringify(journeyData),
             });
-    
-            const data = await response.json();
+
+            const result = await response.json();
             if (response.ok) {
-                const journeyId = data.id;
-                navigation.navigate("EmergencyContacts", { Id: journeyId });
+                const journeyId = result.journeyId;
+                console.log("Navigating to EmergencyContacts with ID:", journeyId);
+                (navigation as any).navigate("EmergencyContacts",{id:journeyId});
             } else {
-                console.error("Failed to create journey:", data);
-                Alert.alert("Error", data?.message || "Failed to create journey.");
+                Alert.alert("Error", result?.message || "Failed to create journey.");
             }
-        } catch (error) {
-            console.error("Error creating journey:", error);
-            Alert.alert("Error", "Something went wrong. Please try again.");
+        } catch (err) {
+            console.error("Error creating journey:", err);
+            Alert.alert("Error", "Could not create journey.");
         }
     };
     
